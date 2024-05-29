@@ -1,0 +1,61 @@
+<!doctype html>
+
+<svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 900 900" width=900>
+	<style>
+		.chip rect {
+			fill: beige;
+			stroke: maroon;
+			stroke-width: 2px;
+		}
+		.chip text {
+			dominant-baseline: central;
+			font-size: 7px;
+			fill: black;
+			font-family: ms pmincho;
+		}
+		.chip path {
+			stroke: maroon;
+			stroke-width: 2px;
+		}
+		.r {
+			text-anchor: end;
+		}
+		.ol {
+			text-decoration: overline;
+		}
+		.chip .name {
+			dominant-baseline: auto;
+			text-anchor: middle;
+		}
+	</style>
+	<g stroke=green stroke-width=1px fill=none>
+		<path d="m270,110 v-20 h50 v20"/>
+		<path d="m210,110 v-20 h50 v20 m0,10 h10"/>
+		<path d="m200,120 h10"/>
+	</g>
+	<g class=chip>
+		<text x=235 y=98 class=name>IC19:1</text>
+		<rect x=220 y=100 width=30 height=50 />
+		<path d="m220,110 h-10" /><text x=222 y=110>D</text>
+		<path d="m220,120 h-10" /><text x=222 y=120>CLK</text>
+		<path d="m220,130 h-10" /><text x=222 y=130>~RES</text>
+		<path d="m220,140 h-10" /><text x=222 y=140>~CLR</text>
+		<path d="m250,110 h10" /><text x=248 y=110 class=r>~Q</text>
+		<path d="m250,120 h10" /><text x=248 y=120 class=r>Q</text>
+	</g>
+	<g class=chip>
+		<text x=295 y=98 class=name>IC19:2</text>
+		<rect x=280 y=100 width=30 height=50 />
+		<path d="m280,110 h-10" /><text x=282 y=110>D</text>
+		<path d="m280,120 h-10" /><text x=282 y=120>CLK</text>
+		<path d="m280,130 h-10" /><text x=282 y=130>~RES</text>
+		<path d="m280,140 h-10" /><text x=282 y=140>~CLR</text>
+		<path d="m310,110 h10" /><text x=308 y=110 class=r>~Q</text>
+		<path d="m310,120 h10" /><text x=308 y=120 class=r>Q</text>
+	</g>
+	<g class=chip>
+		<text x=175 y=108 class=name>X3 26.686MHz</text>
+		<rect x=160 y=110 width=30 height=20 />
+		<path d="m190,120 h10" /><text x=188 y=120 class=r>CLK</text>
+	</g>
+</svg>
