@@ -28,12 +28,12 @@
 			text-anchor: middle;
 		}
 	</style>
-	<g stroke=green stroke-width=1px fill=none>
+	<!--<g stroke=green stroke-width=1px fill=none>
 		<path d="m270,110 v-20 h50 v20"/>
 		<path d="m210,110 v-20 h50 v20 m0,10 h10"/>
 		<path d="m200,120 h10"/>
 	</g>
-	<!--<g class=chip>
+	<g class=chip>
 		<text x=235 y=98 class=name>IC19:1</text>
 		<rect x=220 y=100 width=30 height=50 />
 		<path d="m220,110 h-10" /><text x=222 y=110>D</text>
@@ -69,6 +69,10 @@
 			y: [0,pin.slot,symbol.height,symbol.height-pin.slot][pin.side],
 			dir: ["v-10","h10","v10","h-10"][pin.side],
 		}
+		pin.e = {
+			x: pin.r.x + [0,1,0,-1][pin.side],
+			y: pin.r.y + [-1,0,1,0][pin.side],
+		}
 	}
 	
 	let d = {
@@ -100,6 +104,13 @@
 			pos: {x:28, y:10},
 		},
 	]
+	let cons = [
+		[["IC19:A.D", "IC19:A.~Q"], "v-20 h50"],
+		[["IC19:B.D", "IC19:B.~Q"], "v-20 h50"],
+		[["IC19:A.Q", "IC19:B.CLK"], ""],
+		[["IC19:A.~PRE", "IC19:A.~CLR"], ""],
+		[["IC19:B.~PRE", "IC19:B.~CLR"], ""],
+	]
 	
 	function generate_symbol({name, symbol:def, pos:{x, y}}) {
 		let s = ''
@@ -121,11 +132,37 @@
 			if (p.side==3)
 				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${p.name}</text>`
 		}
-		return s
+		return s + "</g>"
 	}
+	let byname = {}
 	let s = ''
 	for (let p of placed) {
+		byname[p.name] = p
 		s += generate_symbol(p)
+	}
+	function lookup_pin(des) {
+		let [part,pin] = des.split(".")
+		part = byname[part]
+		pin = part.symbol.pins.find(x=>x.name==pin)
+		return [part, pin]
+	}
+	function draw_conn([pins, path]) {
+		let [part, pin] = lookup_pin(pins[0])
+		let s = ''
+		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
+		s += path
+		0,[part, pin] = lookup_pin(pins[1])
+		s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
+		return `<path d="`+s+`"/>`
+	}
+	
+	for (let conn of cons) {
+		s += "<g stroke=green stroke-width=1px fill=none>"
+		s += draw_conn(conn)
+		s += "</g>"
+		//for (let p of pins) {
+			
+		//}
 	}
 	$dest.innerHTML = s
 </script>
