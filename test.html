@@ -100,6 +100,19 @@
 			{name:"Q", num: 5, side:1, slot:2, out:1},
 		],
 	})
+	let d2 = new Component({
+		width: 3,
+		height: 5,
+		name: "74F74",
+		pins: [
+			{name:"D", num: 12, side:3, slot:4},
+			{name:"CLK", num: 11, side:3, slot:3},
+			{name:"~PRE", num: 10, side:3, slot:2},
+			{name:"~CLR", num: 13, side:3, slot:1},
+			{name:"~Q", num: 8, side:1, slot:1, out:1},
+			{name:"Q", num: 9, side:1, slot:2, out:1},
+		],
+	})
 	let f04 = new Component({
 		width: 3,
 		height: 7,
@@ -153,19 +166,30 @@
 			pos: {x:16, y:11},
 		},*/
 		{
-			name: "IC64",
+			name: "IC64A",
 			symbol: d,
-			pos: {x:10, y:11},
+			pos: {x:11, y:11+4},
+		},
+		{
+			name: "IC64B",
+			symbol: d2,
+			pos: {x:18, y:11+4},
 		},
 		{
 			name: "IC65",
 			symbol: f04,
-			pos: {x:16, y:11},
+			pos: {x:5, y:11},
 		},
 	]
 	let cons = [
 		[["IC65.13", null], "h-20"],
-		[["IC65.12", "IC64.3"], ""],
+		[["IC65.12", "IC64A.3"], ""],
+		[["IC65.11", null], "h-20"],
+		[["IC65.10", "IC64A.4"], ""],
+		[["IC65.10", "IC64B.10"], ""],
+		[["IC64A.5", "IC64B.12"], ""],
+		[["IC64B.9", null], "h20"],
+		[["IC64B.11", null], "h20"],
 		
 		/*[["IC19:A.D", "IC19:A.~Q"], "v-20 h50"],
 		[["IC19:B.D", "IC19:B.~Q"], "v-20 h50"],
