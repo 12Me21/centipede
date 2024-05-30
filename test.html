@@ -16,6 +16,7 @@
 		.chip path {
 			stroke: maroon;
 			stroke-width: 2px;
+			stroke-linecap: round;
 		}
 		.r {
 			text-anchor: end;
@@ -88,8 +89,27 @@
 			{name:"Q", side:1, slot:2},
 		],
 	}
+	let osc = {
+		width:3,
+		height: 2,
+		name:"oscillator",
+		pins: [
+			{name:"CLK",side:1,slot:1},
+		],
+	}
+	let oscpkg = { //hm.
+		symbol: osc,
+		pads: {
+			"CLK": 8,
+			"VCC": 14,
+			"GND": 7,
+		}
+	}
 	for (let pin of d.pins) {
 		calculate_pin_position(d, pin)
+	}
+	for (let pin of osc.pins) {
+		calculate_pin_position(osc, pin)
 	}
 	
 	let placed = [
@@ -103,6 +123,11 @@
 			symbol: d,
 			pos: {x:28, y:10},
 		},
+		{
+			name: "X1",
+			symbol: osc,
+			pos: {x:16, y:11},
+		},
 	]
 	let cons = [
 		[["IC19:A.D", "IC19:A.~Q"], "v-20 h50"],
@@ -110,7 +135,13 @@
 		[["IC19:A.Q", "IC19:B.CLK"], ""],
 		[["IC19:A.~PRE", "IC19:A.~CLR"], ""],
 		[["IC19:B.~PRE", "IC19:B.~CLR"], ""],
+		[["IC19:A.Q", null], "v40 h100"],
+		[["IC19:B.Q", null], "h40"],
+		[["X1.CLK", "IC19:A.CLK"], ""],
 	]
+	let byname = {}
+	for (let p of placed)
+		byname[p.name] = p
 	
 	function generate_symbol({name, symbol:def, pos:{x, y}}) {
 		let s = ''
@@ -134,12 +165,6 @@
 		}
 		return s + "</g>"
 	}
-	let byname = {}
-	let s = ''
-	for (let p of placed) {
-		byname[p.name] = p
-		s += generate_symbol(p)
-	}
 	function lookup_pin(des) {
 		let [part,pin] = des.split(".")
 		part = byname[part]
@@ -151,18 +176,22 @@
 		let s = ''
 		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
 		s += path
-		0,[part, pin] = lookup_pin(pins[1])
-		s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
+		if (pins[1]) {
+			0,[part, pin] = lookup_pin(pins[1])
+			s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
+		}
 		return `<path d="`+s+`"/>`
 	}
 	
+	let s = ''
+	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
-		s += "<g stroke=green stroke-width=1px fill=none>"
 		s += draw_conn(conn)
-		s += "</g>"
-		//for (let p of pins) {
-			
-		//}
+	}
+	s += "</g>"
+	for (let p of placed) {
+		byname[p.name] = p
+		s += generate_symbol(p)
 	}
 	$dest.innerHTML = s
 </script>
