@@ -77,27 +77,56 @@
 		}
 	}
 	
-	let d = {
+	class Component {
+		constructor(obj) {
+			let x = Object.setPrototypeOf(obj, Component.prototype)
+			for (let pin of x.pins) {
+				calculate_pin_position(x, pin)
+			}
+			return x
+		}
+	}
+	
+	let d = new Component({
 		width: 3,
 		height: 5,
 		name: "74F74",
 		pins: [
-			{name:"D", side:3, slot:4},
-			{name:"CLK", side:3, slot:3},
-			{name:"~PRE", side:3, slot:2},
-			{name:"~CLR", side:3, slot:1},
-			{name:"~Q", side:1, slot:1, out:1},
-			{name:"Q", side:1, slot:2, out:1},
+			{name:"D", num: 2, side:3, slot:4},
+			{name:"CLK", num: 3, side:3, slot:3},
+			{name:"~PRE", num: 4, side:3, slot:2},
+			{name:"~CLR", num: 1, side:3, slot:1},
+			{name:"~Q", num: 6, side:1, slot:1, out:1},
+			{name:"Q", num: 5, side:1, slot:2, out:1},
 		],
-	}
-	let osc = {
+	})
+	let f04 = new Component({
+		width: 3,
+		height: 7,
+		name: "74F04",
+		pins: [
+			{name:"I1", num:1, side:3, slot:6},
+			{name:"I2", num:3, side:3, slot:5},
+			{name:"I3", num:5, side:3, slot:4},
+			{name:"I4", num:9, side:3, slot:3},
+			{name:"I5", num:11, side:3, slot:2},
+			{name:"I6", num:13, side:3, slot:1},
+			{name:"Y1", num:2, side:1, slot:1,out:1},
+			{name:"Y2", num:4, side:1, slot:2,out:1},
+			{name:"Y3", num:6, side:1, slot:3,out:1},
+			{name:"Y4", num:9, side:1, slot:4,out:1},
+			{name:"Y5", num:10, side:1, slot:5,out:1},
+			{name:"Y6", num:12, side:1, slot:6,out:1},
+		],
+	})
+	let osc = new Component({
 		width:3,
 		height: 2,
 		name:"oscillator",
 		pins: [
 			{name:"CLK",side:1,slot:1,out:1},
 		],
-	}
+	})
 	let oscpkg = { //hm.
 		symbol: osc,
 		pads: {
@@ -106,15 +135,9 @@
 			"GND": 7,
 		}
 	}
-	for (let pin of d.pins) {
-		calculate_pin_position(d, pin)
-	}
-	for (let pin of osc.pins) {
-		calculate_pin_position(osc, pin)
-	}
 	
 	let placed = [
-		{
+		/*{
 			name: "IC19:A",
 			symbol: d,
 			pos: {x:22, y:10},
@@ -128,34 +151,34 @@
 			name: "X1",
 			symbol: osc,
 			pos: {x:16, y:11},
+		},*/
+		{
+			name: "IC64",
+			symbol: d,
+			pos: {x:10, y:11},
+		},
+		{
+			name: "IC65",
+			symbol: f04,
+			pos: {x:16, y:11},
 		},
 	]
 	let cons = [
-		"vclkdiv_feedback_1 IC19:A.D [v-20h50] IC19:A.~Q",
-		"vclkdiv_feedback_2 IC19:B.D [v-20h50] IC19:B.~Q",
-		"a IC19:A.Q IC19:B.CLK",
-		"a IC19:A.~PRE IC19:A.~CLR",
-		"a IC19:B.~PRE IC19:B.~CLR",
-		"a IC19:A.Q [v40h100]",
-		"13mhz_vclkdiv_output_1 IC19:B.Q [h40]",
-		"a X1.CLK IC19:A.CLK",
+		[["IC65.13", null], "h-20"],
+		[["IC65.12", "IC64.3"], ""],
+		
+		/*[["IC19:A.D", "IC19:A.~Q"], "v-20 h50"],
+		[["IC19:B.D", "IC19:B.~Q"], "v-20 h50"],
+		[["IC19:A.Q", "IC19:B.CLK"], ""],
+		[["IC19:A.~PRE", "IC19:A.~CLR"], ""],
+		[["IC19:B.~PRE", "IC19:B.~CLR"], ""],
+		[["IC19:A.Q", null], "v40 h100"],
+		[["IC19:B.Q", null], "h40"],
+		[["X1.CLK", "IC19:A.CLK"], ""],*/
 	]
 	let byname = {}
 	for (let p of placed)
 		byname[p.name] = p
-	
-	function makepos(p, pos) {
-		let px = pos.x + p.e.x
-		let py = pos.y + p.e.y
-		if (p.side==0)
-			return `translate(${(px)*10} ${(py-0.2)*10}) rotate(90)`
-		if (p.side==1)
-			return `translate(${(px+0.2)*10} ${(py)*10})" text-anchor="start`
-		if (p.side==2)
-			return `translate(${(px)*10} ${(py+0.2)*10}) rotate(-90)`
-		if (p.side==3)
-			return `translate(${(px-0.2)*10} ${(py)*10})`
-	}
 	
 	function generate_symbol({name, symbol:def, pos:{x, y}}) {
 		let s = ''
@@ -182,38 +205,26 @@
 	function lookup_pin(des) {
 		let [part,pin] = des.split(".")
 		part = byname[part]
-		pin = part.symbol.pins.find(x=>x.name==pin)
+		pin = part.symbol.pins.find(x=>(x.num==pin||x.name==pin))
 		return [part, pin]
 	}
-	function draw_conn(conn) {
-		conn = conn.split(" ")
-		let name = conn.shift()
-		let s = ""
-		for (let des of conn) {
-			if (~des.indexOf(".")) { // pin
-				let [part, pin] = lookup_pin(des)
-				//s += `M${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
-				s += `<text transform="${makepos(pin, part.pos)}">`+name+`</text>`
-			}
-		}
-		return s
-		/*let s = ''
+	function draw_conn([pins, path]) {
+		let [part, pin] = lookup_pin(pins[0])
+		let s = ''
 		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
 		s += path
 		if (pins[1]) {
 			0,[part, pin] = lookup_pin(pins[1])
 			s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
 		}
-		return `<path d="`+s+`"/>`*/
+		return `<path d="`+s+`"/>`
 	}
 	
 	let s = ''
-	s += "<g text-anchor=end font-size=7 dominant-baseline=central>"
+	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
 		s += draw_conn(conn)
 	}
-	s += "</g>"
-	s += "<g stroke=green stroke-width=1px fill=none>"
 	s += "</g>"
 	for (let p of placed) {
 		byname[p.name] = p
