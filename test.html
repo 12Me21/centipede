@@ -33,6 +33,12 @@
 			font-size: 6px;
 			fill: #008;
 		}
+		.net.net {
+			stroke: none;
+			fill: blue;
+			font-size: 8px;
+			dominant-baseline: central;
+		}
 	</style>
 	<!--<g stroke=green stroke-width=1px fill=none>
 		<path d="m270,110 v-20 h50 v20"/>
@@ -129,12 +135,12 @@
 			{name:"I4", num:9, side:3, slot:4},
 			{name:"I5", num:11, side:3, slot:5},
 			{name:"I6", num:13, side:3, slot:6},
-			{name:"Y1", num:2, side:1, slot:6,out:1},
-			{name:"Y2", num:4, side:1, slot:5,out:1},
-			{name:"Y3", num:6, side:1, slot:4,out:1},
-			{name:"Y4", num:9, side:1, slot:3,out:1},
-			{name:"Y5", num:10, side:1, slot:2,out:1},
-			{name:"Y6", num:12, side:1, slot:1,out:1},
+			{name:"~Y1", num:2, side:1, slot:6,out:1},
+			{name:"~Y2", num:4, side:1, slot:5,out:1},
+			{name:"~Y3", num:6, side:1, slot:4,out:1},
+			{name:"~Y4", num:9, side:1, slot:3,out:1},
+			{name:"~Y5", num:10, side:1, slot:2,out:1},
+			{name:"~Y6", num:12, side:1, slot:1,out:1},
 		],
 	})
 	let osc = new Component({
@@ -187,14 +193,14 @@
 		},
 	]
 	let cons = [
-		[["IC65.13", null], "h-20"],
+		[["IC65.13", "=FDP.205"], ""],
 		[["IC65.12", "IC64A.3"], ""],
-		[["IC65.11", null], "h-20"],
+		[["IC65.11", "=CPU.AS"], ""],
 		[["IC65.10", "IC64A.4"], ""],
 		[["IC65.10", "IC64B.10"], "h10 v30 h60 v-20"],
 		[["IC64A.5", "IC64B.12"], ""],
-		[["IC64B.9", null], "h20"],
-		[["IC64B.11", null], "h-10 v60 h-100"],
+		[["IC64B.9", "=FCM.109"], ""],
+		[["IC64B.11", "=FDP.32"], /*"h-10 v60 h-100"*/""],
 		
 		[["IC64A.1", "VCC"], ""],
 		[["IC64A.2", "GND"], ""],
@@ -251,6 +257,7 @@
 		let s = ''
 		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
 		s += path
+		let s2 = ""
 		if (pins[1]) {
 			if (pins[1]=="VCC") {
 				s += `v-3 h-2 l2,-3 l2,3 h-2`
@@ -258,12 +265,17 @@
 				s += `v3 h-3 l3,3 l3,-3 h-3`
 			} else if (pins[1]=="NC") {
 				s += `m-2,-2 l4,4 m0-4 l-4,4`
+			} else if (pins[1][0]=="=") {
+				if (pin.side==3)
+					s2 = `<text x=${(pin.e.x+part.pos.x-0.2)*10} y=${(pin.e.y+part.pos.y)*10} class=net text-anchor=end>${pins[1].slice(1)}</text>`
+				else 
+					s2 = `<text x=${(pin.e.x+part.pos.x+0.2)*10} y=${(pin.e.y+part.pos.y)*10} class=net text-anchor=start>${pins[1].slice(1)}</text>`
 			} else {
 				0,[part, pin] = lookup_pin(pins[1])
 				s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
 			}
 		}
-		return `<path d="`+s+`"/>`
+		return `<path d="`+s+`"/>`+s2
 	}
 	
 	let s = ''
