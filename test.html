@@ -38,6 +38,7 @@
 			fill: blue;
 			font-size: 8px;
 			dominant-baseline: central;
+			font-family: ms pmincho
 		}
 	</style>
 	<!--<g stroke=green stroke-width=1px fill=none>
@@ -102,6 +103,7 @@
 		width: 3,
 		height: 5,
 		name: "74F74",
+		desc: "d-flip-flop",
 		pins: [
 			{name:"D", num: 2, side:3, slot:4},
 			{name:"CLK", num: 3, side:3, slot:3},
@@ -115,6 +117,7 @@
 		width: 3,
 		height: 5,
 		name: "74F74",
+		desc: "d-flip-flop",
 		pins: [
 			{name:"D", num: 12, side:3, slot:4},
 			{name:"CLK", num: 11, side:3, slot:3},
@@ -128,6 +131,7 @@
 		width: 3,
 		height: 7,
 		name: "74F04",
+		desc: "inverter",
 		pins: [
 			{name:"I1", num:1, side:3, slot:1},
 			{name:"I2", num:3, side:3, slot:2},
@@ -225,7 +229,8 @@
 		let s = ''
 		let {width, height} = def
 		s += `<g class=chip>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=name >${name}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${name}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=name >${def.name} ${def.desc}</text>`
 		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		for (let p of def.pins) {
 			let px = x + p.r.x
