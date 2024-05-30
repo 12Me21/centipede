@@ -69,6 +69,7 @@
 			x: [pin.slot,symbol.width,symbol.width-pin.slot,0][pin.side],
 			y: [0,pin.slot,symbol.height,symbol.height-pin.slot][pin.side],
 			dir: ["v-10","h10","v10","h-10"][pin.side],
+			diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][pin.side],
 		}
 		pin.e = {
 			x: pin.r.x + [0,1,0,-1][pin.side],
@@ -85,8 +86,8 @@
 			{name:"CLK", side:3, slot:3},
 			{name:"~PRE", side:3, slot:2},
 			{name:"~CLR", side:3, slot:1},
-			{name:"~Q", side:1, slot:1},
-			{name:"Q", side:1, slot:2},
+			{name:"~Q", side:1, slot:1, out:1},
+			{name:"Q", side:1, slot:2, out:1},
 		],
 	}
 	let osc = {
@@ -94,7 +95,7 @@
 		height: 2,
 		name:"oscillator",
 		pins: [
-			{name:"CLK",side:1,slot:1},
+			{name:"CLK",side:1,slot:1,out:1},
 		],
 	}
 	let oscpkg = { //hm.
@@ -152,7 +153,7 @@
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
-			let dir = p.r.dir
+			let dir = p.out ? p.r.diro : p.r.dir
 			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
 			if (p.side==0)
 				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
