@@ -63,16 +63,54 @@
 </svg>
 
 <script>
-	function generate_symbol(def, {x, y}) {
+	function calculate_pin_position(symbol, pin) {
+		pin.r = {
+			x: [pin.slot,symbol.width,symbol.width-pin.slot,0][pin.side],
+			y: [0,pin.slot,symbol.height,symbol.height-pin.slot][pin.side],
+			dir: ["v-10","h10","v10","h-10"][pin.side],
+		}
+	}
+	
+	let d = {
+		width: 3,
+		height: 5,
+		name: "74F74",
+		pins: [
+			{name:"D", side:3, slot:4},
+			{name:"CLK", side:3, slot:3},
+			{name:"~PRE", side:3, slot:2},
+			{name:"~CLR", side:3, slot:1},
+			{name:"~Q", side:1, slot:1},
+			{name:"Q", side:1, slot:2},
+		],
+	}
+	for (let pin of d.pins) {
+		calculate_pin_position(d, pin)
+	}
+	
+	let placed = [
+		{
+			name: "IC19:A",
+			symbol: d,
+			pos: {x:22, y:10},
+		},
+		{
+			name: "IC19:B",
+			symbol: d,
+			pos: {x:28, y:10},
+		},
+	]
+	
+	function generate_symbol({name, symbol:def, pos:{x, y}}) {
 		let s = ''
 		let {width, height} = def
 		s += `<g class=chip>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=name >${def.name}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=name >${name}</text>`
 		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		for (let p of def.pins) {
-			let px = x + [p.slot,width,width-p.slot,0][p.side]
-			let py = y + [0,p.slot,height,height-p.slot][p.side]
-			let dir = ["v-10","h10","v10","h-10"][p.side]
+			let px = x + p.r.x
+			let py = y + p.r.y
+			let dir = p.r.dir
 			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
 			if (p.side==0)
 				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
@@ -85,19 +123,9 @@
 		}
 		return s
 	}
-	let s = generate_symbol({
-		width: 3,
-		height: 5,
-		name: "IC19",
-		pins: [
-			{name:"D", side:3, slot:4},
-			{name:"CLK", side:3, slot:3},
-			{name:"~PRE", side:3, slot:2},
-			{name:"~CLR", side:3, slot:1},
-			{name:"~Q", side:1, slot:1},
-			{name:"Q", side:1, slot:2},
-			{name:"VCC", side:0, slot:2},
-		],
-	}, {x:22,y:10})
+	let s = ''
+	for (let p of placed) {
+		s += generate_symbol(p)
+	}
 	$dest.innerHTML = s
 </script>
