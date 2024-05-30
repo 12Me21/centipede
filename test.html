@@ -131,18 +131,31 @@
 		},
 	]
 	let cons = [
-		[["IC19:A.D", "IC19:A.~Q"], "v-20 h50"],
-		[["IC19:B.D", "IC19:B.~Q"], "v-20 h50"],
-		[["IC19:A.Q", "IC19:B.CLK"], ""],
-		[["IC19:A.~PRE", "IC19:A.~CLR"], ""],
-		[["IC19:B.~PRE", "IC19:B.~CLR"], ""],
-		[["IC19:A.Q", null], "v40 h100"],
-		[["IC19:B.Q", null], "h40"],
-		[["X1.CLK", "IC19:A.CLK"], ""],
+		"vclkdiv_feedback_1 IC19:A.D [v-20h50] IC19:A.~Q",
+		"vclkdiv_feedback_2 IC19:B.D [v-20h50] IC19:B.~Q",
+		"a IC19:A.Q IC19:B.CLK",
+		"a IC19:A.~PRE IC19:A.~CLR",
+		"a IC19:B.~PRE IC19:B.~CLR",
+		"a IC19:A.Q [v40h100]",
+		"a IC19:B.Q [h40]",
+		"a X1.CLK IC19:A.CLK",
 	]
 	let byname = {}
 	for (let p of placed)
 		byname[p.name] = p
+	
+	function makepos(p, pos) {
+		let px = pos.x + p.e.x
+		let py = pos.y + p.e.y
+		if (p.side==0)
+			return `translate(${(px)*10} ${(py-0.2)*10}) rotate(90)`
+		if (p.side==1)
+			return `translate(${(px+0.2)*10} ${(py)*10})" text-anchor="start`
+		if (p.side==2)
+			return `translate(${(px)*10} ${(py+0.2)*10}) rotate(-90)`
+		if (p.side==3)
+			return `translate(${(px-0.2)*10} ${(py)*10})`
+	}
 	
 	function generate_symbol({name, symbol:def, pos:{x, y}}) {
 		let s = ''
@@ -172,23 +185,35 @@
 		pin = part.symbol.pins.find(x=>x.name==pin)
 		return [part, pin]
 	}
-	function draw_conn([pins, path]) {
-		let [part, pin] = lookup_pin(pins[0])
-		let s = ''
+	function draw_conn(conn) {
+		conn = conn.split(" ")
+		let name = conn.shift()
+		let s = ""
+		for (let des of conn) {
+			if (~des.indexOf(".")) { // pin
+				let [part, pin] = lookup_pin(des)
+				//s += `M${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
+				s += `<text transform="${makepos(pin, part.pos)}">`+name+`</text>`
+			}
+		}
+		return s
+		/*let s = ''
 		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
 		s += path
 		if (pins[1]) {
 			0,[part, pin] = lookup_pin(pins[1])
 			s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
 		}
-		return `<path d="`+s+`"/>`
+		return `<path d="`+s+`"/>`*/
 	}
 	
 	let s = ''
-	s += "<g stroke=green stroke-width=1px fill=none>"
+	s += "<g text-anchor=end font-size=7 dominant-baseline=central>"
 	for (let conn of cons) {
 		s += draw_conn(conn)
 	}
+	s += "</g>"
+	s += "<g stroke=green stroke-width=1px fill=none>"
 	s += "</g>"
 	for (let p of placed) {
 		byname[p.name] = p
