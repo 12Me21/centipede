@@ -33,7 +33,7 @@
 		<path d="m210,110 v-20 h50 v20 m0,10 h10"/>
 		<path d="m200,120 h10"/>
 	</g>
-	<g class=chip>
+	<!--<g class=chip>
 		<text x=235 y=98 class=name>IC19:1</text>
 		<rect x=220 y=100 width=30 height=50 />
 		<path d="m220,110 h-10" /><text x=222 y=110>D</text>
@@ -57,5 +57,45 @@
 		<text x=175 y=108 class=name>X3 26.686MHz</text>
 		<rect x=160 y=110 width=30 height=20 />
 		<path d="m190,120 h10" /><text x=188 y=120 class=r>CLK</text>
+	</g>-->
+	<g id=$dest>
 	</g>
 </svg>
+
+<script>
+	function generate_symbol(def, {x, y}) {
+		let s = ''
+		let {width, height} = def
+		s += `<g class=chip>`
+		s += `<text x=${(x+width/2)*10} y=${(y-2)*10} class=name />`
+		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
+		for (let p of def.pins) {
+			let px = x + [p.slot,width,width-p.slot,0][p.side]
+			let py = y + [0,p.slot,width,width-p.slot][p.side]
+			let dir = ["v-10","h10","v10","h-10"][p.side]
+			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
+			if (p.side==0)
+				s += `<text x=${(px)*10} y=${(py+0.2)*10}>${p.name}</text>`
+			if (p.side==1)
+				s += `<text x=${(px-0.2)*10} y=${(py)*10}>${p.name}</text>`
+			if (p.side==2)
+				s += `<text x=${(px)*10} y=${(py-0.2)*10}>${p.name}</text>`
+			if (p.side==3)
+				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${p.name}</text>`
+		}
+		return s
+	}
+	let s = generate_symbol({
+		width: 3,
+		height: 5,
+		pins: [
+			{name:"D", side:3, slot:4},
+			{name:"CLK", side:3, slot:3},
+			{name:"~PRE", side:3, slot:2},
+			{name:"~CLR", side:3, slot:1},
+			{name:"~Q", side:1, slot:1},
+			{name:"Q", side:1, slot:2},
+		],
+	}, {x:22,y:10})
+	$dest.innerHTML = s
+</script>
