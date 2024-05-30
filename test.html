@@ -75,11 +75,11 @@
 			let dir = ["v-10","h10","v10","h-10"][p.side]
 			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
 			if (p.side==0)
-				s += `<text x=${(px)*10} y=${(py+0.2)*10}>${p.name}</text>`
+				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
 			if (p.side==1)
 				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end>${p.name}</text>`
 			if (p.side==2)
-				s += `<text x=${(px)*10} y=${(py-0.2)*10}>${p.name}</text>`
+				s += `<text transform="translate(${(px)*10} ${(py-0.2)*10}) rotate(-90)">${p.name}</text>`
 			if (p.side==3)
 				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${p.name}</text>`
 		}
@@ -96,6 +96,7 @@
 			{name:"~CLR", side:3, slot:1},
 			{name:"~Q", side:1, slot:1},
 			{name:"Q", side:1, slot:2},
+			{name:"VCC", side:0, slot:2},
 		],
 	}, {x:22,y:10})
 	$dest.innerHTML = s
