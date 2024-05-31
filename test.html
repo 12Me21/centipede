@@ -27,6 +27,13 @@
 		.chip .name {
 			dominant-baseline: auto;
 			text-anchor: middle;
+			font-size: 8px;
+			font-weight: bold;
+		}
+		.chip .desc {
+			dominant-baseline: auto;
+			text-anchor: middle;
+			font-size: 6px;
 		}
 		.chip .num {
 			dominant-baseline: auto;
@@ -230,7 +237,7 @@
 		let {width, height} = def
 		s += `<g class=chip>`
 		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${name}</text>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=name >${def.name} ${def.desc}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name} ${def.desc}</text>`
 		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		for (let p of def.pins) {
 			let px = x + p.r.x
