@@ -221,6 +221,17 @@
 		[["IC22.RCO", "NC"], ""],
 		
 		[["IC22.ENP", "IC22.ENT"], ""],
+		
+		[["IC21A.D", "IC21A.~Q"], "v-30 h50"],
+		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
+		[["IC21A.Q", "IC21B.CLK"], ""],
+		[["IC21A.Q", null], "h10 v90"],
+		
+		[["IC21A.~PRE", "GND"], ""],
+		[["IC21B.~PRE", "GND"], ""],
+		[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
+		[["IC21B.~CLR", "IC22.~MR"], "v60"],
+		[["IC21B.Q", "IC22.ENP"], ""],
 	]
 	let byname = {}
 	for (let p of placed)
