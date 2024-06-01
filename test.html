@@ -291,6 +291,9 @@
 		[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
 		[["IC21B.~CLR", "IC22.~MR"], "v20"],
 		[["IC21A.~CLR", "=OTIS.BS"], ""],
+		// ic21a.clr [v20h70J] ic21b.clr [P] ic22.mr
+		// J = create junction, P = pop stack, to reach previously created junction
+		
 		[["IC21B.Q", "IC22.ENP"], ""],
 		
 		[["IC30L.A5", "IC30L.A6"], ""],
@@ -358,6 +361,10 @@
 		pin = part.symbol.pins.find(x=>(x.num==pin||x.name==pin))
 		return [part, pin]
 	}
+	function draw_conn2(desc) {
+		
+	}
+	
 	function draw_conn([pins, path]) {
 		let [part, pin] = lookup_pin(pins[0])
 		let s = ''
