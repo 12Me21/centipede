@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html><meta charset=utf-8>
 
 <svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 500 500" width=1000>
 	<style>
@@ -68,25 +68,51 @@
 </svg>
 
 <script>
+	class Point {
+		strattr() {
+			return ` x=${this.x*10} y=${this.y*10}`
+		}
+		strsp() {
+			return `${this.x*10} ${this.y*10}`
+		}
+	}
+	let P = Point.prototype
+	
+	class Pin {
+		constructor(desc, component) {
+			if ('string'==typeof desc) {
+				let m = /^(\d+) (\S+) (?:@(\d+),(\d+))?/.exec(desc)
+				if (!m)
+					throw new Error("invalid pin descriptor: “"+desc+"”")
+				let [_,num,name,side,slot] = m
+				this.name = name
+				this.num = num
+				this.side = side
+				this.slot = slot
+			} else {
+				Object.assign(this, desc)
+			}
+			this.calculate_position(component)
+		}
+		calculate_position(component) {
+			this.r = {
+				x: [this.slot,component.width,component.width-this.slot,0][this.side],
+				y: [0,this.slot,component.height,component.height-this.slot][this.side],
+				dir: ["v-10","h10","v10","h-10"][this.side],
+				diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][this.side],
+			}
+			this.e = {
+				x: this.r.x + [0,1,0,-1][this.side],
+				y: this.r.y + [-1,0,1,0][this.side],
+			}
+		}
+	}
+	
 	class Component {
 		constructor(obj) {
-			let x = Object.setPrototypeOf(obj, Component.prototype)
-			for (let pin of x.pins) {
-				x.calculate_pin_position(pin)
-			}
-			return x
-		}
-		calculate_pin_position(pin) {
-			pin.r = {
-				x: [pin.slot,this.width,this.width-pin.slot,0][pin.side],
-				y: [0,pin.slot,this.height,this.height-pin.slot][pin.side],
-				dir: ["v-10","h10","v10","h-10"][pin.side],
-				diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][pin.side],
-			}
-			pin.e = {
-				x: pin.r.x + [0,1,0,-1][pin.side],
-				y: pin.r.y + [-1,0,1,0][pin.side],
-			}
+			let self = Object.setPrototypeOf(obj, Component.prototype)
+			self.pins = self.pins.map(x=>new Pin(x, self))
+			return self
 		}
 	}
 	
