@@ -275,13 +275,11 @@
 		[["IC22.~LOAD", "VCC"], ""],
 		[["IC22.RCO", "NC"], ""],
 		
-		[["IC22.ENP", "IC22.ENT"], ""],
-		
 		[["IC21A.D", "IC21A.~Q"], "v-30 h50"],
 		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
-		[["IC21A.Q", "IC21B.CLK"], ""],
-		[["IC21A.Q", "IC22.CLK"], "h10 v50 h70 v-30"],
-		[["IC21B.Q", "IC30L.A0"], "h20 v-90 h80 v20"],
+		
+		"ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk",
+		
 		[["IC22.Q0", "IC30L.A1"], ""],
 		[["IC22.Q1", "IC30L.A2"], ""],
 		[["IC22.Q2", "IC30L.A3"], ""],
@@ -290,16 +288,16 @@
 		
 		[["IC21A.~PRE", "GND"], ""],
 		[["IC21B.~PRE", "GND"], ""],
-		//"<circle cx=120 cy=170 r=1.5 class=crossing />",
-		//"<circle cx=190 cy=170 r=1.5 class=crossing />",
+		"<circle cx=120 cy=170 r=1.5 class=crossing />",
+		"<circle cx=190 cy=170 r=1.5 class=crossing />",
 		//[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
 		//[["IC21B.~CLR", "IC22.~MR"], "v20"],
 		//[["IC21A.~CLR", "=OTIS.BS"], ""],
 		// ic21a.clr [v20h70J] ic21b.clr [P] ic22.mr
 		// J = create junction, P = pop stack, to reach previously created junction
-		"ic21b.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
+		"ic21a.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
 		
-		[["IC21B.Q", "IC22.ENP"], ""],
+		"ic21b.q +h2J ic22.enp ic22.ent +Pv-9h8v2 ic30l.a0",
 		
 		[["IC30L.A5", "IC30L.A6"], ""],
 		[["IC30L.A6", "IC30L.A7"], ""],
@@ -453,9 +451,12 @@
 	}
 	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
-		if ('string'==typeof conn)
-			s += draw_conn2(conn)
-		else
+		if ('string'==typeof conn) {
+			if (conn[0]=="<")
+				s+=conn
+			else
+				s += draw_conn2(conn)
+		} else
 			s += draw_conn(conn)
 	}
 	s += "</g>"
