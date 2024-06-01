@@ -68,175 +68,169 @@
 </svg>
 
 <script>
-	function calculate_pin_position(symbol, pin) {
-		pin.r = {
-			x: [pin.slot,symbol.width,symbol.width-pin.slot,0][pin.side],
-			y: [0,pin.slot,symbol.height,symbol.height-pin.slot][pin.side],
-			dir: ["v-10","h10","v10","h-10"][pin.side],
-			diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][pin.side],
-		}
-		pin.e = {
-			x: pin.r.x + [0,1,0,-1][pin.side],
-			y: pin.r.y + [-1,0,1,0][pin.side],
-		}
-	}
-	
 	class Component {
 		constructor(obj) {
 			let x = Object.setPrototypeOf(obj, Component.prototype)
 			for (let pin of x.pins) {
-				calculate_pin_position(x, pin)
+				x.calculate_pin_position(pin)
 			}
 			return x
 		}
+		calculate_pin_position(pin) {
+			pin.r = {
+				x: [pin.slot,this.width,this.width-pin.slot,0][pin.side],
+				y: [0,pin.slot,this.height,this.height-pin.slot][pin.side],
+				dir: ["v-10","h10","v10","h-10"][pin.side],
+				diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][pin.side],
+			}
+			pin.e = {
+				x: pin.r.x + [0,1,0,-1][pin.side],
+				y: pin.r.y + [-1,0,1,0][pin.side],
+			}
+		}
 	}
 	
-	let d = new Component({
-		width: 3,
-		height: 5,
-		name: "74F74",
-		desc: "d-flip-flop",
-		pins: [
-			{name:"D", num: 2, side:3, slot:4},
-			{name:"CLK", num: 3, side:3, slot:3},
-			{name:"~PRE", num: 4, side:3, slot:2},
-			{name:"~CLR", num: 1, side:3, slot:1},
-			{name:"~Q", num: 6, side:1, slot:1, out:1},
-			{name:"Q", num: 5, side:1, slot:2, out:1},
-		],
-	})
-	let f161 = new Component({
-		width: 4,
-		height: 12,
-		name: "74F161",
-		desc: "binary counter",
-		pins: [
-			{name:"D0", num: 3, side:3, slot:11},
-			{name:"D1", num: 4, side:3, slot:10},
-			{name:"D2", num: 5, side:3, slot:9},
-			{name:"D3", num: 6, side:3, slot:8},
-			{name:"~LOAD", num: 9, side:3, slot:6},
-			{name:"ENP", num: 7, side:3, slot:5},
-			{name:"ENT", num: 10, side:3, slot:4},
-			{name:"CLK", num: 2, side:3, slot:3},
-			{name:"~MR", num: 1, side:3, slot:1},
-			
-			{name:"Q0", num: 14, side:1, slot:1},
-			{name:"Q1", num: 13, side:1, slot:2},
-			{name:"Q2", num: 12, side:1, slot:3},
-			{name:"Q3", num: 11, side:1, slot:4},
-			{name:"RCO", num: 15, side:1, slot:10},
-		],
-	})
-	let d2 = new Component({
-		width: 3,
-		height: 5,
-		name: "74F74",
-		desc: "(cont.)",
-		pins: [
-			{name:"D", num: 12, side:3, slot:4},
-			{name:"CLK", num: 11, side:3, slot:3},
-			{name:"~PRE", num: 10, side:3, slot:2},
-			{name:"~CLR", num: 13, side:3, slot:1},
-			{name:"~Q", num: 8, side:1, slot:1, out:1},
-			{name:"Q", num: 9, side:1, slot:2, out:1},
-		],
-	})
-	let dpram = new Component({
-		width: 4,
-		height: 16,
-		name: "MB8421 L",
-		desc: "dual-port RAM",
-		pins: [
-			{name:"~BUSY", num: 3, side:1, slot:12},
-			{name:"~INT", num: 4, side:1, slot:13},
-			{name:"IO0", num: 18, side:1, slot:1},
-			{name:"IO1", num: 19, side:1, slot:2},
-			{name:"IO2", num: 20, side:1, slot:3},
-			{name:"IO3", num: 21, side:1, slot:4},
-			{name:"IO4", num: 22, side:1, slot:5},
-			{name:"IO5", num: 23, side:1, slot:6},
-			{name:"IO6", num: 24, side:1, slot:7},
-			{name:"IO7", num: 25, side:1, slot:8},
-			
-			{name:"~CS", num: 1, side:3, slot:3},
-			{name:"~WE", num: 2, side:3, slot:2},
-			{name:"~OE", num: 7, side:3, slot:1},
-			{name:"A0", num: 8, side:3, slot:15},
-			{name:"A1", num: 9, side:3, slot:14},
-			{name:"A2", num: 10, side:3, slot:13},
-			{name:"A3", num: 11, side:3, slot:12},
-			{name:"A4", num: 12, side:3, slot:11},
-			{name:"A5", num: 13, side:3, slot:10},
-			{name:"A6", num: 14, side:3, slot:9},
-			{name:"A7", num: 15, side:3, slot:8},
-			{name:"A8", num: 16, side:3, slot:7},
-			{name:"A9", num: 17, side:3, slot:6},
-			{name:"A10", num: 6, side:3, slot:5},
-		],
-	})
-	let f04 = new Component({
-		width: 3,
-		height: 7,
-		name: "74F04",
-		desc: "inverter",
-		pins: [
-			{name:"I1", num:1, side:3, slot:1},
-			{name:"I2", num:3, side:3, slot:2},
-			{name:"I3", num:5, side:3, slot:3},
-			{name:"I4", num:9, side:3, slot:4},
-			{name:"I5", num:11, side:3, slot:5},
-			{name:"I6", num:13, side:3, slot:6},
-			{name:"~Y1", num:2, side:1, slot:6,out:1},
-			{name:"~Y2", num:4, side:1, slot:5,out:1},
-			{name:"~Y3", num:6, side:1, slot:4,out:1},
-			{name:"~Y4", num:9, side:1, slot:3,out:1},
-			{name:"~Y5", num:10, side:1, slot:2,out:1},
-			{name:"~Y6", num:12, side:1, slot:1,out:1},
-		],
-	})
-	let osc = new Component({
-		width:3,
-		height: 2,
-		name:"oscillator",
-		pins: [
-			{name:"CLK",side:1,slot:1,out:1},
-		],
-	})
-	let oscpkg = { //hm.
-		symbol: osc,
-		pads: {
-			"CLK": 8,
-			"VCC": 14,
-			"GND": 7,
-		}
+	let comps = {
+		f74a: new Component({
+			width: 3,
+			height: 5,
+			name: "74F74",
+			desc: "d-flip-flop",
+			pins: [
+				{name:"D", num: 2, side:3, slot:4},
+				{name:"CLK", num: 3, side:3, slot:3},
+				{name:"~PRE", num: 4, side:3, slot:2},
+				{name:"~CLR", num: 1, side:3, slot:1},
+				{name:"~Q", num: 6, side:1, slot:1, out:1},
+				{name:"Q", num: 5, side:1, slot:2, out:1},
+			],
+		}),
+		f74b: new Component({
+			width: 3,
+			height: 5,
+			name: "74F74",
+			desc: "(cont.)",
+			pins: [
+				{name:"D", num: 12, side:3, slot:4},
+				{name:"CLK", num: 11, side:3, slot:3},
+				{name:"~PRE", num: 10, side:3, slot:2},
+				{name:"~CLR", num: 13, side:3, slot:1},
+				{name:"~Q", num: 8, side:1, slot:1, out:1},
+				{name:"Q", num: 9, side:1, slot:2, out:1},
+			],
+		}),
+		f161: new Component({
+			width: 4,
+			height: 12,
+			name: "74F161",
+			desc: "binary counter",
+			pins: [
+				{name:"D0", num: 3, side:3, slot:11},
+				{name:"D1", num: 4, side:3, slot:10},
+				{name:"D2", num: 5, side:3, slot:9},
+				{name:"D3", num: 6, side:3, slot:8},
+				{name:"~LOAD", num: 9, side:3, slot:6},
+				{name:"ENP", num: 7, side:3, slot:5},
+				{name:"ENT", num: 10, side:3, slot:4},
+				{name:"CLK", num: 2, side:3, slot:3},
+				{name:"~MR", num: 1, side:3, slot:1},
+				
+				{name:"Q0", num: 14, side:1, slot:1},
+				{name:"Q1", num: 13, side:1, slot:2},
+				{name:"Q2", num: 12, side:1, slot:3},
+				{name:"Q3", num: 11, side:1, slot:4},
+				{name:"RCO", num: 15, side:1, slot:10},
+			],
+		}),
+		dpraml: new Component({
+			width: 4,
+			height: 16,
+			name: "MB8421 L",
+			desc: "dual-port RAM",
+			pins: [
+				{name:"~BUSY", num: 3, side:1, slot:12},
+				{name:"~INT", num: 4, side:1, slot:13},
+				{name:"IO0", num: 18, side:1, slot:1},
+				{name:"IO1", num: 19, side:1, slot:2},
+				{name:"IO2", num: 20, side:1, slot:3},
+				{name:"IO3", num: 21, side:1, slot:4},
+				{name:"IO4", num: 22, side:1, slot:5},
+				{name:"IO5", num: 23, side:1, slot:6},
+				{name:"IO6", num: 24, side:1, slot:7},
+				{name:"IO7", num: 25, side:1, slot:8},
+				
+				{name:"~CS", num: 1, side:3, slot:3},
+				{name:"~WE", num: 2, side:3, slot:2},
+				{name:"~OE", num: 7, side:3, slot:1},
+				{name:"A0", num: 8, side:3, slot:15},
+				{name:"A1", num: 9, side:3, slot:14},
+				{name:"A2", num: 10, side:3, slot:13},
+				{name:"A3", num: 11, side:3, slot:12},
+				{name:"A4", num: 12, side:3, slot:11},
+				{name:"A5", num: 13, side:3, slot:10},
+				{name:"A6", num: 14, side:3, slot:9},
+				{name:"A7", num: 15, side:3, slot:8},
+				{name:"A8", num: 16, side:3, slot:7},
+				{name:"A9", num: 17, side:3, slot:6},
+				{name:"A10", num: 6, side:3, slot:5},
+			],
+		}),
+		f04: new Component({
+			width: 3,
+			height: 7,
+			name: "74F04",
+			desc: "inverter",
+			pins: [
+				{name:"I1", num:1, side:3, slot:1},
+				{name:"I2", num:3, side:3, slot:2},
+				{name:"I3", num:5, side:3, slot:3},
+				{name:"I4", num:9, side:3, slot:4},
+				{name:"I5", num:11, side:3, slot:5},
+				{name:"I6", num:13, side:3, slot:6},
+				{name:"~Y1", num:2, side:1, slot:6,out:1},
+				{name:"~Y2", num:4, side:1, slot:5,out:1},
+				{name:"~Y3", num:6, side:1, slot:4,out:1},
+				{name:"~Y4", num:9, side:1, slot:3,out:1},
+				{name:"~Y5", num:10, side:1, slot:2,out:1},
+				{name:"~Y6", num:12, side:1, slot:1,out:1},
+			],
+		}),
+		osc: new Component({
+			width:3,
+			height: 2,
+			name: "oscillator",
+			pins: [
+				{name:"CLK",side:1,slot:1,out:1},
+			],
+		}),
 	}
 	
 	let placed = [
 		{
 			name: "IC21A",
 			displayname: "IC21:1",
-			symbol: d,
+			symbol: comps.f74a,
 			pos: {x:12-5, y:11},
 		},
 		{
 			name: "IC21B",
 			displayname: "IC21:2",
-			symbol: d2,
+			symbol: comps.f74b,
 			pos: {x:19-5, y:11},
 		},
 		{
 			name: "IC22",
-			symbol: f161,
+			symbol: comps.f161,
 			pos: {x:30-3-5, y:11-5},
 		},
 		{
 			name: "IC30L",
 			displayname: "IC30:L",
-			symbol: dpram,
+			symbol: comps.dpraml,
 			pos: {x:35-5, y:10-5},
 		},
 	]
+	
 	let cons = [
 		[["IC22.D0", "IC22.D1"], ""],
 		[["IC22.D1", "IC22.D2"], ""],
@@ -288,6 +282,7 @@
 		
 		[["IC30L.~BUSY", "IC30L.~WE"], "h10 v50 h-80 v-30"], // unsure
 	]
+	
 	let byname = {}
 	for (let p of placed)
 		byname[p.name] = p
