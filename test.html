@@ -47,6 +47,12 @@
 			dominant-baseline: central;
 			font-family: ms pmincho
 		}
+		.overline {
+			text-decoration: underline;
+			text-underline-offset: -6px;
+			text-decoration-skip-ink: none;
+			text-underline-position: from-font;
+		}
 	</style>
 	<!--<g stroke=green stroke-width=1px fill=none>
 		<path d="m270,110 v-20 h50 v20"/>
@@ -109,7 +115,7 @@
 	let d = new Component({
 		width: 3,
 		height: 5,
-		name: "74F74 A",
+		name: "74F74",
 		desc: "d-flip-flop",
 		pins: [
 			{name:"D", num: 2, side:3, slot:4},
@@ -146,8 +152,8 @@
 	let d2 = new Component({
 		width: 3,
 		height: 5,
-		name: "74F74 B",
-		desc: "d-flip-flop",
+		name: "74F74",
+		desc: "(cont.)",
 		pins: [
 			{name:"D", num: 12, side:3, slot:4},
 			{name:"CLK", num: 11, side:3, slot:3},
@@ -244,9 +250,9 @@
 			pos: {x:30-2, y:11},
 		},
 		{
-			name: "IC30",
+			name: "IC30L",
 			symbol: dpram,
-			pos: {x:50, y:11},
+			pos: {x:36, y:10},
 		},
 	]
 	let cons = [
@@ -264,11 +270,11 @@
 		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
 		[["IC21A.Q", "IC21B.CLK"], ""],
 		[["IC21A.Q", "IC22.CLK"], "h10 v-50 h70 v70"],
-		[["IC21B.Q", null], "h30 v-90 h80 v20 h20"],
-		[["IC22.Q0", null], "h30"],
-		[["IC22.Q1", null], "h30"],
-		[["IC22.Q2", null], "h30"],
-		[["IC22.Q3", null], "h30"],
+		[["IC21B.Q", "IC30L.A0"], "h30 v-90 h80 v20"],
+		[["IC22.Q0", "IC30L.A1"], ""],
+		[["IC22.Q1", "IC30L.A2"], ""],
+		[["IC22.Q2", "IC30L.A3"], ""],
+		[["IC22.Q3", "IC30L.A4"], ""],
 		[["IC21A.CLK", "=OTIS.E"], ""],
 		
 		[["IC21A.~PRE", "GND"], ""],
@@ -277,6 +283,26 @@
 		[["IC21B.~CLR", "IC22.~MR"], "v20"],
 		[["IC21A.~CLR", "=OTIS.BS"], ""],
 		[["IC21B.Q", "IC22.ENP"], ""],
+		
+		[["IC30L.A5", "IC30L.A6"], ""],
+		[["IC30L.A6", "IC30L.A7"], ""],
+		[["IC30L.A7", "IC30L.A8"], ""],
+		[["IC30L.A8", "IC30L.A9"], ""],
+		[["IC30L.A9", "IC30L.A10"], ""],
+		[["IC30L.A10", "GND"], ""],
+		
+		[["IC30L.IO4", "NC"], ""],
+		[["IC30L.IO5", "NC"], ""],
+		[["IC30L.IO6", "NC"], ""],
+		[["IC30L.IO7", "NC"], ""],
+		[["IC30L.IO0", "=cartB.89"], ""],
+		[["IC30L.IO1", "=cartB.90"], ""],
+		[["IC30L.IO2", "=cartB.91"], ""],
+		[["IC30L.IO3", "=cartB.92"], ""],
+		
+		[["IC30L.~OE", "GND"], ""],
+		
+		[["IC30L.~BUSY", "IC30L.~WE"], "h10 v50 h-80 v-30"], // unsure
 	]
 	let byname = {}
 	for (let p of placed)
@@ -294,15 +320,21 @@
 			let py = y + p.r.y
 			let dir = p.out ? p.r.diro : p.r.dir
 			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
+			let pname = p.name
+			let ext = ""
+			if (pname[0]=="~") {
+				//pname = pname.slice(1)
+				//ext = "class=overline"
+			}
 			if (p.side==0) {
 				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
 			} if (p.side==1) {
-				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end>${p.name}</text>`
+				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end ${ext}>${pname}</text>`
 				s += `<text x=${(px+0.2)*10} y=${(py-0.2)*10} class=num>${p.num}</text>`
 			} if (p.side==2) {
 				s += `<text transform="translate(${(px)*10} ${(py-0.2)*10}) rotate(-90)">${p.name}</text>`
 			} if (p.side==3) {
-				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${p.name}</text>`
+				s += `<text x=${(px+0.2)*10} y=${(py)*10} ${ext}>${pname}</text>`
 				s += `<text x=${(px-0.2)*10} y=${(py-0.2)*10} text-anchor=end class=num>${p.num}</text>`
 			}
 		}
