@@ -362,7 +362,15 @@
 		let px = 0
 		let py = 0
 		let dir = 0
-		let landmarks = []
+		let landmarks = [] //todo: what if we stored the current pos in landmark stack?
+		// i.e. for this sequence:
+		// "ic21b.q +h2J ic22.enp ic22.ent +Pv-9h8v2 ic30l.a0",
+		// the stack would go:
+		// ic21b.q [q]
+		// +h2J [q,junction]
+		// ic22.enp [q,junction,enp]
+		// actually no..
+
 		let lineto = (c)=>{s+=c+px*10+","+py*10}
 		let drawing = false
 		for (let item of desc) {
