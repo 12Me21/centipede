@@ -53,6 +53,10 @@
 			text-decoration-skip-ink: none;
 			text-underline-position: from-font;
 		}
+		.crossing {
+			fill: white;
+			stroke: none;
+		}
 	</style>
 	<!--<g stroke=green stroke-width=1px fill=none>
 		<path d="m270,110 v-20 h50 v20"/>
@@ -269,7 +273,7 @@
 		[["IC21A.D", "IC21A.~Q"], "v-30 h50"],
 		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
 		[["IC21A.Q", "IC21B.CLK"], ""],
-		[["IC21A.Q", "IC22.CLK"], "h10 v-50 h70 v70"],
+		[["IC21A.Q", "IC22.CLK"], "h10 v50 h70 v-30"],
 		[["IC21B.Q", "IC30L.A0"], "h30 v-90 h80 v20"],
 		[["IC22.Q0", "IC30L.A1"], ""],
 		[["IC22.Q1", "IC30L.A2"], ""],
@@ -279,6 +283,8 @@
 		
 		[["IC21A.~PRE", "GND"], ""],
 		[["IC21B.~PRE", "GND"], ""],
+		"<circle cx=170 cy=220 r=1.5 class=crossing />",
+		"<circle cx=240 cy=220 r=1.5 class=crossing />",
 		[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
 		[["IC21B.~CLR", "IC22.~MR"], "v20"],
 		[["IC21A.~CLR", "=OTIS.BS"], ""],
@@ -379,7 +385,10 @@
 	}
 	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
-		s += draw_conn(conn)
+		if ('string'==typeof conn)
+			s += conn
+		else
+			s += draw_conn(conn)
 	}
 	s += "</g>"
 	$dest.innerHTML = s
