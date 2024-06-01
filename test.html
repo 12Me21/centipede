@@ -62,6 +62,10 @@
 			fill: white;
 			stroke: none;
 		}
+		.junction {
+			fill: green;
+			stroke: none;
+		}
 	</style>
 	<g id=$dest>
 	</g>
@@ -286,13 +290,14 @@
 		
 		[["IC21A.~PRE", "GND"], ""],
 		[["IC21B.~PRE", "GND"], ""],
-		"<circle cx=120 cy=170 r=1.5 class=crossing />",
-		"<circle cx=190 cy=170 r=1.5 class=crossing />",
-		[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
-		[["IC21B.~CLR", "IC22.~MR"], "v20"],
-		[["IC21A.~CLR", "=OTIS.BS"], ""],
+		//"<circle cx=120 cy=170 r=1.5 class=crossing />",
+		//"<circle cx=190 cy=170 r=1.5 class=crossing />",
+		//[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
+		//[["IC21B.~CLR", "IC22.~MR"], "v20"],
+		//[["IC21A.~CLR", "=OTIS.BS"], ""],
 		// ic21a.clr [v20h70J] ic21b.clr [P] ic22.mr
 		// J = create junction, P = pop stack, to reach previously created junction
+		"ic21b.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
 		
 		[["IC21B.Q", "IC22.ENP"], ""],
 		
@@ -357,12 +362,62 @@
 	}
 	function lookup_pin(des) {
 		let [part,pin] = des.split(".")
+		part = part.toUpperCase()
+		pin = pin.toUpperCase()
 		part = byname[part]
 		pin = part.symbol.pins.find(x=>(x.num==pin||x.name==pin))
 		return [part, pin]
 	}
 	function draw_conn2(desc) {
-		
+		desc = desc.split(" ")
+		let s = ""
+		let s2 = ""
+		let px = 0
+		let py = 0
+		let dir = 0
+		let landmarks = []
+		let lineto = (c)=>{s+=c+px*10+","+py*10}
+		let drawing = false
+		for (let item of desc) {
+			if (item[0]=="+") {
+				for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
+					move = move[0]
+					let num = +move.slice(1)
+					if (move[0]=="h") {
+						px += num
+						lineto('L')
+					} else if (move[0]=='v') {
+						py += num
+						lineto('L')
+					} else if (move[0]=='J') {
+						landmarks.push([px,py])
+						s2 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=junction />`
+					} else if (move[0]=='P') {
+						0,[px,py] = landmarks.pop()
+						lineto('M')
+					} else {
+						throw new Error('oh no +'+move[0])
+					}
+				}
+			} else if (item[0]=="=") {
+				let text = item.slice(1)
+				if (dir=3)
+					s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
+				else 
+					s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+			} else {
+				let [part, pin] = lookup_pin(item)
+				dir = pin.side
+				px = pin.e.x+part.pos.x
+				py = pin.e.y+part.pos.y
+				if (drawing)
+					lineto('L')
+				else
+					lineto('M')
+				drawing = true
+			}
+		}
+		return `<path d="`+s+`"/>`+s2
 	}
 	
 	function draw_conn([pins, path]) {
@@ -399,7 +454,7 @@
 	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
 		if ('string'==typeof conn)
-			s += conn
+			s += draw_conn2(conn)
 		else
 			s += draw_conn(conn)
 	}
