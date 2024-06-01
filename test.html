@@ -109,7 +109,7 @@
 	let d = new Component({
 		width: 3,
 		height: 5,
-		name: "74F74",
+		name: "74F74 A",
 		desc: "d-flip-flop",
 		pins: [
 			{name:"D", num: 2, side:3, slot:4},
@@ -146,7 +146,7 @@
 	let d2 = new Component({
 		width: 3,
 		height: 5,
-		name: "74F74",
+		name: "74F74 B",
 		desc: "d-flip-flop",
 		pins: [
 			{name:"D", num: 12, side:3, slot:4},
@@ -155,6 +155,39 @@
 			{name:"~CLR", num: 13, side:3, slot:1},
 			{name:"~Q", num: 8, side:1, slot:1, out:1},
 			{name:"Q", num: 9, side:1, slot:2, out:1},
+		],
+	})
+	let dpram = new Component({
+		width: 4,
+		height: 16,
+		name: "MB8421 L",
+		desc: "dual-port RAM",
+		pins: [
+			{name:"~BUSY", num: 3, side:1, slot:12},
+			{name:"~INT", num: 4, side:1, slot:13},
+			{name:"IO0", num: 18, side:1, slot:1},
+			{name:"IO1", num: 19, side:1, slot:2},
+			{name:"IO2", num: 20, side:1, slot:3},
+			{name:"IO3", num: 21, side:1, slot:4},
+			{name:"IO4", num: 22, side:1, slot:5},
+			{name:"IO5", num: 23, side:1, slot:6},
+			{name:"IO6", num: 24, side:1, slot:7},
+			{name:"IO7", num: 25, side:1, slot:8},
+			
+			{name:"~CS", num: 1, side:3, slot:3},
+			{name:"~WE", num: 2, side:3, slot:2},
+			{name:"~OE", num: 7, side:3, slot:1},
+			{name:"A0", num: 8, side:3, slot:15},
+			{name:"A1", num: 9, side:3, slot:14},
+			{name:"A2", num: 10, side:3, slot:13},
+			{name:"A3", num: 11, side:3, slot:12},
+			{name:"A4", num: 12, side:3, slot:11},
+			{name:"A5", num: 13, side:3, slot:10},
+			{name:"A6", num: 14, side:3, slot:9},
+			{name:"A7", num: 15, side:3, slot:8},
+			{name:"A8", num: 16, side:3, slot:7},
+			{name:"A9", num: 17, side:3, slot:6},
+			{name:"A10", num: 6, side:3, slot:5},
 		],
 	})
 	let f04 = new Component({
@@ -209,6 +242,11 @@
 			name: "IC22",
 			symbol: f161,
 			pos: {x:30-2, y:11},
+		},
+		{
+			name: "IC30",
+			symbol: dpram,
+			pos: {x:50, y:11},
 		},
 	]
 	let cons = [
