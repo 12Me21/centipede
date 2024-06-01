@@ -267,27 +267,24 @@
 	]
 	
 	let cons = [
-		[["IC22.D0", "IC22.D1"], ""],
-		[["IC22.D1", "IC22.D2"], ""],
-		[["IC22.D2", "IC22.D3"], ""],
-		[["IC22.D3", "GND"], ""],
+		"IC22.D0 IC22.D1 IC22.D2 IC22.D3 GND",
 		
-		[["IC22.~LOAD", "VCC"], ""],
-		[["IC22.RCO", "NC"], ""],
+		"IC22.~LOAD VCC",
+		"IC22.RCO NC",
 		
-		[["IC21A.D", "IC21A.~Q"], "v-30 h50"],
-		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
+		"IC21A.D +v-3h5 IC21A.~Q",
+		"IC21B.D +v-3h5 IC21B.~Q",
 		
 		"ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk",
 		
-		[["IC22.Q0", "IC30L.A1"], ""],
-		[["IC22.Q1", "IC30L.A2"], ""],
-		[["IC22.Q2", "IC30L.A3"], ""],
-		[["IC22.Q3", "IC30L.A4"], ""],
-		[["IC21A.CLK", "=OTIS.E"], ""],
+		"IC22.Q0 IC30L.A1",
+		"IC22.Q1 IC30L.A2",
+		"IC22.Q2 IC30L.A3",
+		"IC22.Q3 IC30L.A4",
+		"IC21A.CLK =OTIS.E",
 		
-		[["IC21A.~PRE", "GND"], ""],
-		[["IC21B.~PRE", "GND"], ""],
+		"IC21A.~PRE GND",
+		"IC21B.~PRE GND",
 		"<circle cx=120 cy=170 r=1.5 class=crossing />",
 		"<circle cx=190 cy=170 r=1.5 class=crossing />",
 		//[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
@@ -299,25 +296,21 @@
 		
 		"ic21b.q +h2J ic22.enp ic22.ent +Pv-9h8v2 ic30l.a0",
 		
-		[["IC30L.A5", "IC30L.A6"], ""],
-		[["IC30L.A6", "IC30L.A7"], ""],
-		[["IC30L.A7", "IC30L.A8"], ""],
-		[["IC30L.A8", "IC30L.A9"], ""],
-		[["IC30L.A9", "IC30L.A10"], ""],
-		[["IC30L.A10", "GND"], ""],
+		"ic30l.a5 ic30l.a6 ic30l.a7 ic30l.a8 ic30l.a9 ic30l.a10 GND",
 		
-		[["IC30L.IO4", "NC"], ""],
-		[["IC30L.IO5", "NC"], ""],
-		[["IC30L.IO6", "NC"], ""],
-		[["IC30L.IO7", "NC"], ""],
-		[["IC30L.IO0", "=cartB.89"], ""],
-		[["IC30L.IO1", "=cartB.90"], ""],
-		[["IC30L.IO2", "=cartB.91"], ""],
-		[["IC30L.IO3", "=cartB.92"], ""],
+		"IC30L.IO4 NC",
+		"IC30L.IO5 NC",
+		"IC30L.IO6 NC",
+		"IC30L.IO7 NC",
 		
-		[["IC30L.~OE", "GND"], ""],
+		"IC30L.IO0 =cartB.89",
+		"IC30L.IO1 =cartB.90",
+		"IC30L.IO2 =cartB.91",
+		"IC30L.IO3 =cartB.92",
 		
-		[["IC30L.~BUSY", "IC30L.~WE"], "h10 v50 h-80 v-30"], // unsure
+		"IC30L.~OE GND",
+		
+		"IC30L.~BUSY +h1v5h-8v-3 IC30L.~WE", // unsure
 	]
 	
 	let byname = {}
@@ -399,20 +392,28 @@
 				}
 			} else if (item[0]=="=") {
 				let text = item.slice(1)
-				if (dir=3)
+				if (dir==3)
 					s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
 				else 
 					s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
 			} else {
-				let [part, pin] = lookup_pin(item)
-				dir = pin.side
-				px = pin.e.x+part.pos.x
-				py = pin.e.y+part.pos.y
-				if (drawing)
-					lineto('L')
-				else
-					lineto('M')
-				drawing = true
+				if (item=="VCC") {
+					s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
+				} else if (item=="GND") {
+					s += `v3 h-3 l3,3 l3,-3 h-3`
+				} else if (item=="NC") {
+					s += `m-2,-2 l4,4 m0-4 l-4,4`
+				} else {
+					let [part, pin] = lookup_pin(item)
+					dir = pin.side
+					px = pin.e.x+part.pos.x
+					py = pin.e.y+part.pos.y
+					if (drawing)
+						lineto('L')
+					else
+						lineto('M')
+					drawing = true
+				}
 			}
 		}
 		return `<path d="`+s+`"/>`+s2
