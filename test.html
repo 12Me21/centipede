@@ -2,6 +2,11 @@
 
 <svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 900 900" width=900>
 	<style>
+		@font-face {
+			font-family: 'mspm';
+			src: url("./short2.otf?1");
+		}
+		
 		.chip rect {
 			fill: beige;
 			stroke: maroon;
@@ -240,23 +245,29 @@
 	let placed = [
 		{
 			name: "IC21A",
+			displayname: "IC21",
+			suffix: "<tspan style=font-variant-position:sub;>1</tspan>",
 			symbol: d,
 			pos: {x:12, y:11+5},
 		},
 		{
 			name: "IC21B",
+			displayname: "IC21",
+			suffix: "<tspan style=font-variant-position:sub;>2</tspan>",
 			symbol: d2,
 			pos: {x:19, y:11+5},
 		},
 		{
 			name: "IC22",
 			symbol: f161,
-			pos: {x:30-2, y:11},
+			pos: {x:30-3, y:11},
 		},
 		{
 			name: "IC30L",
+			displayname: "IC30",
+			suffix: "<tspan style=font-variant-position:sub;>L</tspan>",
 			symbol: dpram,
-			pos: {x:36, y:10},
+			pos: {x:35, y:10},
 		},
 	]
 	let cons = [
@@ -274,7 +285,7 @@
 		[["IC21B.D", "IC21B.~Q"], "v-30 h50"],
 		[["IC21A.Q", "IC21B.CLK"], ""],
 		[["IC21A.Q", "IC22.CLK"], "h10 v50 h70 v-30"],
-		[["IC21B.Q", "IC30L.A0"], "h30 v-90 h80 v20"],
+		[["IC21B.Q", "IC30L.A0"], "h20 v-90 h80 v20"],
 		[["IC22.Q0", "IC30L.A1"], ""],
 		[["IC22.Q1", "IC30L.A2"], ""],
 		[["IC22.Q2", "IC30L.A3"], ""],
@@ -314,11 +325,11 @@
 	for (let p of placed)
 		byname[p.name] = p
 	
-	function generate_symbol({name, symbol:def, pos:{x, y}}) {
+	function generate_symbol({name, displayname, suffix="", symbol:def, pos:{x, y}}) {
 		let s = ''
 		let {width, height} = def
 		s += `<g class=chip>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${name}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${displayname || name}${suffix}</text>`
 		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name} ${def.desc}</text>`
 		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		for (let p of def.pins) {
@@ -332,6 +343,7 @@
 				//pname = pname.slice(1)
 				//ext = "class=overline"
 			}
+			pname += suffix
 			if (p.side==0) {
 				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
 			} if (p.side==1) {
