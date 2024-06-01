@@ -287,11 +287,7 @@
 		"IC21B.~PRE GND",
 		"<circle cx=120 cy=170 r=1.5 class=crossing />",
 		"<circle cx=190 cy=170 r=1.5 class=crossing />",
-		//[["IC21A.~CLR", "IC21B.~CLR"], "v20 h70"],
-		//[["IC21B.~CLR", "IC22.~MR"], "v20"],
-		//[["IC21A.~CLR", "=OTIS.BS"], ""],
-		// ic21a.clr [v20h70J] ic21b.clr [P] ic22.mr
-		// J = create junction, P = pop stack, to reach previously created junction
+		
 		"ic21a.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
 		
 		"ic21b.q +h2J ic22.enp ic22.ent +Pv-9h8v2 ic30l.a0",
@@ -418,33 +414,6 @@
 		}
 		return `<path d="`+s+`"/>`+s2
 	}
-	
-	function draw_conn([pins, path]) {
-		let [part, pin] = lookup_pin(pins[0])
-		let s = ''
-		s += `m${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]} `
-		s += path
-		let s2 = ""
-		if (pins[1]) {
-			if (pins[1]=="VCC") {
-				s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
-			} else if (pins[1]=="GND") {
-				s += `v3 h-3 l3,3 l3,-3 h-3`
-			} else if (pins[1]=="NC") {
-				s += `m-2,-2 l4,4 m0-4 l-4,4`
-			} else if (pins[1][0]=="=") {
-				if (pin.side==3)
-					s2 = `<text x=${(pin.e.x+part.pos.x-0.2)*10} y=${(pin.e.y+part.pos.y)*10} class=net text-anchor=end>${pins[1].slice(1)}</text>`
-				else 
-					s2 = `<text x=${(pin.e.x+part.pos.x+0.2)*10} y=${(pin.e.y+part.pos.y)*10} class=net text-anchor=start>${pins[1].slice(1)}</text>`
-			} else {
-				0,[part, pin] = lookup_pin(pins[1])
-				s += ` L${[(pin.e.x+part.pos.x)*10,(pin.e.y+part.pos.y)*10]}`
-			}
-		}
-		return `<path d="`+s+`"/>`+s2
-	}
-	
 	let s = ''
 	for (let p of placed) {
 		byname[p.name] = p
@@ -452,13 +421,10 @@
 	}
 	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
-		if ('string'==typeof conn) {
-			if (conn[0]=="<")
-				s+=conn
-			else
-				s += draw_conn2(conn)
-		} else
-			s += draw_conn(conn)
+		if (conn[0]=="<")
+			s+=conn
+		else
+			s += draw_conn2(conn)
 	}
 	s += "</g>"
 	$dest.innerHTML = s
