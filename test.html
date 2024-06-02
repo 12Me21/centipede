@@ -1,6 +1,6 @@
 <!doctype html><meta charset=utf-8>
 
-<svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 500 500" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 500 1000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
@@ -324,27 +324,37 @@
 		{
 			name: "IC19:B",
 			symbol: comps.f74b,
-			pos: {x:22, y:10+25},
+			pos: {x:22, y:10+25+10},
 		},
 		{
 			name: "IC19:A",
 			symbol: comps.f74a,
-			pos: {x:29, y:10+25},
+			pos: {x:29, y:10+25+10},
 		},
 		{
 			name: "X1",
 			symbol: comps.osc,
-			pos: {x:16, y:11+25},
+			pos: {x:16, y:11+25+10},
 		},
 		{
 			name: "IC20:A",
 			symbol: comps.f244a,
-			pos: {x:40-2, y:11+16},
+			pos: {x:40-2, y:11+16+2+10},
 		},
 		{
 			name: "IC20:B",
 			symbol: comps.f244b,
-			pos: {x:40-2, y:11+25},
+			pos: {x:40-2, y:11+25+2+10},
+		},
+		{
+			name: "X2",
+			symbol: comps.osc,
+			pos: {x:16+1, y:11+20+10},
+		},
+		{
+			name: "X3",
+			symbol: comps.osc,
+			pos: {x:16+6, y:11+15+3+10},
 		},
 	]
 	
@@ -406,14 +416,18 @@
 		
 		"IC19:B.D +v-3h5 IC19:B.~Q",
 		"IC19:A.D +v-3h5 IC19:A.~Q",
-		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:A.I2 +P IC20:B.I2",
+		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-9 IC20:A.I2",
 		"IC19:B.~PRE IC19:B.~CLR GND",
 		"IC19:A.~PRE IC19:A.~CLR GND",
-		"IC19:A.Q +h2Jv-3 IC20:A.I3 +P IC20:B.I3",
+		"IC19:A.Q +h2Jv-4 IC20:A.I3 +Pv5 IC20:B.I3",
 		"X1.CLK IC19:B.CLK",
 		
 		"IC20:A.~OE GND",
 		"IC20:B.~OE GND",
+		"IC20:B.I1 GND",
+		
+		"X3.CLK IC20:A.I0",
+		"X2.CLK +h5v-1 IC20:A.I1",
 	]
 	
 	let byname = {}
