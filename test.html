@@ -91,8 +91,13 @@
 				let [_,num,name,side,slot] = m
 				this.name = name
 				this.num = num
-				this.side = +side
-				this.slot = +slot
+				side = +side | 0
+				slot = +slot | 0
+				while (component.used[side][slot])
+					slot++
+				component.used[side][slot] = true
+				this.side = side
+				this.slot = slot
 			} else {
 				Object.assign(this, desc)
 			}
@@ -118,6 +123,7 @@
 	class Component {
 		constructor(obj) {
 			let self = Object.setPrototypeOf(obj, Component.prototype)
+			self.used = [[],[],[],[]]
 			self.pins = self.pins.map(x=>new Pin(x, self))
 			//self.pins2 = self.pins.map(x=>x.todesc())
 			return self
@@ -235,7 +241,66 @@
 			height: 2,
 			name: "oscillator",
 			pins: [
-				{name:"CLK",side:1,slot:1,out:1},
+				"8 CLK @1,1",
+			],
+		}),
+		otis: new Component({
+			width: 10,
+			height: 30,
+			name: "OTIS R2",
+			pins: [
+				"34 CLKIN @3,1",
+				"31 RAS @1,1",
+				"33 CAS @1,1",
+				"32 AMUX @1,1",
+				"30 E @1,1",
+				
+				"19 R/W @3,1",
+				"21 CS @3,1",
+				"20 MS @3,1",
+				"18 DTACK @1,1",
+				"29 IRQ @1,1",
+				
+				"25 A0 @3,1",
+				"26 A1 @3,1",
+				"27 A2 @3,1",
+				"28 A3 @3,1",
+				
+				"35 A4/D0 @3,1",
+				"36 A5/D1 @3,1",
+				"37 A6/D2 @3,1",
+				"38 A7/D3 @3,1",
+				"39 A8/D4 @3,1",
+				"40 A9/D5 @3,1",
+				"41 A10/D6 @3,1",
+				"42 A11/D7 @3,1",
+				"43 A12/D8 @3,1",
+				"44 A13/D9 @3,1",
+				"45 A14/D10 @3,1",
+				"46 A15/D11 @3,1",
+				"47 A16/D12 @3,1",
+				"1 A17/D13 @3,1",
+				"2 A18/D14 @3,1",
+				"3 A19/D15 @3,1",
+				"4 BS @1,1",
+				
+				"12 SERBCLK @1,1",
+				"10 SERWCLK @1,1",
+				"11 SERLR @1,1",
+				"6 SER0 @1,1",
+				"7 SER1 @1,1",
+				"8 SER2 @1,1",
+				"9 SER3 @1,1",
+				
+				"16 LHI @1,25",
+				"15 LLO @1,26",
+				"14 RHI @1,27",
+				"13 RLO @1,28",
+				"5 PWZERO @1,29",
+				
+				"17 POT @3,1",
+				
+				"22 RES @3,1",
 			],
 		}),
 	}
@@ -263,6 +328,38 @@
 			displayname: "IC30:L",
 			symbol: comps.dpraml,
 			pos: {x:35-5, y:10-5},
+		},
+		
+		{
+			name: "IC64A",
+			symbol: comps.f74a,
+			pos: {x:12, y:11+4+10},
+		},
+		{
+			name: "IC64B",
+			symbol: comps.f74b,
+			pos: {x:19+2, y:11+5+10},
+		},
+		{
+			name: "IC65",
+			symbol: comps.f04,
+			pos: {x:5, y:11+5+10},
+		},
+		
+		{
+			name: "IC19:B",
+			symbol: comps.f74b,
+			pos: {x:22, y:10+25},
+		},
+		{
+			name: "IC19:A",
+			symbol: comps.f74a,
+			pos: {x:29, y:10+25},
+		},
+		{
+			name: "X1",
+			symbol: comps.osc,
+			pos: {x:16, y:11+25},
 		},
 	]
 	
@@ -307,6 +404,28 @@
 		"IC30L.~OE GND",
 		
 		"IC30L.~BUSY +h1v5h-8v-3 IC30L.~WE", // unsure
+		
+		"IC65.13 =FDP.205",
+		"IC65.12 IC64A.3",
+		"IC65.11 =CPU.AS",
+		"IC65.10 +h1J IC64A.4 +Pv3h6v-2 IC64B.10",
+		"IC64A.5 IC64B.12",
+		"IC64B.9 =FCM.109",
+		"IC64B.11 =~VRAM-CE", //], /*"h-10 v60 h-100"*/""],
+		
+		"IC64A.1 VCC",
+		"IC64A.2 GND",
+		"IC64B.13 VCC",
+		"IC64A.~Q NC",
+		"IC64B.~Q NC",
+		
+		"IC19:B.D +v-3h5 IC19:B.~Q",
+		"IC19:A.D +v-3h5 IC19:A.~Q",
+		"IC19:B.Q +h1J IC19:A.CLK +Pv4h10",
+		"IC19:B.~PRE IC19:B.~CLR GND",
+		"IC19:A.~PRE IC19:A.~CLR GND",
+		"IC19:A.Q +h4",
+		"X1.CLK IC19:B.CLK",
 	]
 	
 	let byname = {}
@@ -362,15 +481,7 @@
 		let px = 0
 		let py = 0
 		let dir = 0
-		let landmarks = [] //todo: what if we stored the current pos in landmark stack?
-		// i.e. for this sequence:
-		// "ic21b.q +h2J ic22.enp ic22.ent +Pv-9h8v2 ic30l.a0",
-		// the stack would go:
-		// ic21b.q [q]
-		// +h2J [q,junction]
-		// ic22.enp [q,junction,enp]
-		// actually no..
-
+		let landmarks = []
 		let lineto = (c)=>{s+=c+px*10+","+py*10}
 		let drawing = false
 		for (let item of desc) {
