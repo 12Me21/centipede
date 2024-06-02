@@ -324,37 +324,37 @@
 		{
 			name: "IC19:B",
 			symbol: comps.f74b,
-			pos: {x:22, y:10+25+10},
+			pos: {x:22-10, y:10+25+10},
 		},
 		{
 			name: "IC19:A",
 			symbol: comps.f74a,
-			pos: {x:29, y:10+25+10},
+			pos: {x:29-10, y:10+25+10},
 		},
 		{
 			name: "X1",
 			symbol: comps.osc,
-			pos: {x:16, y:11+25+10},
+			pos: {x:16-10, y:11+25+10},
 		},
 		{
 			name: "IC20:A",
 			symbol: comps.f244a,
-			pos: {x:40-2, y:11+16+2+10},
+			pos: {x:40-2-10, y:11+16+2+10},
 		},
 		{
 			name: "IC20:B",
 			symbol: comps.f244b,
-			pos: {x:40-2, y:11+25+2+10},
+			pos: {x:40-2-10, y:11+25+2+10},
 		},
 		{
 			name: "X2",
 			symbol: comps.osc,
-			pos: {x:16+1, y:11+20+10},
+			pos: {x:16+10-10, y:11+20+10-1},
 		},
 		{
 			name: "X3",
 			symbol: comps.osc,
-			pos: {x:16+6, y:11+15+3+10},
+			pos: {x:16+5+10-10, y:11+15+3+10-1},
 		},
 	]
 	
@@ -426,8 +426,8 @@
 		"IC20:B.~OE GND",
 		"IC20:B.I1 GND",
 		
-		"X3.CLK IC20:A.I0",
-		"X2.CLK +h5v-1 IC20:A.I1",
+		"X3.CLK +h1v1 IC20:A.I0",
+		"X2.CLK IC20:A.I1",
 	]
 	
 	let byname = {}
