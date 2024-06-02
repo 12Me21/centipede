@@ -182,6 +182,29 @@
 				"15 RCO @1,10",
 			],
 		}),
+		f163: new Component({
+			width: 4,
+			height: 12,
+			name: "74F163",
+			desc: "binary counter",
+			pins: [
+				"1 ~SR @3,1",
+				"2 CLK @3,3",
+				"3 D0 @3,11",
+				"4 D1 @3,10",
+				"5 D2 @3,9",
+				"6 D3 @3,8",
+				"7 ENP @3,5",
+				
+				"9 ~LOAD @3,6",
+				"10 ENT @3,4",
+				"11 Q3 @1,4",
+				"12 Q2 @1,3",
+				"13 Q1 @1,2",
+				"14 Q0 @1,1",
+				"15 RCO @1,10",
+			],
+		}),
 		dpraml: new Component({
 			width: 4,
 			height: 16,
@@ -338,42 +361,47 @@
 		{
 			name: "IC19:B",
 			symbol: comps.f74b,
-			pos: {x:22-10, y:10+25+10},
+			pos: {x:22-10-5, y:10+25+10},
 		},
 		{
 			name: "IC19:A",
 			symbol: comps.f74a,
-			pos: {x:29-10, y:10+25+10},
+			pos: {x:29-10-5, y:10+25+10},
 		},
 		{
 			name: "X1",
 			symbol: comps.osc,
-			pos: {x:16-10, y:11+25+10},
+			pos: {x:16-10-5, y:11+25+10},
 		},
 		{
 			name: "IC20:A",
 			symbol: comps.f244a,
-			pos: {x:40-2-10, y:11+16+2+10-1},
+			pos: {x:40-2-10-5, y:11+16+2+10-1},
 		},
 		{
 			name: "IC20:B",
 			symbol: comps.f244b,
-			pos: {x:40-2-10, y:11+25+2+10},
+			pos: {x:40-2-10-5, y:11+25+2+10},
 		},
 		{
 			name: "X2",
 			symbol: comps.osc,
-			pos: {x:16+10-10, y:11+20+10-1},
+			pos: {x:16+10-10-5, y:11+20+10-1},
 		},
 		{
 			name: "X3",
 			symbol: comps.osc,
-			pos: {x:16+5+10-10, y:11+15+3+10-1},
+			pos: {x:16+5+10-10-5, y:11+15+3+10-1},
 		},
 		{
 			name: "5701",
 			symbol: comps.escd,
-			pos: {x:16+10+10, y:11+15+3+10-2+1},
+			pos: {x:16+10+10-5, y:11+15+3+10-2+1},
+		},
+		{
+			name: "IC18",
+			symbol: comps.f161,
+			pos: {x:16+10+10+10-5-10+2, y:11+15+3+10-2+1+5+3},
 		},
 	]
 	
@@ -456,14 +484,22 @@
 		"IC20:B.9 =cartC.2",
 		"IC20:A.14 =VCLK_13",
 		"IC20:A.12 =VCLK_7",
-		"IC20:A.16 +h1J 5701.19 +Pv-4h8 =CLK_30",
 		"IC20:A.18 5701.10",
+		"IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
 		"IC20:B.5 NC",
-		"IC20:B.3 =VSYNC_OUT",
+		"IC20:B.3 =VSYNC",
 		"IC20:B.I0 +h-4v4h-1 =FDP.120",
 		
-		"5701.21 =CLK_15",
-		"5701.8 =CLK_8",
+		"5701.21 +h2 =CLK_15",
+		
+		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
+		"ic18.1 VCC",
+		"ic18.10 ic18.7 ic18.9 VCC",
+		"ic18.15 NC",
+		"5701.8 +h1Jv3h-6v11 ic18.2 +Ph1 =CLK_8",
+		"ic18.14 =CLK_4",
+		"ic18.12 =CLK_1",
+		"ic18.11 =CLK_05",
 	]
 	
 	let byname = {}
@@ -515,7 +551,7 @@
 	function draw_conn2(desc) {
 		desc = desc.split(" ")
 		let s = ""
-		let s2 = ""
+		let s2 = "", s1=""
 		let px = 0
 		let py = 0
 		let dir = 0
@@ -541,6 +577,8 @@
 					} else if (move[0]=='P') {
 						0,[px,py] = landmarks.pop()
 						lineto('M')
+					} else if (move[0]=='G') {
+						s1 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=crossing />`
 					} else {
 						throw new Error('oh no +'+move[0])
 					}
@@ -571,7 +609,7 @@
 				}
 			}
 		}
-		return `<path d="`+s+`"/>`+s2
+		return s1+`<path d="`+s+`"/>`+s2
 	}
 	let s = ''
 	for (let p of placed) {
