@@ -510,14 +510,14 @@
 		"IC20:B.5 NC",
 		"IC20:B.3 =VSYNC",
 		
-		"5701.21 +h2Jv-2 ic1.10 +Ph1 =CLK_15",
+		"[CLK_15] 5701.21 +TM ic1.10 +TM",
 		"ic1.8 =CPU.CLK",
 		
 		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
 		"ic18.1 VCC",
 		"ic18.10 ic18.7 ic18.9 VCC",
 		"ic18.15 NC",
-		"5701.8 +h1v1Gv2Jh-6v11 ic18.2 +Ph1 =CLK_8",
+		"5701.8 =CLK_8",
 		"ic18.14 =CLK_4",
 		"ic18.12 =CLK_1",
 		"ic18.11 =CLK_05",
@@ -580,6 +580,16 @@
 		let landmarks = []
 		let lineto = (c)=>{s+=c+px*10+","+py*10}
 		let drawing = false
+		let label
+		if (/^\[.*\]$/.test(desc[0])) {
+			label = desc.shift().slice(1,-1)
+		}
+		function add_label(text) {
+			if (dir==3)
+				s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
+			else 
+				s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+		}
 		for (let item of desc) {
 			if (item[0]=="+") {
 				for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
@@ -601,16 +611,17 @@
 						lineto('M')
 					} else if (move[0]=='G') {
 						s1 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=crossing />`
+					} else if (move[0]=='M') {
+						drawing = false
+					} else if (move[0]=='T') {
+						add_label(label)
 					} else {
 						throw new Error('oh no +'+move[0])
 					}
 				}
 			} else if (item[0]=="=") {
 				let text = item.slice(1)
-				if (dir==3)
-					s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
-				else 
-					s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+				add_label(text)
 			} else {
 				if (item=="VCC") {
 					s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
