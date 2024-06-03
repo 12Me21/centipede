@@ -399,29 +399,29 @@
 			name: "X2",
 			symbol: comps.osc,
 			override_name: "30.47618MHz",
-			pos: {x:16+10-10-5, y:11+20+10-1},
+			pos: {x:11, y:40},
 		},
 		{
 			name: "X3",
 			symbol: comps.osc,
 			override_name: "16MHz",
-			pos: {x:16+5+10-10-5, y:11+15+3+10-1},
+			pos: {x:16, y:38},
 		},
 		{
 			name: "5701",
 			displayname: "5701:clkdiv",
 			symbol: comps.escd,
-			pos: {x:16+10+10-5, y:11+15+3+10-2+1},
+			pos: {x:4, y:60},
 		},
 		{
 			name: "IC18",
 			symbol: comps.f161,
-			pos: {x:16+10+10+10-5-10+2, y:11+15+3+10-2+1+5+3},
+			pos: {x:33, y:46},
 		},
 		{
 			name: "IC1",
 			symbol: comps.hc08,
-			pos: {x:16+25-1, y:11+15+3+10-1},
+			pos: {x:5, y:70},
 		},
 	]
 	
@@ -505,12 +505,14 @@
 		"IC20:B.9 =cartC.2",
 		"IC20:A.14 =VCLK_13",
 		"IC20:A.12 =VCLK_7",
-		"IC20:A.18 5701.10",
-		"IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
+		"IC20:A.18 =CLK_16",
+		"5701.10 =CLK_16",
+		"IC20:A.16 =CLK_30",
+		"5701.19 =CLK_30",
 		"IC20:B.5 NC",
 		"IC20:B.3 =VSYNC",
 		
-		"5701.21 +h2Jv-2 ic1.10 +Ph1 =CLK_15",
+		"5701.21 +h1Jv2 ic1.10 +Ph1 =CLK_15",
 		"ic1.8 =CPU.CLK",
 		
 		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
