@@ -485,43 +485,53 @@
 		"IC64A.~Q NC",
 		"IC64B.~Q NC",
 		
-		"IC19:B.D +v-3h5 IC19:B.~Q",
-		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2",
-		"IC20:B.I0 +h-1Gh-3v2Gv2h-1 =FDP.120",
-		"IC19:A.D +v-3h5 IC19:A.~Q +h3Gh6 =~VCLK_7",
-		"IC19:B.~PRE IC19:B.~CLR GND",
-		"IC19:A.~PRE IC19:A.~CLR GND",
-		"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
-		"X1.CLK IC19:B.CLK",
+		
 		
 		"IC20:A.~OE GND",
 		"IC20:B.~OE GND",
 		"IC20:B.I1 GND",
 		
-		"X3.CLK IC20:A.I0",
+		////
+		
+		"X3.8 IC20:A.2",
+		"IC20:A.18 5701.10",
+		
+		"X1.8 IC19:B.11",
+		"IC19:B.8 +v-3h-5 IC19:B.12",
+		"[~VCLK_7] IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph9T",
+		
+		"[VCLK_13_PRE] IC19:B.9 +h1J IC19:A.3 +Pv4h9J IC20:B.13 +Pv-10 IC20:A.6",
+		"[VCLK_13] IC20:A.14 +T",
+		
+		"[FDP.120] IC20:B.17 +h-1Gh-3v2Gv2h-1 +T",
+		
+		"[GND] IC19:B.~PRE IC19:B.~CLR +T IC19:A.~PRE IC19:A.~CLR +T",
+		"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
+		
+		
 		"X2.CLK +h5v-1 IC20:A.I1",
 		
-		"IC20:B.7 =cartC.1",
-		"IC20:B.9 =cartC.2",
-		"IC20:A.14 =VCLK_13",
-		"IC20:A.12 =VCLK_7",
-		"IC20:A.18 5701.10",
+		"[cartC.1] IC20:B.7 +T",
+		"[cartC.2] IC20:B.9 +T",
+		
+		"[VCLK_7] IC20:A.12 +T",
+		
 		"IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
-		"IC20:B.5 NC",
-		"IC20:B.3 =VSYNC",
+		"[NC] IC20:B.5 +T",
+		"[VSYNC] IC20:B.3 +T",
 		
-		"[CLK_15] 5701.21 +TM ic1.10 +TM",
-		"ic1.8 =CPU.CLK",
+		"[CLK_15] 5701.21 +T ic1.10 +T",
+		"[CPU.CLK] ic1.8 +T",
 		
-		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
-		"ic18.1 VCC",
-		"ic18.10 ic18.7 ic18.9 VCC",
-		"ic18.15 NC",
-		"5701.8 =CLK_8",
-		"ic18.14 =CLK_4",
-		"ic18.12 =CLK_1",
-		"ic18.11 =CLK_05",
-		"ic1.9 VCC"
+		"[GND] ic18.3 ic18.4 ic18.5 ic18.6 +T",
+		"[VCC] ic18.1 +T",
+		"[VCC] ic18.10 ic18.7 ic18.9 +T",
+		"[NC] ic18.15 +T",
+		"[CLK_8] 5701.8 +T",
+		"[CLK_4] ic18.14 +T",
+		"[CLK_1] ic18.12 +T",
+		"[CLK_05] ic18.11 +T",
+		"[VCC] ic1.9 +T"
 	]
 	
 	let byname = {}
@@ -584,11 +594,24 @@
 		if (/^\[.*\]$/.test(desc[0])) {
 			label = desc.shift().slice(1,-1)
 		}
+		// e.g.
+		// pin ++ pin - no label needed (**special case, fully connected list)
+		// pin - label on 1
+		// pin pin - label on 1 and 2
+		// pin ++ pin pin ++ pin - labels on 1 and 3
 		function add_label(text) {
-			if (dir==3)
-				s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
-			else 
-				s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+			if (text=="VCC") {
+				s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
+			} else if (text=="GND") {
+				s += `v3 h-3 l3,3 l3,-3 h-3`
+			} else if (text=="NC") {
+				s += `m-2,-2 l4,4 m0-4 l-4,4`
+			} else {
+				if (dir==3)
+					s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
+				else 
+					s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+			}
 		}
 		for (let item of desc) {
 			if (item[0]=="+") {
@@ -609,12 +632,12 @@
 					} else if (move[0]=='P') {
 						0,[px,py] = landmarks.pop()
 						lineto('M')
+						drawing = true
 					} else if (move[0]=='G') {
 						s1 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=crossing />`
-					} else if (move[0]=='M') {
-						drawing = false
 					} else if (move[0]=='T') {
 						add_label(label)
+						drawing = false
 					} else {
 						throw new Error('oh no +'+move[0])
 					}
