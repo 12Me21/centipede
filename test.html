@@ -1,6 +1,6 @@
 <!doctype html><meta charset=utf-8>
 
-<svg xmlns=http://www.w3.org/2000/svg viewBox="0 0 500 1000" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 500 1000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
@@ -135,7 +135,7 @@
 			width: 3,
 			height: 5,
 			name: "74F74",
-			desc: "d-flip-flop",
+			desc: "D flip-flop",
 			pins: [
 				"1 ~CLR @3,1",
 				"2 D @3,4",
@@ -149,7 +149,7 @@
 			width: 3,
 			height: 5,
 			name: "74F74",
-			desc: "(cont.)",
+			desc: "D flip-flop",
 			pins: [
 				"8 ~Q @1,1",
 				"9 Q @1,2",
@@ -259,10 +259,21 @@
 				"13 I6 @3,6",
 			],
 		}),
+		hc08: new Component({
+			width: 3,
+			height: 3,
+			name: "74HC08",
+			desc: "AND gate",
+			pins: [
+				"8 Y3 @1,1",
+				"9 A3 @3,2",
+				"10 B3 @3,1",
+			],
+		}),
 		osc: new Component({
 			width:3,
 			height: 2,
-			name: "oscillator",
+			desc: "oscillator",
 			pins: [
 				"8 CLK @1,1",
 			],
@@ -304,8 +315,8 @@
 		escd: new Component({
 			width: 4,
 			height: 5,
-			name: "5701",
-			desc: "clock divider",
+			name: "ES5701",
+			desc: "Super-GLU",
 			pins: [
 				"10 16MI @3,4",
 				"19 20MI @3,3",
@@ -371,6 +382,7 @@
 		{
 			name: "X1",
 			symbol: comps.osc,
+			override_name: "26.686MHz",
 			pos: {x:16-10-5, y:11+25+10},
 		},
 		{
@@ -386,15 +398,18 @@
 		{
 			name: "X2",
 			symbol: comps.osc,
+			override_name: "30.47618MHz",
 			pos: {x:16+10-10-5, y:11+20+10-1},
 		},
 		{
 			name: "X3",
 			symbol: comps.osc,
+			override_name: "16MHz",
 			pos: {x:16+5+10-10-5, y:11+15+3+10-1},
 		},
 		{
 			name: "5701",
+			displayname: "5701:clkdiv",
 			symbol: comps.escd,
 			pos: {x:16+10+10-5, y:11+15+3+10-2+1},
 		},
@@ -402,6 +417,11 @@
 			name: "IC18",
 			symbol: comps.f161,
 			pos: {x:16+10+10+10-5-10+2, y:11+15+3+10-2+1+5+3},
+		},
+		{
+			name: "IC1",
+			symbol: comps.hc08,
+			pos: {x:16+25-1, y:11+15+3+10-1},
 		},
 	]
 	
@@ -466,11 +486,12 @@
 		"IC64B.~Q NC",
 		
 		"IC19:B.D +v-3h5 IC19:B.~Q",
-		"IC19:A.D +v-3h5 IC19:A.~Q +h9 =~VCLK_7",
 		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2",
+		"IC20:B.I0 +h-1Gh-3v2Gv2h-1 =FDP.120",
+		"IC19:A.D +v-3h5 IC19:A.~Q +h3Gh6 =~VCLK_7",
 		"IC19:B.~PRE IC19:B.~CLR GND",
 		"IC19:A.~PRE IC19:A.~CLR GND",
-		"IC19:A.Q +h2Jv-5 IC20:A.I3 +Pv5 IC20:B.I3",
+		"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
 		"X1.CLK IC19:B.CLK",
 		
 		"IC20:A.~OE GND",
@@ -488,30 +509,31 @@
 		"IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
 		"IC20:B.5 NC",
 		"IC20:B.3 =VSYNC",
-		"IC20:B.I0 +h-4v4h-1 =FDP.120",
 		
-		"5701.21 +h2 =CLK_15",
+		"5701.21 +h2Jv-2 ic1.10 +Ph1 =CLK_15",
+		"ic1.8 =CPU.CLK",
 		
 		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
 		"ic18.1 VCC",
 		"ic18.10 ic18.7 ic18.9 VCC",
 		"ic18.15 NC",
-		"5701.8 +h1Jv3h-6v11 ic18.2 +Ph1 =CLK_8",
+		"5701.8 +h1v1Gv2Jh-6v11 ic18.2 +Ph1 =CLK_8",
 		"ic18.14 =CLK_4",
 		"ic18.12 =CLK_1",
 		"ic18.11 =CLK_05",
+		"ic1.9 VCC"
 	]
 	
 	let byname = {}
 	for (let p of placed)
 		byname[p.name] = p
 	
-	function generate_symbol({name, displayname, suffix="", symbol:def, pos:{x, y}}) {
+	function generate_symbol({name, override_name, displayname, suffix="", symbol:def, pos:{x, y}}) {
 		let s = ''
 		let {width, height} = def
 		s += `<g class=chip>`
 		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${displayname || name}${suffix}</text>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name} ${def.desc}</text>`
+		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
 		s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		for (let p of def.pins) {
 			let px = x + p.r.x
