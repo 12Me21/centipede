@@ -596,9 +596,8 @@
 		}
 		// e.g.
 		// pin ++ pin - no label needed (**special case, fully connected list)
-		// pin - label on 1
-		// pin pin - label on 1 and 2
-		// pin ++ pin pin ++ pin - labels on 1 and 3
+		// otherwise: label on one pin per section
+		// ughh ghh
 		function add_label(text) {
 			if (text=="VCC") {
 				s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
