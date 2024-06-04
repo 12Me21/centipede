@@ -1,12 +1,18 @@
 <!doctype html><meta charset=utf-8>
 
+what if we just make classes for like  text alignment, 9 variants (left|center|right)(top|middle|bottom)
 <svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 500 1000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
 			src: url("./short2.otf?1");
 		}
-		
+		.l { text-anchor: start }
+		.c { text-enchor: middle }
+		.r { text-anchor: end }
+		.t { dominant-baseline: auto }
+		.m { dominant-baseline: central }
+		.b { dominant-baseline: hanging }
 		.chip rect {
 			fill: beige;
 			stroke: maroon;
@@ -16,7 +22,6 @@
 			dominant-baseline: central;
 			font-size: 7px;
 			fill: black;
-			font-family: ms pmincho;
 		}
 		.chip path {
 			stroke: maroon;
@@ -35,6 +40,13 @@
 			font-size: 8px;
 			font-weight: bold;
 		}
+		.chip.resistor .name {
+			text-anchor: end;
+			font-size: 7px;
+		}
+		.chip.resistor .desc {
+			text-anchor: start;
+		}
 		.chip .desc {
 			dominant-baseline: auto;
 			text-anchor: middle;
@@ -50,7 +62,6 @@
 			fill: blue;
 			font-size: 8px;
 			dominant-baseline: central;
-			font-family: ms pmincho
 		}
 		.overline {
 			text-decoration: underline;
@@ -68,6 +79,7 @@
 		}
 		.chip .resistor {
 			fill: none;
+			stroke-width: 1.5px;
 		}
 	</style>
 	<g id=$dest>
@@ -336,8 +348,8 @@
 			desc: "",
 			body: 'resistor',
 			pins: [
-				"1 . @3,0",
-				"2 . @1,0",
+				"1 &Tab; @3,0",
+				"2 &Tab; @1,0",
 			],
 		}),
 		r2: new Component({
@@ -347,8 +359,8 @@
 			desc: "",
 			body: 'resistor',
 			pins: [
-				"2 . @3,0",
-				"1 . @1,0",
+				"2 &Tab; @3,0",
+				"1 &Tab; @1,0",
 			],
 		}),
 	}
@@ -451,26 +463,32 @@
 		{
 			name: "R52",
 			symbol: comps.r2,
-			override_name: "idkΩ",
+			override_name: "82Ω",
 			pos: {x:29, y:41},
 		},
 		{
 			name: "R53",
 			symbol: comps.r,
-			override_name: "idkΩ",
-			pos: {x:29, y:44},
+			override_name: "82Ω",
+			pos: {x:29, y:42},
 		},
 		{
 			name: "R54",
 			symbol: comps.r2,
-			override_name: "idkΩ",
+			override_name: "82Ω",
 			pos: {x:29, y:51},
 		},
 		{
 			name: "R55",
 			symbol: comps.r,
-			override_name: "idkΩ",
+			override_name: "82Ω",
 			pos: {x:29, y:52},
+		},
+		{
+			name: "R24",
+			symbol: comps.r,
+			override_name: "75Ω",
+			pos: {x:29, y:49},
 		},
 	]
 	
@@ -537,7 +555,7 @@
 		"IC19:B.D +v-3h5 IC19:B.~Q",
 		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2",
 		"IC20:B.I0 +h-1Gh-3v2Gv2h-1 =FDP.120",
-		"IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh6 =~VCLK_7",
+		"IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh12 =~VCLK_7",
 		"IC19:B.~PRE IC19:B.~CLR GND",
 		"IC19:A.~PRE IC19:A.~CLR GND",
 		"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
@@ -576,6 +594,14 @@
 		"r54.1 +h1 =cartC.1",
 		"ic20:B.9 r55.1",
 		"r55.2 +h1 =cartC.2",
+		
+		"ic20:B.3 r24.1",
+		"r24.2 +h1 =V_SYNC",
+		
+		"ic20:A.18 +h6 =CLK_16",
+		"ic20:A.16 +h6 =CLK_30",
+		
+		"ic20:B.5 NC",
 	]
 	
 	let byname = {}
@@ -586,11 +612,17 @@
 		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = obj
 		let s = ''
 		let {width, height} = def
-		s += `<g class=chip>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${displayname || name}${suffix}</text>`
-		s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
-		if (0&&def.body=='resistor') {
-			s += `<path d="M${x*10},${y*10+10}h1l1.5,-3l3,6l3,-6l3,6l3,-6l3,6l1.5,-3h1" class=resistor />`
+		if (def.body=='resistor') {
+			s += `<g class='chip resistor'>`
+			s += `<text x=${(x+width)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
+			s += `<text x=${(x)*10} y=${(y-0.2)*10} class=name >${displayname || name}${suffix}</text>`
+		} else {
+			s += `<g class=chip>`
+			s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
+			s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${displayname || name}${suffix}</text>`
+		}
+		if (def.body=='resistor') {
+			s += `<path d="M${x*10},${y*10}h1l1.5,-3l3,6l3,-6l3,6l3,-6l3,6l1.5,-3h1" class=resistor />`
 		} else {
 			s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
 		}
@@ -603,21 +635,24 @@
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
-				//pname = pname.slice(1)
-				//ext = "class=overline"
+				// html/svg cannot render overlines properly
+				//pname = `<tspan class=overline>${pname.slice(1)}</tspan>`
 			}
 			pname += suffix
 			if (p.side==0) {
 				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
 			} if (p.side==1) {
-				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end ${ext}>${pname}</text>`
-				s += `<text x=${(px+0.2)*10} y=${(py-0.2)*10} class=num>${p.num}</text>`
+				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end>${pname}</text>`
+				if (def.body!='resistor')
+					s += `<text x=${(px+0.2)*10} y=${(py-0.2)*10} class=num>${p.num}</text>`
 			} if (p.side==2) {
 				s += `<text transform="translate(${(px)*10} ${(py-0.2)*10}) rotate(-90)">${p.name}</text>`
 			} if (p.side==3) {
-				s += `<text x=${(px+0.2)*10} y=${(py)*10} ${ext}>${pname}</text>`
-				s += `<text x=${(px-0.2)*10} y=${(py-0.2)*10} text-anchor=end class=num>${p.num}</text>`
+				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${pname}</text>`
+				if (def.body!='resistor')
+					s += `<text x=${(px-0.2)*10} y=${(py-0.2)*10} text-anchor=end class=num>${p.num}</text>`
 			}
+			
 		}
 		return s + "</g>"
 	}
