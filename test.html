@@ -365,10 +365,10 @@
 			name: "ES5701",
 			desc: "Super-GLU",
 			pins: [
-				"10 16MI @3,2",
-				"19 20MI @3,1",
-				"8 8M @1,1",
-				"21 10M @1,2",
+				"10 16MI @3,1",
+				"19 20MI @3,2",
+				"8 8M @1,2",
+				"21 10M @1,1",
 			],
 		}),
 		r: new Component({
@@ -478,18 +478,18 @@
 			name: "5701",
 			displayname: "5701:clkdiv",
 			symbol: comps.escd,
-			pos: {x:10, y:60},
+			pos: {x:31, y:37},
 		},
-		/*{
+		{
 			name: "IC18",
 			symbol: comps.f161,
-			pos: {x:16+10+10+10-5-10+2, y:11+15+3+10-2+1+5+3},
+			pos: {x:39, y:43},
 		},
 		{
 			name: "IC1",
 			symbol: comps.hc08,
-			pos: {x:16+25-1, y:11+15+3+10-1},
-		},*/
+			pos: {x:40, y:36},
+		},
 		{
 			name: "R52",
 			symbol: comps.r2,
@@ -579,52 +579,51 @@
 		"IC19:B.D +v-3h5 IC19:B.~Q",
 		"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2",
 		"IC20:B.I0 +h-1Gh-3v2Gv2h-1 =FDP.120",
-		"IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh12 =~VCLK_7",
+		"IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh10 =~VCLK_7",
 		"IC19:B.~PRE IC19:B.~CLR GND",
 		"IC19:A.~PRE IC19:A.~CLR GND",
 		"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
-		"X1.CLK IC19:B.CLK",
+		"X1.CLK + IC19:B.CLK",
 		
 		"IC20:A.~OE GND",
 		"IC20:B.~OE GND",
 		"IC20:B.I1 GND",
 		
-		"X3.CLK IC20:A.I0",
+		"X3.CLK + IC20:A.I0",
 		"X2.CLK +h5v-1 IC20:A.I1",
 		
 		/*"IC20:A.18 5701.10",
 		"IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
 		"IC20:B.5 NC",
-		"IC20:B.3 =VSYNC",
+		"IC20:B.3 =VSYNC",*/
+		"ic20:A.14 + r52.2",
+		"r52.1 =VCLK_13",
+		"ic20:A.12 + r53.1",
+		"r53.2 =VCLK_7",
 		
-		"5701.21 +h2Jv-2 ic1.10 +Ph1 =CLK_15",
+		"ic20:B.7 + r54.2",
+		"r54.1 =cartC.1",
+		"ic20:B.9 + r55.1",
+		"r55.2 =cartC.2",
+		
+		"ic20:B.3 =V_SYNC",
+		
+		"ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =CLK_30",
+		"ic20:A.18 +h2G 5701.10",
+		
+		"ic20:B.5 NC",
+		"5701.21 +h2J ic1.10 +Pv2h1 =CLK_15",
 		"ic1.8 =CPU.CLK",
 		
 		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
 		"ic18.1 VCC",
 		"ic18.10 ic18.7 ic18.9 VCC",
 		"ic18.15 NC",
-		"5701.8 +h1v1Gv2Jh-6v11 ic18.2 +Ph1 =CLK_8",
+		"5701.8 +h1v2Jv11 ic18.2 +Ph7 =CLK_8",
 		"ic18.14 =CLK_4",
 		"ic18.12 =CLK_1",
 		"ic18.11 =CLK_05",
-			"ic1.9 VCC",*/
-		"ic20:A.14 r52.2",
-		"r52.1 +h1 =VCLK_13",
-		"ic20:A.12 r53.1",
-		"r53.2 +h1 =VCLK_7",
-		
-		"ic20:B.7 r54.2",
-		"r54.1 +h1 =cartC.1",
-		"ic20:B.9 r55.1",
-		"r55.2 +h1 cartC.2",
-		
-		"ic20:B.3 =V_SYNC",
-		
-		"ic20:A.18 +h6 =CLK_16",
-		"ic20:A.16 +h6 =CLK_30 5701.19 =CLK_30",
-		
-		"ic20:B.5 NC",
+		"ic1.9 VCC",
 	]
 	
 	let byname = {}
@@ -700,6 +699,7 @@
 				} else {
 					let [part, pin] = lookup_pin(item)
 					if (!part || !pin) {
+						throw new Error("lookup pin failed: “"+item+"”")
 						add_label(item)
 						drawing = false
 					} else {
@@ -710,7 +710,6 @@
 							lineto('L')
 						else {
 							lineto('M')
-							add_label("oh")
 						}
 					}
 				}
