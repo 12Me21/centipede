@@ -1,7 +1,7 @@
 <!doctype html><meta charset=utf-8>
 
 what if we just make classes for like  text alignment, 9 variants (left|center|right)(top|middle|bottom)
-<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 500 1000" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 2000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
@@ -16,16 +16,16 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		.chip rect {
 			fill: beige;
 			stroke: maroon;
-			stroke-width: 2px;
+			stroke-width: 4px;
 		}
 		.chip text {
 			dominant-baseline: central;
-			font-size: 7px;
+			font-size: 14px;
 			fill: black;
 		}
 		.chip path {
 			stroke: maroon;
-			stroke-width: 2px;
+			stroke-width: 4px;
 			stroke-linecap: round;
 		}
 		.r {
@@ -37,12 +37,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		.chip .name {
 			dominant-baseline: auto;
 			text-anchor: middle;
-			font-size: 8px;
+			font-size: 16px;
 			font-weight: bold;
 		}
 		.chip.resistor .name {
 			text-anchor: end;
-			font-size: 7px;
+			font-size: 14px;
 		}
 		.chip.resistor .desc {
 			text-anchor: start;
@@ -50,22 +50,22 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		.chip .desc {
 			dominant-baseline: auto;
 			text-anchor: middle;
-			font-size: 6px;
+			font-size: 12px;
 		}
 		.chip .num {
 			dominant-baseline: auto;
-			font-size: 6px;
+			font-size: 12px;
 			fill: #008;
 		}
 		.net.net {
 			stroke: none;
 			fill: blue;
-			font-size: 8px;
+			font-size: 16px;
 			dominant-baseline: central;
 		}
 		.overline {
 			text-decoration: underline;
-			text-underline-offset: -6px;
+			text-underline-offset: -12px;
 			text-decoration-skip-ink: none;
 			text-underline-position: from-font;
 		}
@@ -79,7 +79,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		}
 		.chip .resistor {
 			fill: none;
-			stroke-width: 1.5px;
+			stroke-width: 3px;
 		}
 	</style>
 	<g id=$dest>
@@ -89,10 +89,10 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 <script>
 	class Point {
 		strattr() {
-			return ` x=${this.x*10} y=${this.y*10}`
+			return ` x=${this.x*20} y=${this.y*20}`
 		}
 		strsp() {
-			return `${this.x*10} ${this.y*10}`
+			return `${this.x*20} ${this.y*20}`
 		}
 	}
 	let P = Point.prototype
@@ -122,7 +122,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			this.r = {
 				x: [this.slot,component.width,component.width-this.slot,0][this.side],
 				y: [0,this.slot,component.height,component.height-this.slot][this.side],
-				dir: ["v-10","h10","v10","h-10"][this.side],
+				dir: ["v-20","h20","v20","h-20"][this.side],
 				//diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][this.side],
 			}
 			this.e = {
@@ -505,8 +505,8 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		
 		"IC21A.~PRE GND",
 		"IC21B.~PRE GND",
-		"<circle cx=120 cy=170 r=1.5 class=crossing />",
-		"<circle cx=190 cy=170 r=1.5 class=crossing />",
+		"<circle cx=240 cy=340 r=3 class=crossing />",
+		"<circle cx=380 cy=340 r=3 class=crossing />",
 		
 		"ic21a.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
 		
@@ -607,24 +607,24 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		let {width, height} = def
 		if (def.body=='resistor') {
 			s += `<g class='chip resistor'>`
-			s += `<text x=${(x+width)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
-			s += `<text x=${(x)*10} y=${(y-0.2)*10} class=name >${displayname || name}${suffix}</text>`
+			s += `<text x=${(x+width)*20} y=${(y-0.2)*20} class=desc >${def.name||override_name} ${def.desc}</text>`
+			s += `<text x=${(x)*20} y=${(y-0.2)*20} class=name >${displayname || name}${suffix}</text>`
 		} else {
 			s += `<g class=chip>`
-			s += `<text x=${(x+width/2)*10} y=${(y-0.2)*10} class=desc >${def.name||override_name} ${def.desc}</text>`
-			s += `<text x=${(x+width/2)*10} y=${(y-0.8)*10} class=name >${displayname || name}${suffix}</text>`
+			s += `<text x=${(x+width/2)*20} y=${(y-0.2)*20} class=desc >${def.name||override_name} ${def.desc}</text>`
+			s += `<text x=${(x+width/2)*20} y=${(y-0.8)*20} class=name >${displayname || name}${suffix}</text>`
 		}
 		if (def.body=='resistor') {
-			s += `<path d="M${x*10},${y*10}h1l1.5,-3l3,6l3,-6l3,6l3,-6l3,6l1.5,-3h1" class=resistor />`
+			s += `<path d="M${x*20},${y*20}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class=resistor />`
 		} else {
-			s += `<rect x=${(x)*10} y=${(y)*10} width=${(width)*10} height=${(height)*10} />`
+			s += `<rect x=${(x)*20} y=${(y)*20} width=${(width)*20} height=${(height)*20} />`
 		}
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
 			//let dir = p.out ? p.r.diro : p.r.dir
 			let dir = p.r.dir
-			s += `<path d="m${(px)*10},${(py)*10} ${dir}" />`
+			s += `<path d="m${(px)*20},${(py)*20} ${dir}" />`
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
@@ -633,17 +633,17 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			}
 			pname += suffix
 			if (p.side==0) {
-				s += `<text transform="translate(${(px)*10} ${(py+0.2)*10}) rotate(90)">${p.name}</text>`
+				s += `<text transform="translate(${(px)*20} ${(py+0.2)*20}) rotate(90)">${p.name}</text>`
 			} if (p.side==1) {
-				s += `<text x=${(px-0.2)*10} y=${(py)*10} text-anchor=end>${pname}</text>`
+				s += `<text x=${(px-0.2)*20} y=${(py)*20} text-anchor=end>${pname}</text>`
 				if (def.body!='resistor')
-					s += `<text x=${(px+0.2)*10} y=${(py-0.2)*10} class=num>${p.num}</text>`
+					s += `<text x=${(px+0.2)*20} y=${(py-0.2)*20} class=num>${p.num}</text>`
 			} if (p.side==2) {
-				s += `<text transform="translate(${(px)*10} ${(py-0.2)*10}) rotate(-90)">${p.name}</text>`
+				s += `<text transform="translate(${(px)*20} ${(py-0.2)*20}) rotate(-90)">${p.name}</text>`
 			} if (p.side==3) {
-				s += `<text x=${(px+0.2)*10} y=${(py)*10}>${pname}</text>`
+				s += `<text x=${(px+0.2)*20} y=${(py)*20}>${pname}</text>`
 				if (def.body!='resistor')
-					s += `<text x=${(px-0.2)*10} y=${(py-0.2)*10} text-anchor=end class=num>${p.num}</text>`
+					s += `<text x=${(px-0.2)*20} y=${(py-0.2)*20} text-anchor=end class=num>${p.num}</text>`
 			}
 			
 		}
@@ -665,7 +665,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		let py = 0
 		let dir = 0
 		let landmarks = []
-		let lineto = (c)=>{s+=c+px*10+","+py*10}
+		let lineto = (c)=>{s+=c+px*20+","+py*20}
 		let drawing = false
 		for (let item of desc) {
 			if (item[0]=="+") {
@@ -682,12 +682,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 						lineto('L')
 					} else if (move[0]=='J') {
 						landmarks.push([px,py])
-						s2 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=junction />`
+						s2 += `<circle cx=${px*20} cy=${py*20} r=3 class=junction />`
 					} else if (move[0]=='P') {
 						0,[px,py] = landmarks.pop()
 						lineto('M')
 					} else if (move[0]=='G') {
-						s1 += `<circle cx=${px*10} cy=${py*10} r=1.5 class=crossing />`
+						s1 += `<circle cx=${px*20} cy=${py*20} r=3 class=crossing />`
 					} else {
 						throw new Error('oh no +'+move[0])
 					}
@@ -695,16 +695,16 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			} else if (item[0]=="=") {
 				let text = item.slice(1)
 				if (dir==3)
-					s2 += `<text x=${(px-0.2)*10} y=${(py)*10} class=net text-anchor=end>${text}</text>`
+					s2 += `<text x=${(px-0.2)*20} y=${(py)*20} class=net text-anchor=end>${text}</text>`
 				else 
-					s2 += `<text x=${(px+0.2)*10} y=${(py)*10} class=net text-anchor=start>${text}</text>`
+					s2 += `<text x=${(px+0.2)*20} y=${(py)*20} class=net text-anchor=start>${text}</text>`
 			} else {
 				if (item=="VCC") {
-					s += `v-3 h-1 l1,-3 l1,3 h-1 v-3`
+					s += `v-6 h-2 l2,-6 l2,6 h-2 v-6`
 				} else if (item=="GND") {
-					s += `v3 h-3 l3,3 l3,-3 h-3`
+					s += `v6 h-6 l6,6 l6,-6 h-6`
 				} else if (item=="NC") {
-					s += `m-2,-2 l4,4 m0-4 l-4,4`
+					s += `m-4,-4 l8,8 m0-8 l-8,8`
 				} else {
 					let [part, pin] = lookup_pin(item)
 					dir = pin.side
@@ -725,7 +725,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		byname[p.name] = p
 		s += generate_symbol(p)
 	}
-	s += "<g stroke=green stroke-width=1px fill=none>"
+	s += "<g stroke=green stroke-width=2px fill=none>"
 	for (let conn of cons) {
 		if (conn[0]=="<")
 			s+=conn
