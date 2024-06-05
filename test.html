@@ -1,66 +1,51 @@
 <!doctype html><meta charset=utf-8>
 
-what if we just make classes for like  text alignment, 9 variants (left|center|right)(top|middle|bottom)
 <svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 2000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
 			src: url("./short2.otf?1");
 		}
-		.l { text-anchor: start }
-		.c { text-enchor: middle }
-		.r { text-anchor: end }
-		.t { dominant-baseline: auto }
-		.m { dominant-baseline: central }
-		.b { dominant-baseline: hanging }
-		.chip rect {
+		.l { text-anchor: start; }
+		.c { text-anchor: middle; }
+		.r { text-anchor: end; }
+		.t { dominant-baseline: hanging; }
+		.m { dominant-baseline: central; }
+		.b { dominant-baseline: auto; }
+		.body {
 			fill: beige;
 			stroke: maroon;
 			stroke-width: 4px;
 		}
-		.chip path {
+		.pin {
 			stroke: maroon;
 			stroke-width: 4px;
 			stroke-linecap: round;
 		}
-		.ol {
-			text-decoration: overline;
-		}
-		.chip .name {
-			dominant-baseline: auto;
-			text-anchor: middle;
+		.name {
 			font-size: 16px;
 			font-weight: bold;
-			fill: black;
 		}
-		.chip.resistor .name {
-			text-anchor: end;
-			font-size: 14px;
-		}
-		.chip.resistor .desc {
-			text-anchor: start;
-		}
-		.chip .desc {
-			dominant-baseline: auto;
-			text-anchor: middle;
+		.desc {
 			font-size: 12px;
-			fill: black;
 		}
-		.chip .pname {
-			dominant-baseline: central;
+		.resistor .name {
+			font-size: 14px;
+		}
+		.resistor .desc {
+		}
+		.pname {
 			font-size: 14px;
 			fill: black;
 		}
-		.chip .num {
-			dominant-baseline: auto;
+		.num {
 			font-size: 12px;
 			fill: #008;
 		}
-		.net.net {
+		.net {
 			stroke: none;
 			fill: blue;
 			font-size: 16px;
-			dominant-baseline: central;
 		}
 		.overline {
 			text-decoration: underline;
@@ -76,9 +61,10 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			fill: green;
 			stroke: none;
 		}
-		.chip .resistor {
+		.resistorbody {
 			fill: none;
 			stroke-width: 3px;
+			stroke: maroon;
 		}
 	</style>
 	<g id=$dest>
@@ -147,22 +133,24 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			let s = ''
 			let {width, height} = def
 			if (def.body=='resistor') {
-				s += `<g class='chip resistor'>`
-				s += `<text ${attrxy(x+width, y-0.2)} class=desc >${def.name||override_name} ${def.desc}</text>`
-				s += `<text ${attrxy(x, y-0.2)} class=name >${displayname || name}${suffix}</text>`
-				s += `<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class=resistor />`
+				s += `
+<g class='chip resistor'>
+<text ${attrxy(x, y-0.2)} class='name r'>${displayname || name}${suffix}</text>
+<text ${attrxy(x+width, y-0.2)} class='desc'>${def.name||override_name} ${def.desc}</text>
+<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class='resistorbody'/>
+`
 			} else {
 				s += `<g class=chip>`
-				s += `<text ${attrxy(x+width/2, y-0.2)} class=desc >${def.name||override_name} ${def.desc}</text>`
-				s += `<text ${attrxy(x+width/2, y-0.8)} class=name >${displayname || name}${suffix}</text>`
-				s += `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
+				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${def.name||override_name} ${def.desc}</text>`
+				s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${displayname || name}${suffix}</text>`
+				s += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
 			}
 			for (let p of def.pins) {
 				let px = x + p.r.x
 				let py = y + p.r.y
 				//let dir = p.out ? p.r.diro : p.r.dir
 				let dir = p.r.dir
-				s += `<path d="m${spacexy(px,py)} ${dir}" />`
+				s += `<path class=pin d="m${spacexy(px,py)}${dir}" />`
 				let pname = p.name
 				let ext = ""
 				if (pname[0]=="~") {
@@ -171,17 +159,17 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 				}
 				pname += suffix
 				if (p.side==0) {
-					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class=pname>${p.name}</text>`
+					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'>${p.name}</text>`
 				} if (p.side==1) {
-					s += `<text ${attrxy(px-0.2, py)} text-anchor=end class=pname>${pname}</text>`
+					s += `<text ${attrxy(px-0.2, py)} class='pname m r'>${pname}</text>`
 					if (def.body!='resistor')
 						s += `<text ${attrxy(px+0.2, py-0.2)} class=num>${p.num}</text>`
 				} if (p.side==2) {
-					s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class=pname>${p.name}</text>`
+					s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'>${p.name}</text>`
 				} if (p.side==3) {
-					s += `<text ${attrxy(px+0.2, py)} class=pname>${pname}</text>`
+					s += `<text ${attrxy(px+0.2, py)} class='pname m'>${pname}</text>`
 					if (def.body!='resistor')
-						s += `<text ${attrxy(px-0.2, py-0.2)} text-anchor=end class=num>${p.num}</text>`
+						s += `<text ${attrxy(px-0.2, py-0.2)} class='num r'>${p.num}</text>`
 				}
 				
 			}
@@ -373,16 +361,14 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		}),
 		escd: new Component({
 			width: 4,
-			height: 5,
+			height: 3,
 			name: "ES5701",
 			desc: "Super-GLU",
 			pins: [
-				"10 16MI @3,4",
-				"19 20MI @3,3",
-				"9 16MO @1,1",
-				"20 20MO @1,2",
-				"8 8M @1,3",
-				"21 10M @1,4",
+				"10 16MI @3,2",
+				"19 20MI @3,1",
+				"8 8M @1,1",
+				"21 10M @1,2",
 			],
 		}),
 		r: new Component({
@@ -488,13 +474,13 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			override_name: "16MHz",
 			pos: {x:16+5+10-10-5, y:11+15+3+10-1},
 		},
-		/*{
+		{
 			name: "5701",
 			displayname: "5701:clkdiv",
 			symbol: comps.escd,
-			pos: {x:16+10+10-5, y:11+15+3+10-2+1},
+			pos: {x:10, y:60},
 		},
-		{
+		/*{
 			name: "IC18",
 			symbol: comps.f161,
 			pos: {x:16+10+10+10-5-10+2, y:11+15+3+10-2+1+5+3},
@@ -531,7 +517,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 	]
 	
 	let cons = [
-		"IC22.D0 IC22.D1 IC22.D2 IC22.D3 GND",
+		"IC22.D0 + IC22.D1 + IC22.D2 + IC22.D3 GND",
 		
 		"IC22.~LOAD VCC",
 		"IC22.RCO NC",
@@ -541,10 +527,10 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		
 		"ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk",
 		
-		"IC22.Q0 IC30L.A1",
-		"IC22.Q1 IC30L.A2",
-		"IC22.Q2 IC30L.A3",
-		"IC22.Q3 IC30L.A4",
+		"IC22.Q0 + IC30L.A1",
+		"IC22.Q1 + IC30L.A2",
+		"IC22.Q2 + IC30L.A3",
+		"IC22.Q3 + IC30L.A4",
 		"IC21A.CLK =OTIS.E",
 		
 		"IC21A.~PRE GND",
@@ -556,7 +542,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		
 		"ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0",
 		
-		"ic30l.a5 ic30l.a6 ic30l.a7 ic30l.a8 ic30l.a9 ic30l.a10 GND",
+		"ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + GND",
 		
 		"IC30L.1 =OTIS.E",
 		
@@ -577,10 +563,10 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		"IC30L.4 NC",
 		
 		"IC65.13 =FDP.205",
-		"IC65.12 IC64A.3",
+		"IC65.12 + IC64A.3",
 		"IC65.11 =CPU.AS",
 		"IC65.10 +h1J IC64A.4 +Pv3h6v-2 IC64B.10",
-		"IC64A.5 IC64B.12",
+		"IC64A.5 + IC64B.12",
 		"IC64B.9 =FCM.109",
 		"IC64B.11 =~VRAM-CE", //], /*"h-10 v60 h-100"*/""],
 		
@@ -631,12 +617,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		"ic20:B.7 r54.2",
 		"r54.1 +h1 =cartC.1",
 		"ic20:B.9 r55.1",
-		"r55.2 +h1 =cartC.2",
+		"r55.2 +h1 cartC.2",
 		
 		"ic20:B.3 =V_SYNC",
 		
 		"ic20:A.18 +h6 =CLK_16",
-		"ic20:A.16 +h6 =CLK_30",
+		"ic20:A.16 +h6 =CLK_30 5701.19 =CLK_30",
 		
 		"ic20:B.5 NC",
 	]
@@ -647,9 +633,13 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 	
 	function lookup_pin(des) {
 		let [part,pin] = des.split(".")
+		if (!part || !pin)
+			return [null, null]
 		part = part.toUpperCase()
 		pin = pin.toUpperCase()
 		part = byname[part]
+		if (!part)
+			return [null, null]
 		pin = part.symbol.pins.find(x=>(x.num==pin||x.name==pin))
 		return [part, pin]
 	}
@@ -663,6 +653,13 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		let landmarks = []
 		let lineto = (c)=>{s+=c+spacexy(px,py)}
 		let drawing = false
+		let label = null
+		function add_label(text) {
+			if (dir==3)
+				s2 += `<text ${attrxy(px-0.2, py)} class='net m r'>${text}</text>`
+			else 
+				s2 += `<text ${attrxy(px+0.2, py)} class='net m l'>${text}</text>`
+		}
 		for (let item of desc) {
 			if (item[0]=="+") {
 				for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
@@ -688,12 +685,11 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 						throw new Error('oh no +'+move[0])
 					}
 				}
+				drawing = true
 			} else if (item[0]=="=") {
-				let text = item.slice(1)
-				if (dir==3)
-					s2 += `<text ${attrxy(px-0.2, py)} class=net text-anchor=end>${text}</text>`
-				else 
-					s2 += `<text ${attrxy(px+0.2, py)} class=net text-anchor=start>${text}</text>`
+				label = item.slice(1)
+				add_label(label)
+				drawing = false
 			} else {
 				if (item=="VCC") {
 					s += `v-6 h-2 l2,-6 l2,6 h-2 v-6`
@@ -703,15 +699,22 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 					s += `m-4,-4 l8,8 m0-8 l-8,8`
 				} else {
 					let [part, pin] = lookup_pin(item)
-					dir = pin.side
-					px = pin.e.x+part.pos.x
-					py = pin.e.y+part.pos.y
-					if (drawing)
-						lineto('L')
-					else
-						lineto('M')
-					drawing = true
+					if (!part || !pin) {
+						add_label(item)
+						drawing = false
+					} else {
+						dir = pin.side
+						px = pin.e.x+part.pos.x
+						py = pin.e.y+part.pos.y
+						if (drawing)
+							lineto('L')
+						else {
+							lineto('M')
+							add_label("oh")
+						}
+					}
 				}
+				drawing = false
 			}
 		}
 		return s1+`<path d="`+s+`"/>`+s2
