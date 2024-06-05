@@ -1,7 +1,7 @@
 <!doctype html><meta charset=utf-8>
 
 what if we just make classes for like  text alignment, 9 variants (left|center|right)(top|middle|bottom)
-<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 2000" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="-10.5 0.5 1000 2000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
@@ -16,7 +16,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		.chip rect {
 			fill: beige;
 			stroke: maroon;
-			stroke-width: 4px;
+			stroke-width: 3px;
 		}
 		.chip text {
 			dominant-baseline: central;
@@ -25,7 +25,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		}
 		.chip path {
 			stroke: maroon;
-			stroke-width: 4px;
+			stroke-width: 3px;
 			stroke-linecap: round;
 		}
 		.r {
@@ -725,7 +725,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		byname[p.name] = p
 		s += generate_symbol(p)
 	}
-	s += "<g stroke=green stroke-width=2px fill=none>"
+	s += "<g stroke=green stroke-width=1px fill=none>"
 	for (let conn of cons) {
 		if (conn[0]=="<")
 			s+=conn
