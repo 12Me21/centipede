@@ -1,7 +1,7 @@
 <!doctype html><meta charset=utf-8>
 
 what if we just make classes for like  text alignment, 9 variants (left|center|right)(top|middle|bottom)
-<svg xmlns=http://www.w3.org/2000/svg viewBox="-10.5 0.5 1000 2000" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 2000" width=1000>
 	<style>
 		@font-face {
 			font-family: 'mspm';
@@ -16,20 +16,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		.chip rect {
 			fill: beige;
 			stroke: maroon;
-			stroke-width: 3px;
-		}
-		.chip text {
-			dominant-baseline: central;
-			font-size: 14px;
-			fill: black;
+			stroke-width: 4px;
 		}
 		.chip path {
 			stroke: maroon;
-			stroke-width: 3px;
+			stroke-width: 4px;
 			stroke-linecap: round;
-		}
-		.r {
-			text-anchor: end;
 		}
 		.ol {
 			text-decoration: overline;
@@ -39,6 +31,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			text-anchor: middle;
 			font-size: 16px;
 			font-weight: bold;
+			fill: black;
 		}
 		.chip.resistor .name {
 			text-anchor: end;
@@ -51,6 +44,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			dominant-baseline: auto;
 			text-anchor: middle;
 			font-size: 12px;
+			fill: black;
+		}
+		.chip .pname {
+			dominant-baseline: central;
+			font-size: 14px;
+			fill: black;
 		}
 		.chip .num {
 			dominant-baseline: auto;
@@ -87,15 +86,15 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 </svg>
 
 <script>
-	class Point {
-		strattr() {
-			return ` x=${this.x*20} y=${this.y*20}`
-		}
-		strsp() {
-			return `${this.x*20} ${this.y*20}`
-		}
+	function attrxy(x, y) {
+		return `x=${x*20} y=${y*20}`
 	}
-	let P = Point.prototype
+	function spacexy(x, y) {
+		return `${x*20} ${y*20}`
+	}
+	function attrxy2(a, x, b, y) {
+		return `${a}=${x*20} ${b}=${y*20}`
+	}
 	
 	class Pin {
 		constructor(desc, component) {
@@ -142,6 +141,51 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			self.pins = self.pins.map(x=>new Pin(x, self))
 			//self.pins2 = self.pins.map(x=>x.todesc())
 			return self
+		}
+		render(placed) {
+			let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = placed
+			let s = ''
+			let {width, height} = def
+			if (def.body=='resistor') {
+				s += `<g class='chip resistor'>`
+				s += `<text ${attrxy(x+width, y-0.2)} class=desc >${def.name||override_name} ${def.desc}</text>`
+				s += `<text ${attrxy(x, y-0.2)} class=name >${displayname || name}${suffix}</text>`
+				s += `<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class=resistor />`
+			} else {
+				s += `<g class=chip>`
+				s += `<text ${attrxy(x+width/2, y-0.2)} class=desc >${def.name||override_name} ${def.desc}</text>`
+				s += `<text ${attrxy(x+width/2, y-0.8)} class=name >${displayname || name}${suffix}</text>`
+				s += `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
+			}
+			for (let p of def.pins) {
+				let px = x + p.r.x
+				let py = y + p.r.y
+				//let dir = p.out ? p.r.diro : p.r.dir
+				let dir = p.r.dir
+				s += `<path d="m${spacexy(px,py)} ${dir}" />`
+				let pname = p.name
+				let ext = ""
+				if (pname[0]=="~") {
+					// html/svg cannot render overlines properly
+					//pname = `<tspan class=overline>${pname.slice(1)}</tspan>`
+				}
+				pname += suffix
+				if (p.side==0) {
+					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class=pname>${p.name}</text>`
+				} if (p.side==1) {
+					s += `<text ${attrxy(px-0.2, py)} text-anchor=end class=pname>${pname}</text>`
+					if (def.body!='resistor')
+						s += `<text ${attrxy(px+0.2, py-0.2)} class=num>${p.num}</text>`
+				} if (p.side==2) {
+					s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class=pname>${p.name}</text>`
+				} if (p.side==3) {
+					s += `<text ${attrxy(px+0.2, py)} class=pname>${pname}</text>`
+					if (def.body!='resistor')
+						s += `<text ${attrxy(px-0.2, py-0.2)} text-anchor=end class=num>${p.num}</text>`
+				}
+				
+			}
+			return s + "</g>"
 		}
 	}
 	
@@ -601,54 +645,6 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 	for (let p of placed)
 		byname[p.name] = p
 	
-	function generate_symbol(obj) {
-		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = obj
-		let s = ''
-		let {width, height} = def
-		if (def.body=='resistor') {
-			s += `<g class='chip resistor'>`
-			s += `<text x=${(x+width)*20} y=${(y-0.2)*20} class=desc >${def.name||override_name} ${def.desc}</text>`
-			s += `<text x=${(x)*20} y=${(y-0.2)*20} class=name >${displayname || name}${suffix}</text>`
-		} else {
-			s += `<g class=chip>`
-			s += `<text x=${(x+width/2)*20} y=${(y-0.2)*20} class=desc >${def.name||override_name} ${def.desc}</text>`
-			s += `<text x=${(x+width/2)*20} y=${(y-0.8)*20} class=name >${displayname || name}${suffix}</text>`
-		}
-		if (def.body=='resistor') {
-			s += `<path d="M${x*20},${y*20}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class=resistor />`
-		} else {
-			s += `<rect x=${(x)*20} y=${(y)*20} width=${(width)*20} height=${(height)*20} />`
-		}
-		for (let p of def.pins) {
-			let px = x + p.r.x
-			let py = y + p.r.y
-			//let dir = p.out ? p.r.diro : p.r.dir
-			let dir = p.r.dir
-			s += `<path d="m${(px)*20},${(py)*20} ${dir}" />`
-			let pname = p.name
-			let ext = ""
-			if (pname[0]=="~") {
-				// html/svg cannot render overlines properly
-				//pname = `<tspan class=overline>${pname.slice(1)}</tspan>`
-			}
-			pname += suffix
-			if (p.side==0) {
-				s += `<text transform="translate(${(px)*20} ${(py+0.2)*20}) rotate(90)">${p.name}</text>`
-			} if (p.side==1) {
-				s += `<text x=${(px-0.2)*20} y=${(py)*20} text-anchor=end>${pname}</text>`
-				if (def.body!='resistor')
-					s += `<text x=${(px+0.2)*20} y=${(py-0.2)*20} class=num>${p.num}</text>`
-			} if (p.side==2) {
-				s += `<text transform="translate(${(px)*20} ${(py-0.2)*20}) rotate(-90)">${p.name}</text>`
-			} if (p.side==3) {
-				s += `<text x=${(px+0.2)*20} y=${(py)*20}>${pname}</text>`
-				if (def.body!='resistor')
-					s += `<text x=${(px-0.2)*20} y=${(py-0.2)*20} text-anchor=end class=num>${p.num}</text>`
-			}
-			
-		}
-		return s + "</g>"
-	}
 	function lookup_pin(des) {
 		let [part,pin] = des.split(".")
 		part = part.toUpperCase()
@@ -665,7 +661,7 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 		let py = 0
 		let dir = 0
 		let landmarks = []
-		let lineto = (c)=>{s+=c+px*20+","+py*20}
+		let lineto = (c)=>{s+=c+spacexy(px,py)}
 		let drawing = false
 		for (let item of desc) {
 			if (item[0]=="+") {
@@ -682,12 +678,12 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 						lineto('L')
 					} else if (move[0]=='J') {
 						landmarks.push([px,py])
-						s2 += `<circle cx=${px*20} cy=${py*20} r=3 class=junction />`
+						s2 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
 					} else if (move[0]=='P') {
 						0,[px,py] = landmarks.pop()
 						lineto('M')
 					} else if (move[0]=='G') {
-						s1 += `<circle cx=${px*20} cy=${py*20} r=3 class=crossing />`
+						s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
 					} else {
 						throw new Error('oh no +'+move[0])
 					}
@@ -695,9 +691,9 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 			} else if (item[0]=="=") {
 				let text = item.slice(1)
 				if (dir==3)
-					s2 += `<text x=${(px-0.2)*20} y=${(py)*20} class=net text-anchor=end>${text}</text>`
+					s2 += `<text ${attrxy(px-0.2, py)} class=net text-anchor=end>${text}</text>`
 				else 
-					s2 += `<text x=${(px+0.2)*20} y=${(py)*20} class=net text-anchor=start>${text}</text>`
+					s2 += `<text ${attrxy(px+0.2, py)} class=net text-anchor=start>${text}</text>`
 			} else {
 				if (item=="VCC") {
 					s += `v-6 h-2 l2,-6 l2,6 h-2 v-6`
@@ -723,9 +719,9 @@ what if we just make classes for like  text alignment, 9 variants (left|center|r
 	let s = ''
 	for (let p of placed) {
 		byname[p.name] = p
-		s += generate_symbol(p)
+		s += p.symbol.render(p)
 	}
-	s += "<g stroke=green stroke-width=1px fill=none>"
+	s += "<g stroke=green stroke-width=2px fill=none>"
 	for (let conn of cons) {
 		if (conn[0]=="<")
 			s+=conn
