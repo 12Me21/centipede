@@ -42,7 +42,7 @@
 			font-size: 12px;
 			fill: #008;
 		}
-		.net {
+		.netlabel {
 			stroke: none;
 			fill: blue;
 			font-size: 16px;
@@ -65,6 +65,15 @@
 			fill: none;
 			stroke-width: 3px;
 			stroke: maroon;
+		}
+		.net:hover path {
+			stroke: red;
+		}
+		.net:hover text {
+			fill: red;
+		}
+		.net:hover .junction {
+			fill: red;
 		}
 	</style>
 	<g id=$dest>
@@ -306,15 +315,15 @@
 				"13 I6 @3,6",
 			],
 		}),
-		hc08: new Component({
+		hc08c: new Component({
 			width: 3,
 			height: 3,
 			name: "74HC08",
 			desc: "AND gate",
 			pins: [
-				"8 Y3 @1,1",
-				"9 A3 @3,2",
-				"10 B3 @3,1",
+				"8 Y @1,1",
+				"9 A @3,2",
+				"10 B @3,1",
 			],
 		}),
 		osc: new Component({
@@ -482,13 +491,14 @@
 		},
 		{
 			name: "IC18",
-			symbol: comps.f161,
-			pos: {x:39, y:43},
+			symbol: comps.f163,
+			pos: {x:39, y:45},
 		},
 		{
 			name: "IC1",
-			symbol: comps.hc08,
-			pos: {x:40, y:36},
+			displayname: "IC1:3",
+			symbol: comps.hc08c,
+			pos: {x:40, y:39},
 		},
 		{
 			name: "R52",
@@ -514,6 +524,12 @@
 			override_name: "82Ω",
 			pos: {x:29, y:52},
 		},
+		{
+			name: "R3",
+			symbol: comps.r2,
+			override_name: "2400Ω",
+			pos: {x:12-4, y:19},
+		},
 	]
 	
 	let cons = [
@@ -531,20 +547,19 @@
 		"IC22.Q1 + IC30L.A2",
 		"IC22.Q2 + IC30L.A3",
 		"IC22.Q3 + IC30L.A4",
-		"IC21A.CLK =OTIS.E",
+		"IC21A.CLK =OTIS.E IC30L.1 =OTIS.E",
 		
 		"IC21A.~PRE GND",
 		"IC21B.~PRE GND",
 		"<circle cx=240 cy=340 r=3 class=crossing />",
 		"<circle cx=380 cy=340 r=3 class=crossing />",
 		
-		"ic21a.~clr =OTIS.BS +v2h7J ic21b.~clr +P ic22.~mr",
+		"ic21a.~clr =OTIS.BS +v2Jh7J ic21b.~clr +P ic22.~mr +Pv2h1 r3.2",
+		"r3.1 GND",
 		
 		"ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0",
 		
 		"ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + GND",
-		
-		"IC30L.1 =OTIS.E",
 		
 		"IC30L.IO4 NC",
 		"IC30L.IO5 NC",
@@ -612,14 +627,14 @@
 		"ic20:A.18 +h2G 5701.10",
 		
 		"ic20:B.5 NC",
-		"5701.21 +h2J ic1.10 +Pv2h1 =CLK_15",
+		"5701.21 +h2Jv3 ic1.10 +Pv-2h1 =CLK_15",
 		"ic1.8 =CPU.CLK",
 		
-		"ic18.3 ic18.4 ic18.5 ic18.6 GND",
+		"ic18.3 + ic18.4 + ic18.5 + ic18.6 GND",
 		"ic18.1 VCC",
-		"ic18.10 ic18.7 ic18.9 VCC",
+		"ic18.10 + ic18.7 + ic18.9 VCC",
 		"ic18.15 NC",
-		"5701.8 +h1v2Jv11 ic18.2 +Ph7 =CLK_8",
+		"5701.8 +h1v4Jv11 ic18.2 +Ph7 =CLK_8",
 		"ic18.14 =CLK_4",
 		"ic18.12 =CLK_1",
 		"ic18.11 =CLK_05",
@@ -655,9 +670,9 @@
 		let label = null
 		function add_label(text) {
 			if (dir==3)
-				s2 += `<text ${attrxy(px-0.2, py)} class='net m r'>${text}</text>`
+				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
 			else 
-				s2 += `<text ${attrxy(px+0.2, py)} class='net m l'>${text}</text>`
+				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
 		}
 		for (let item of desc) {
 			if (item[0]=="+") {
@@ -716,7 +731,7 @@
 				drawing = false
 			}
 		}
-		return s1+`<path d="`+s+`"/>`+s2
+		return "<g class=net>"+s1+`<path d="`+s+`"/>`+s2+"</g>"
 	}
 	let s = ''
 	for (let p of placed) {
