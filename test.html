@@ -29,10 +29,10 @@
 		.desc {
 			font-size: 12px;
 		}
-		.resistor .name {
+		.discrete .name {
 			font-size: 14px;
 		}
-		.resistor .desc {
+		.discrete .desc {
 		}
 		.pname {
 			font-size: 14px;
@@ -63,7 +63,7 @@
 		}
 		.resistorbody {
 			fill: none;
-			stroke-width: 3px;
+			stroke-width: 2px;
 			stroke: maroon;
 		}
 		.net:hover path {
@@ -141,13 +141,18 @@
 			let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = placed
 			let s = ''
 			let {width, height} = def
-			if (def.body=='resistor') {
+			if (def.body) {
 				s += `
-<g class='chip resistor'>
+<g class='chip discrete'>
 <text ${attrxy(x, y-0.2)} class='name r'>${displayname || name}${suffix}</text>
-<text ${attrxy(x+width, y-0.2)} class='desc'>${def.name||override_name} ${def.desc}</text>
-<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class='resistorbody'/>
-`
+<text ${attrxy(x+width, y-0.2)} class='desc'>${def.name||override_name} ${def.desc}</text>`
+				if (def.body=='resistor') {
+					s += `<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class='resistorbody'/>`
+				} else if (def.body=='zener') {
+					s += `<path d="M${spacexy(x,y)}l5,0v12l24,-12l-24,-12v12m24,0h1v-10l4,-4m-4,14v10l-4,4m4,-14l10,0" class='resistorbody'/>`
+				} else if (def.body=='ferrite') {
+					s += `<path d="M${spacexy(x,y)}h6l4,-6l5,3l-2,3h6" class='resistorbody'/>`
+				}
 			} else {
 				s += `<g class=chip>`
 				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${def.name||override_name} ${def.desc}</text>`
@@ -171,13 +176,13 @@
 					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'>${p.name}</text>`
 				} if (p.side==1) {
 					s += `<text ${attrxy(px-0.2, py)} class='pname m r'>${pname}</text>`
-					if (def.body!='resistor')
+					if (!def.body)
 						s += `<text ${attrxy(px+0.2, py-0.2)} class=num>${p.num}</text>`
 				} if (p.side==2) {
 					s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'>${p.name}</text>`
 				} if (p.side==3) {
 					s += `<text ${attrxy(px+0.2, py)} class='pname m'>${pname}</text>`
-					if (def.body!='resistor')
+					if (!def.body)
 						s += `<text ${attrxy(px-0.2, py-0.2)} class='num r'>${p.num}</text>`
 				}
 				
@@ -402,6 +407,28 @@
 				"1 &Tab; @1,0",
 			],
 		}),
+		zd: new Component({
+			width: 2,
+			height: 0,
+			name: "",
+			desc: "",
+			body: 'zener',
+			pins: [
+				"1 &Tab; @3,0",
+				"2 &Tab; @1,0",
+			],
+		}),
+		fb: new Component({
+			width: 2,
+			height: 0,
+			name: "",
+			desc: "",
+			body: 'ferrite',
+			pins: [
+				"1 &Tab; @3,0",
+				"2 &Tab; @1,0",
+			],
+		}),
 	}
 	
 	let placed = [
@@ -530,6 +557,24 @@
 			override_name: "2400Ω",
 			pos: {x:12-4, y:19},
 		},
+		{
+			name: "R24",
+			symbol: comps.r,
+			override_name: "75Ω",
+			pos: {x:12-4, y:60},
+		},
+		{
+			name: "ZD5",
+			symbol: comps.zd,
+			override_name: "",
+			pos: {x:12-4, y:62},
+		},
+		{
+			name: "L11",
+			symbol: comps.fb,
+			override_name: "",
+			pos: {x:13, y:62},
+		},
 	]
 	
 	let cons = [
@@ -621,7 +666,9 @@
 		"ic20:B.9 + r55.1",
 		"r55.2 =cartC.2",
 		
-		"ic20:B.3 =V_SYNC",
+		"ic20:B.3 =V_SYNC r24.1 =V_SYNC",
+		"r24.2 + zd5.2 + l11.1",
+		"zd5.1 GND",
 		
 		"ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =CLK_30",
 		"ic20:A.18 +h2G 5701.10",
