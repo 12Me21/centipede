@@ -310,7 +310,6 @@ let comps = {
 	vr: new Component({
 		width: 3, height: 3,
 		name: "501WL?",
-		bottomdesc: true,
 		desc: "variable resistor",
 		pins: [
 			"1 ? @3,1",
