@@ -460,6 +460,19 @@
 				"2 &Tab; @1,0",
 			],
 		}),
+		cc2: new Component({
+			width: 2,
+			height: 0,
+			name: "",
+			desc: "",
+			body: 'cc',
+			no_names: true,
+			no_numbers: true,
+			pins: [
+				"1 &Tab; @1,0",
+				"2 &Tab; @3,0",
+			],
+		}),
 		npn: new Component({
 			width: 2,
 			height: 2,
@@ -653,7 +666,7 @@
 			name: "R18",
 			symbol: comps.r,
 			override_name: "75&ohm;",
-			pos: {x:33, y:70-5-1},
+			pos: {x:33, y:70-5},
 		},
 		{
 			name: "R19",
@@ -677,7 +690,7 @@
 			name: "L13",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:33+5, y:70-5-1},
+			pos: {x:33+5, y:70-5},
 		},
 		{
 			name: "L14",
@@ -687,15 +700,15 @@
 		},
 		{
 			name: "C38",
-			symbol: comps.cc,
+			symbol: comps.cc2,
 			override_name: "",
-			pos: {x:33+5+5, y:70-5},
+			pos: {x:33+5+5+1-7+1, y:70-5-1-1},
 		},
 		{
 			name: "C39",
-			symbol: comps.cc,
+			symbol: comps.cc2,
 			override_name: "",
-			pos: {x:33+5+5, y:71-5+1},
+			pos: {x:33+5+5+1-7+1, y:71-5+1+1},
 		},
 	]
 	
@@ -799,13 +812,13 @@
 		"tr1.2 VCC",
 		"tr1.3 =FDA.VIDEO_BLUE",
 		"tr1.1 +h1J tr4.3 +Pv1h-1 r26.1",
-		"tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1",
+		"tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-1 r18.1",
 		"r25.2 GND",
 		"r26.2 GND",
 		"tr4.2 =12V",
 		"r18.2 + l13.1",
 		"r19.2 + l14.1",
-		"l13.2 +h1Jv1 c38.1 +Ph6 =M2.3",
+		"l13.2 +h1Jv-1 c38.1 +Ph6 =M2.3",
 		"l14.2 +h1Jv1 c39.1 +Ph6 =JAMMA.",
 		"c38.2 GND",
 		"c39.2 GND",
