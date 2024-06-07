@@ -151,7 +151,11 @@
 				} else if (def.body=='zener') {
 					s += `<path d="M${spacexy(x,y)}l5,0v12l24,-12l-24,-12v12m24,0h1v-10l4,-4m-4,14v10l-4,4m4,-14l10,0" class='resistorbody'/>`
 				} else if (def.body=='ferrite') {
-					s += `<path d="M${spacexy(x,y)}h6l4,-6l5,3l-2,3h6" class='resistorbody'/>`
+					s += `<path d="M${spacexy(x,y)}h13l8,-12l10,6l-4,6l-8,12l-10,-6 l4,-6 m14,0 h13" class='resistorbody'/>`
+				} else if (def.body=='cc') {
+					s += `<path d="M${spacexy(x,y)}h15m0,-12v24m10,0v-24m0,12h15" class='resistorbody'/>`
+				} else if (def.body=='npn') {
+					s += `<path d="M${spacexy(x,y)}m20,0a 20,20 0 01 0,40a 20,20 0 01 0,-40v20m-20,0h20v20h20" class='resistorbody'/>`
 				}
 			} else {
 				s += `<g class=chip>`
@@ -172,6 +176,7 @@
 					//pname = `<tspan class=overline>${pname.slice(1)}</tspan>`
 				}
 				pname += suffix
+				if (!def.body) {
 				if (p.side==0) {
 					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'>${p.name}</text>`
 				} if (p.side==1) {
@@ -184,6 +189,7 @@
 					s += `<text ${attrxy(px+0.2, py)} class='pname m'>${pname}</text>`
 					if (!def.body)
 						s += `<text ${attrxy(px-0.2, py-0.2)} class='num r'>${p.num}</text>`
+				}
 				}
 				
 			}
@@ -429,6 +435,29 @@
 				"2 &Tab; @1,0",
 			],
 		}),
+		cc: new Component({
+			width: 2,
+			height: 0,
+			name: "",
+			desc: "",
+			body: 'cc',
+			pins: [
+				"1 &Tab; @3,0",
+				"2 &Tab; @1,0",
+			],
+		}),
+		npn: new Component({
+			width: 2,
+			height: 2,
+			name: "",
+			desc: "",
+			body: 'npn',
+			pins: [
+				"1 E @1,2",
+				"2 C @0,1",
+				"3 B @3,1",
+			],
+		}),
 	}
 	
 	let placed = [
@@ -573,7 +602,31 @@
 			name: "L11",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:13, y:62},
+			pos: {x:15, y:60-1},
+		},
+		{
+			name: "L12",
+			symbol: comps.fb,
+			override_name: "",
+			pos: {x:15, y:61},
+		},
+		{
+			name: "C36",
+			symbol: comps.cc,
+			override_name: "",
+			pos: {x:21, y:60},
+		},
+		{
+			name: "C37",
+			symbol: comps.cc,
+			override_name: "",
+			pos: {x:21, y:62},
+		},
+		{
+			name: "TR1",
+			symbol: comps.npn,
+			override_name: "",
+			pos: {x:21, y:65},
 		},
 	]
 	
@@ -667,8 +720,14 @@
 		"r55.2 =cartC.2",
 		
 		"ic20:B.3 =V_SYNC r24.1 =V_SYNC",
-		"r24.2 + zd5.2 + l11.1",
+		"r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1",
 		"zd5.1 GND",
+		"l11.2 +h1Jv1 c36.1 +Ph6 =M2.4",
+		"l12.2 +h1Jv1 c37.1 +Ph6 =JAMMA.P",
+		"c36.2 GND",
+		"c37.2 GND",
+		
+		"c37.2 GND",
 		
 		"ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =CLK_30",
 		"ic20:A.18 +h2G 5701.10",
