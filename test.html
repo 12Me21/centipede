@@ -151,8 +151,13 @@
 				s += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
 			} else {
 				s += `<g class=chip>`
-				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${def.name||override_name} ${def.desc}</text>`
-				s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${displayname || name}${suffix}</text>`
+				if (def.bottomdesc) {
+					s += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${def.name||override_name} ${def.desc}</text>`
+					s += `<text ${attrxy(x, y-0.2)} class='name l'>${displayname || name}${suffix}</text>`					
+				} else {
+					s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${def.name||override_name} ${def.desc}</text>`
+					s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${displayname || name}${suffix}</text>`
+				}
 				s += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
 			}
 			for (let p of def.pins) {
@@ -168,8 +173,8 @@
 				pname += suffix
 				if (!def.no_names) {
 					s += `<text `
-					switch (p.side) {
-							break; case 0: s += `transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'`
+					switch (p.side) { default:
+							break; case 0: s += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
 							break; case 1: s += `${attrxy(px-0.2, py)} class='pname m r'`
 							break; case 2: s += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
 							break; case 3: s += `${attrxy(px+0.2, py)} class='pname m'`
@@ -178,7 +183,7 @@
 				}
 				if (!def.no_numbers) {
 					s += `<text `
-					switch (p.side) {
+					switch (p.side) { default:
 							break; case 0: s += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
 							break; case 1: s += `${attrxy(px+0.2, py-0.2)} class='num'`
 							break; case 2:;
@@ -469,56 +474,124 @@
 				"3 B @3,1",
 			],
 		}),
+		td62064a: new Component({
+			width: 5, height: 5,
+			name: "TD062064A",
+			bottomdesc: true,
+			desc: "high-current driver",
+			pins: [
+				"1 COM @0,3", // and 8, pins connected internally
+				"2 O1 @1,1",
+				"7 O2 @1,2",
+				"9 O3 @1,3",
+				"16 O4 @1,4",
+				"3 I1 @3,4",
+				"6 I2 @3,3",
+				"11 I3 @3,2",
+				"14 I4 @3,1",
+			],
+		}),
 	}
 	
 	let placed = [
-		{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd, pos: {x:31, y:37}, },
-		{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c, pos: {x:40, y:39}, },
-		{name: 'IC18', symbol: comps.f163, pos: {x:39, y:45}, },
-		{name: 'IC19:A', symbol: comps.f74a, pos: {x:29-10-5, y:10+25+10}, },
-		{name: 'IC19:B', symbol: comps.f74b, pos: {x:22-10-5, y:10+25+10}, },
-		{name: 'IC20:A', symbol: comps.f244a, pos: {x:40-2-10-5, y:11+16+2+10-1}, },
-		{name: 'IC20:B', symbol: comps.f244b, pos: {x:40-2-10-5, y:11+25+2+10}, },
-		{name: 'IC21A', displayname: 'IC21:1', symbol: comps.f74a, pos: {x:12-5, y:11}, },
-		{name: 'IC21B', displayname: 'IC21:2', symbol: comps.f74b, pos: {x:19-5, y:11}, },
-		{name: 'IC22', symbol: comps.f161, pos: {x:30-3-5, y:11-5}, },
-		{name: 'IC30L', displayname: 'IC30:L', symbol: comps.dpraml, pos: {x:35-5, y:10-5}, },
-		{name: 'IC64A', symbol: comps.f74a, pos: {x:12, y:11+4+10}, },
-		{name: 'IC64B', symbol: comps.f74b, pos: {x:19+2, y:11+5+10}, },
-		{name: 'IC65', symbol: comps.f04, pos: {x:5, y:11+5+10}, }, 
+		{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
+		 pos: {x:31, y:37}, },
+		{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c,
+		 pos: {x:40, y:39}, },
+		{name: 'IC18', symbol: comps.f163,
+		 pos: {x:39, y:45}, },
+		{name: 'IC19:A', symbol: comps.f74a,
+		 pos: {x:29-10-5, y:10+25+10}, },
+		{name: 'IC19:B', symbol: comps.f74b,
+		 pos: {x:22-10-5, y:10+25+10}, },
+		{name: 'IC20:A', symbol: comps.f244a,
+		 pos: {x:40-2-10-5, y:11+16+2+10-1}, },
+		{name: 'IC20:B', symbol: comps.f244b,
+		 pos: {x:40-2-10-5, y:11+25+2+10}, },
+		{name: 'IC21A', displayname: 'IC21:1', symbol: comps.f74a,
+		 pos: {x:12-5, y:11}, },
+		{name: 'IC21B', displayname: 'IC21:2', symbol: comps.f74b,
+		 pos: {x:19-5, y:11}, },
+		{name: 'IC22', symbol: comps.f161,
+		 pos: {x:30-3-5, y:11-5}, },
+		{name: 'IC30L', displayname: 'IC30:L', symbol: comps.dpraml,
+		 pos: {x:35-5, y:10-5}, },
+		{name: 'IC64A', symbol: comps.f74a,
+		 pos: {x:12, y:11+4+10}, },
+		{name: 'IC64B', symbol: comps.f74b,
+		 pos: {x:19+2, y:11+5+10}, },
+		{name: 'IC65', symbol: comps.f04,
+		 pos: {x:5, y:11+5+10}, }, 
 		
-		{name: 'C36', symbol: comps.cc, override_name: '220pF', pos: {x:21, y:60-2}, },
-		{name: 'C37', symbol: comps.cc, override_name: '220pF', pos: {x:21, y:62-2}, },
-		{name: 'C38', symbol: comps.cc, override_name: '220pF', pos: {x:33+5+5+1-13, y:70-5}, },
-		{name: 'C39', symbol: comps.cc, override_name: '220pF', pos: {x:33+5+5+1-13, y:71-5+1}, },
+		{name: 'C36', symbol: comps.cc, override_name: '220pF',
+		 pos: {x:21, y:60-2}, },
+		{name: 'C37', symbol: comps.cc, override_name: '220pF',
+		 pos: {x:21, y:62-2}, },
+		{name: 'C38', symbol: comps.cc, override_name: '220pF',
+		 pos: {x:33+5+5+1-13, y:70-5}, },
+		{name: 'C39', symbol: comps.cc, override_name: '220pF',
+		 pos: {x:33+5+5+1-13, y:71-5+1}, },
 		
-		{name: 'L11', symbol: comps.fb, override_name: '', pos: {x:15, y:60-1-2}, },
-		{name: 'L12', symbol: comps.fb, override_name: '', pos: {x:15, y:61-2}, },
-		{name: 'L13', symbol: comps.fb, override_name: '', pos: {x:33+5-13, y:70-5-1}, },
-		{name: 'L14', symbol: comps.fb, override_name: '', pos: {x:33+5-13, y:71-5}, },
+		{name: 'L11', symbol: comps.fb, override_name: '',
+		 pos: {x:15, y:60-1-2}, },
+		{name: 'L12', symbol: comps.fb, override_name: '',
+		 pos: {x:15, y:61-2}, },
+		{name: 'L13', symbol: comps.fb, override_name: '',
+		 pos: {x:33+5-13, y:70-5-1}, },
+		{name: 'L14', symbol: comps.fb, override_name: '',
+		 pos: {x:33+5-13, y:71-5}, },
 		
-		{name: 'R3', symbol: comps.r2, override_name: '2400Ω', pos: {x:12-4, y:19}, },
-		{name: 'R18', symbol: comps.r, override_name: '75&ohm;', pos: {x:33-13, y:70-5-1}, },
-		{name: 'R19', symbol: comps.r, override_name: '75&ohm;', pos: {x:33-13, y:71-5}, },
-		{name: 'R24', symbol: comps.r, override_name: '75Ω', pos: {x:12-4, y:60-2}, },
-		{name: 'R25', symbol: comps.r2, override_name: '100Ω', pos: {x:33-5-1-13, y:72-5+1}, },
-		{name: 'R26', symbol: comps.r2, override_name: '1000Ω', pos: {x:21-13, y:67}, },
-		{name: 'R52', symbol: comps.r2, override_name: '82Ω', pos: {x:29, y:41}, },
-		{name: 'R53', symbol: comps.r, override_name: '82Ω', pos: {x:29, y:42}, },
-		{name: 'R54', symbol: comps.r2, override_name: '82Ω', pos: {x:29, y:51}, },
-		{name: 'R55', symbol: comps.r, override_name: '82Ω', pos: {x:29, y:52}, },
+		{name: 'R3', symbol: comps.r2, override_name: '2400Ω',
+		 pos: {x:12-4, y:19}, },
+		{name: 'R18', symbol: comps.r, override_name: '75&ohm;',
+		 pos: {x:33-13, y:70-5-1}, },
+		{name: 'R19', symbol: comps.r, override_name: '75&ohm;',
+		 pos: {x:33-13, y:71-5}, },
+		{name: 'R24', symbol: comps.r, override_name: '75Ω',
+		 pos: {x:12-4, y:60-2}, },
+		{name: 'R25', symbol: comps.r2, override_name: '100Ω',
+		 pos: {x:33-5-1-13, y:72-5+1}, },
+		{name: 'R26', symbol: comps.r2, override_name: '1000Ω',
+		 pos: {x:21-13, y:67}, },
+		{name: 'R52', symbol: comps.r2, override_name: '82Ω',
+		 pos: {x:29, y:41}, },
+		{name: 'R53', symbol: comps.r, override_name: '82Ω',
+		 pos: {x:29, y:42}, },
+		{name: 'R54', symbol: comps.r2, override_name: '82Ω',
+		 pos: {x:29, y:51}, },
+		{name: 'R55', symbol: comps.r, override_name: '82Ω',
+		 pos: {x:29, y:52}, },
 		
-		{name: 'TR1', symbol: comps.npn, override_name: '', pos: {x:21-13, y:65-1}, },
-		{name: 'TR4', symbol: comps.npn, override_name: '', pos: {x:27-13, y:65}, },
+		{name: 'TR1', symbol: comps.npn, override_name: '',
+		 pos: {x:21-13, y:65-1}, },
+		{name: 'TR4', symbol: comps.npn, override_name: '',
+		 pos: {x:27-13, y:65}, },
 		
-		{name: 'X1', symbol: comps.osc, override_name: '26.686MHz', pos: {x:16-10-5, y:11+25+10}, },
-		{name: 'X2', symbol: comps.osc, override_name: '30.47618MHz', pos: {x:16+10-10-5, y:11+20+10-1}, },
-		{name: 'X3', symbol: comps.osc, override_name: '16MHz', pos: {x:16+5+10-10-5, y:11+15+3+10-1}, },
+		{name: 'X1', symbol: comps.osc, override_name: '26.686MHz',
+		 pos: {x:16-10-5, y:11+25+10}, },
+		{name: 'X2', symbol: comps.osc, override_name: '30.47618MHz',
+		 pos: {x:16+10-10-5, y:11+20+10-1}, },
+		{name: 'X3', symbol: comps.osc, override_name: '16MHz',
+		 pos: {x:16+5+10-10-5, y:11+15+3+10-1}, },
 		
-		{name: 'ZD5', symbol: comps.zd, override_name: '', pos: {x:12-4, y:62-2}, },
+		{name: 'ZD5', symbol: comps.zd, override_name: '',
+		 pos: {x:12-4, y:62-2}, },
+		
+		{name: 'IC34', symbol: comps.td62064a,
+		 pos: {x:5, y:72}},
 	]
 	
 	let cons = [
+		"ic34.1 NC",
+		"ic34.3 =FIO.69",
+		"ic34.6 =FIO.70",
+		"ic34.14 =FIO.71",
+		"ic34.11 =FIO.72",
+		/* "ic34.16 zd1.2 l2.1",
+			"ic34.9 zd2.2 l3.1",
+			"ic34.7 zd3.2 l4.1",
+			"ic34.2 zd4.2 l5.1", */
+		
 		"IC22.D0 + IC22.D1 + IC22.D2 + IC22.D3 GND",
 		
 		"IC22.~LOAD VCC",
