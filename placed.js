@@ -140,13 +140,16 @@ let placed = [
 	 pos: {x:20, y:98}, },
 	{name: 'C48', symbol: comps.cc, override_name: '?',
 	 pos: {x:18, y:99}, },
+	{name: 'IC62', symbol: comps.lm317l,
+	 pos: {x:30, y:99}, },
 ]
 
 let cons = [
 	"vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1",
 	"r33.2 GND",
 	"c48.2 GND",
-	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +P r31.2",
+	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +P r31.2 + ic62.1",
+	"ic62.2 + r31.1",
 	
 	"ic61.1 =+12V",
 	"ic61.3 =FIO.8",

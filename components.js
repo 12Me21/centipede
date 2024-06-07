@@ -317,4 +317,15 @@ let comps = {
 			"3 ? @3,2",
 		],
 	}),
+	lm317l: new Component({
+		width: 4, height: 3,
+		name: "LM317L",
+		desc: "voltage regulator",
+		bottomdesc: true,
+		pins: [
+			"1 ADJ @3,1",
+			"2 OUT @1,2",
+			"3 IN @0,3",
+		],
+	})		
 }
