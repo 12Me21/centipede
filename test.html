@@ -144,7 +144,7 @@
 			if (def.body) {
 				s += `
 <g class='chip discrete'>
-<text ${attrxy(x, y-0.2)} class='name r'>${displayname || name}${suffix}</text>
+<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${displayname || name}${suffix}</text>
 <text ${attrxy(x+width, y-0.2)} class='desc'>${def.name||override_name} ${def.desc}</text>`
 				if (def.body=='resistor') {
 					s += `<path d="M${spacexy(x,y)}h2l3,-6l6,12l6,-12l6,12l6,-12l6,12l3,-6h2" class='resistorbody'/>`
@@ -653,7 +653,7 @@
 			name: "R18",
 			symbol: comps.r,
 			override_name: "75&ohm;",
-			pos: {x:33, y:70-5},
+			pos: {x:33, y:70-5-1},
 		},
 		{
 			name: "R19",
@@ -663,15 +663,39 @@
 		},
 		{
 			name: "R25",
-			symbol: comps.r,
+			symbol: comps.r2,
 			override_name: "100&ohm;",
-			pos: {x:33, y:72-5},
+			pos: {x:33-5-1, y:72-5+1},
 		},
 		{
 			name: "R26",
 			symbol: comps.r2,
 			override_name: "1000&ohm;",
 			pos: {x:21, y:67},
+		},
+		{
+			name: "L13",
+			symbol: comps.fb,
+			override_name: "",
+			pos: {x:33+5, y:70-5-1},
+		},
+		{
+			name: "L14",
+			symbol: comps.fb,
+			override_name: "",
+			pos: {x:33+5, y:71-5},
+		},
+		{
+			name: "C38",
+			symbol: comps.cc,
+			override_name: "",
+			pos: {x:33+5+5, y:70-5},
+		},
+		{
+			name: "C39",
+			symbol: comps.cc,
+			override_name: "",
+			pos: {x:33+5+5, y:71-5+1},
 		},
 	]
 	
@@ -775,10 +799,16 @@
 		"tr1.2 VCC",
 		"tr1.3 =FDA.VIDEO_BLUE",
 		"tr1.1 +h1J tr4.3 +Pv1h-1 r26.1",
-		"tr4.1 +h1J r25.1 +Pv-1J r19.1 +Pv-1 r18.1",
+		"tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1",
 		"r25.2 GND",
 		"r26.2 GND",
 		"tr4.2 =12V",
+		"r18.2 + l13.1",
+		"r19.2 + l14.1",
+		"l13.2 +h1Jv1 c38.1 +Ph6 =M2.3",
+		"l14.2 +h1Jv1 c39.1 +Ph6 =JAMMA.",
+		"c38.2 GND",
+		"c39.2 GND",
 		
 		"c37.2 GND",
 		
