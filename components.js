@@ -327,5 +327,19 @@ let comps = {
 			"2 OUT @1,2",
 			"3 IN @0,3",
 		],
-	})		
+	}),
+	d: new Component({
+		width: 2,
+		height: 0,
+		name: "",
+		desc: "",
+		body: 'diode',
+		bodypath: 'l7,0v12l24,-12l-24,-12v12m24,0h1m0,-13v26m0,-13l10,0',
+		no_names: true,
+		no_numbers: true,
+		pins: [
+			"1 &Tab; @3,0",
+			"2 &Tab; @1,0",
+		],
+	}),
 }

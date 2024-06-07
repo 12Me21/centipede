@@ -137,19 +137,23 @@ let placed = [
 	{name: 'R33', symbol: comps.r2, override_name: '510Ω',
 	 pos: {x:4, y:97}, },
 	{name: 'R31', symbol: comps.r2, override_name: '220Ω',
-	 pos: {x:20, y:98}, },
+	 pos: {x:20, y:101}, },
 	{name: 'C48', symbol: comps.cc2, override_name: '?',
 	 pos: {x:10, y:101}, },
 	{name: 'IC62', symbol: comps.lm317l,
-	 pos: {x:30, y:99}, },
+	 pos: {x:20, y:96}, },
+	{name: 'D1', symbol: comps.d, override_name: '',
+	 pos: {x:30-2, y:96+2}, },
 ]
 
 let cons = [
 	"vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1",
 	"r33.2 GND",
 	"c48.2 GND",
-	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +P r31.2 + ic62.1",
-	"ic62.2 + r31.1",
+	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2",
+	"ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h2 =JP4.1", //jp4.1
+	"ic62.3 =+12V",
+	"d1.2 =ESP.VDD",
 	
 	"ic61.1 =+12V",
 	"ic61.3 =FIO.8",
