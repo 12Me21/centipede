@@ -138,8 +138,8 @@ let placed = [
 	 pos: {x:4, y:97}, },
 	{name: 'R31', symbol: comps.r2, override_name: '220Ω',
 	 pos: {x:20, y:98}, },
-	{name: 'C48', symbol: comps.cc, override_name: '?',
-	 pos: {x:18, y:99}, },
+	{name: 'C48', symbol: comps.cc2, override_name: '?',
+	 pos: {x:10, y:101}, },
 	{name: 'IC62', symbol: comps.lm317l,
 	 pos: {x:30, y:99}, },
 ]
