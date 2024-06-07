@@ -155,7 +155,7 @@
 				} else if (def.body=='cc') {
 					s += `<path d="M${spacexy(x,y)}h15m0,-12v24m10,0v-24m0,12h15" class='resistorbody'/>`
 				} else if (def.body=='npn') {
-					s += `<path d="M${spacexy(x,y)}m0,20a 20,20 0 01 40,0a 20,20 0 01 -40,0h15m0,-15v30m0,-8l15,10m-15,-10m0,8m0,-30m0,8l15,-10" class='resistorbody'/>`
+					s += `<path d="M${spacexy(x,y)}m0,20a 20,20 0 01 40,0a 20,20 0 01 -40,0h15m0,-15v30m0,-8l15,10h10v5m-10,-5m-15,-10m0,8m0,-30m0,8l15,-10h10v-5" class='resistorbody'/>`
 				}
 			} else {
 				s += `<g class=chip>`
@@ -454,7 +454,7 @@
 			body: 'npn',
 			pins: [
 				"1 E @1,2",
-				"2 C @0,1",
+				"2 C @0,2",
 				"3 B @3,1",
 			],
 		}),
