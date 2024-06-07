@@ -605,97 +605,97 @@
 			name: "R24",
 			symbol: comps.r,
 			override_name: "75Ω",
-			pos: {x:12-4, y:60},
+			pos: {x:12-4, y:60-2},
 		},
 		{
 			name: "ZD5",
 			symbol: comps.zd,
 			override_name: "",
-			pos: {x:12-4, y:62},
+			pos: {x:12-4, y:62-2},
 		},
 		{
 			name: "L11",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:15, y:60-1},
+			pos: {x:15, y:60-1-2},
 		},
 		{
 			name: "L12",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:15, y:61},
+			pos: {x:15, y:61-2},
 		},
 		{
 			name: "C36",
 			symbol: comps.cc,
 			override_name: "220pF",
-			pos: {x:21, y:60},
+			pos: {x:21, y:60-2},
 		},
 		{
 			name: "C37",
 			symbol: comps.cc,
 			override_name: "220pF",
-			pos: {x:21, y:62},
+			pos: {x:21, y:62-2},
 		},
 		{
 			name: "TR1",
 			symbol: comps.npn,
 			override_name: "",
-			pos: {x:21, y:65-1},
+			pos: {x:21-13, y:65-1},
 		},
 		{
 			name: "TR4",
 			symbol: comps.npn,
 			override_name: "",
-			pos: {x:27, y:65},
+			pos: {x:27-13, y:65},
 		},
 		{
 			name: "R18",
 			symbol: comps.r,
 			override_name: "75&ohm;",
-			pos: {x:33, y:70-5-1},
+			pos: {x:33-13, y:70-5-1},
 		},
 		{
 			name: "R19",
 			symbol: comps.r,
 			override_name: "75&ohm;",
-			pos: {x:33, y:71-5},
+			pos: {x:33-13, y:71-5},
 		},
 		{
 			name: "R25",
 			symbol: comps.r2,
 			override_name: "100&ohm;",
-			pos: {x:33-5-1, y:72-5+1},
+			pos: {x:33-5-1-13, y:72-5+1},
 		},
 		{
 			name: "R26",
 			symbol: comps.r2,
 			override_name: "1000&ohm;",
-			pos: {x:21, y:67},
+			pos: {x:21-13, y:67},
 		},
 		{
 			name: "L13",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:33+5, y:70-5-1},
+			pos: {x:33+5-13, y:70-5-1},
 		},
 		{
 			name: "L14",
 			symbol: comps.fb,
 			override_name: "",
-			pos: {x:33+5, y:71-5},
+			pos: {x:33+5-13, y:71-5},
 		},
 		{
 			name: "C38",
 			symbol: comps.cc,
 			override_name: "220pF",
-			pos: {x:33+5+5+1, y:70-5},
+			pos: {x:33+5+5+1-13, y:70-5},
 		},
 		{
 			name: "C39",
 			symbol: comps.cc,
 			override_name: "220pF",
-			pos: {x:33+5+5+1, y:71-5+1},
+			pos: {x:33+5+5+1-13, y:71-5+1},
 		},
 	]
 	
@@ -802,11 +802,11 @@
 		"tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1",
 		"r25.2 GND",
 		"r26.2 GND",
-		"tr4.2 =12V",
+		"tr4.2 =&plus;12V",
 		"r18.2 + l13.1",
 		"r19.2 + l14.1",
 		"l13.2 +h1Jv1 c38.1 +Ph6 =M2.3",
-		"l14.2 +h1Jv1 c39.1 +Ph6 =JAMMA.",
+		"l14.2 +h1Jv1 c39.1 +Ph6 =JAMMA.13",
 		"c38.2 GND",
 		"c39.2 GND",
 		
@@ -860,6 +860,8 @@
 		function add_label(text) {
 			if (dir==3)
 				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
+			else if (dir==0)
+				s2 += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
 			else 
 				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
 		}
