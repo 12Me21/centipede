@@ -155,7 +155,7 @@
 				} else if (def.body=='cc') {
 					s += `<path d="M${spacexy(x,y)}h15m0,-12v24m10,0v-24m0,12h15" class='resistorbody'/>`
 				} else if (def.body=='npn') {
-					s += `<path d="M${spacexy(x,y)}m0,20a 20,20 0 01 40,0a 20,20 0 01 -40,0h15m0,-15v30m0,-8l15,10h10v5m-10,-5m-15,-10m0,8m0,-30m0,8l15,-10h10v-5" class='resistorbody'/>`
+					s += `<path d="M${spacexy(x,y)}m3,20a 20,20 0 01 40,0a 20,20 0 01 -40,0h12m0,-15v30m0,-8l20,10h5v5m-5,-5m-20,-10m0,8m0,-30m0,8l20,-10h5v-5m-18,30l5,5l-7,-1" class='resistorbody'/>`
 				}
 			} else {
 				s += `<g class=chip>`
@@ -176,20 +176,24 @@
 					//pname = `<tspan class=overline>${pname.slice(1)}</tspan>`
 				}
 				pname += suffix
-				if (!def.body) {
 				if (p.side==0) {
-					s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'>${p.name}</text>`
+					if (!def.no_names)
+						s += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(90)" class='pname m'>${p.name}</text>`
+					if (!def.no_numbers)
+						s += `<text transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'>${p.num}</text>`
 				} if (p.side==1) {
-					s += `<text ${attrxy(px-0.2, py)} class='pname m r'>${pname}</text>`
-					if (!def.body)
+					if (!def.no_names)
+						s += `<text ${attrxy(px-0.2, py)} class='pname m r'>${pname}</text>`
+					if (!def.no_numbers)
 						s += `<text ${attrxy(px+0.2, py-0.2)} class=num>${p.num}</text>`
 				} if (p.side==2) {
-					s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'>${p.name}</text>`
+					if (!def.no_names)
+						s += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'>${p.name}</text>`
 				} if (p.side==3) {
-					s += `<text ${attrxy(px+0.2, py)} class='pname m'>${pname}</text>`
-					if (!def.body)
+					if (!def.no_names)
+						s += `<text ${attrxy(px+0.2, py)} class='pname m'>${pname}</text>`
+					if (!def.no_numbers)
 						s += `<text ${attrxy(px-0.2, py-0.2)} class='num r'>${p.num}</text>`
-				}
 				}
 				
 			}
@@ -397,6 +401,8 @@
 			name: "",
 			desc: "",
 			body: 'resistor',
+			no_names: true,
+			no_numbers: true,
 			pins: [
 				"1 &Tab; @3,0",
 				"2 &Tab; @1,0",
@@ -408,6 +414,8 @@
 			name: "",
 			desc: "",
 			body: 'resistor',
+			no_names: true,
+			no_numbers: true,
 			pins: [
 				"2 &Tab; @3,0",
 				"1 &Tab; @1,0",
@@ -419,6 +427,8 @@
 			name: "",
 			desc: "",
 			body: 'zener',
+			no_names: true,
+			no_numbers: true,
 			pins: [
 				"1 &Tab; @3,0",
 				"2 &Tab; @1,0",
@@ -430,6 +440,8 @@
 			name: "",
 			desc: "",
 			body: 'ferrite',
+			no_names: true,
+			no_numbers: true,
 			pins: [
 				"1 &Tab; @3,0",
 				"2 &Tab; @1,0",
@@ -441,6 +453,8 @@
 			name: "",
 			desc: "",
 			body: 'cc',
+			no_names: true,
+			no_numbers: true,
 			pins: [
 				"1 &Tab; @3,0",
 				"2 &Tab; @1,0",
@@ -452,6 +466,7 @@
 			name: "",
 			desc: "",
 			body: 'npn',
+			no_names: true,
 			pins: [
 				"1 E @1,2",
 				"2 C @0,2",
@@ -626,7 +641,37 @@
 			name: "TR1",
 			symbol: comps.npn,
 			override_name: "",
-			pos: {x:21, y:65},
+			pos: {x:21, y:65-1},
+		},
+		{
+			name: "TR4",
+			symbol: comps.npn,
+			override_name: "",
+			pos: {x:27, y:65},
+		},
+		{
+			name: "R18",
+			symbol: comps.r,
+			override_name: "75&ohm;",
+			pos: {x:33, y:70-5},
+		},
+		{
+			name: "R19",
+			symbol: comps.r,
+			override_name: "75&ohm;",
+			pos: {x:33, y:71-5},
+		},
+		{
+			name: "R25",
+			symbol: comps.r,
+			override_name: "100&ohm;",
+			pos: {x:33, y:72-5},
+		},
+		{
+			name: "R26",
+			symbol: comps.r2,
+			override_name: "1000&ohm;",
+			pos: {x:21, y:67},
 		},
 	]
 	
@@ -726,6 +771,14 @@
 		"l12.2 +h1Jv1 c37.1 +Ph6 =JAMMA.P",
 		"c36.2 GND",
 		"c37.2 GND",
+		
+		"tr1.2 VCC",
+		"tr1.3 =FDA.VIDEO_BLUE",
+		"tr1.1 +h1J tr4.3 +Pv1h-1 r26.1",
+		"tr4.1 +h1J r25.1 +Pv-1J r19.1 +Pv-1 r18.1",
+		"r25.2 GND",
+		"r26.2 GND",
+		"tr4.2 =12V",
 		
 		"c37.2 GND",
 		
