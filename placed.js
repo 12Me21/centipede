@@ -325,3 +325,11 @@ let cons = [
 	"CLK_05: ic18.11 =",
 	"VCC: ic1.9 =",
 ]
+
+/* hmm what if
+instead of the + designators being 'between' two pin designators,
+they are metadata on each pin des, meaning  "here is how to connect 
+this pin back to the rest of the net"
+and then, a junction is like,  here is a point where those back-connections meet up. (if there are more than 2)
+
+*/
