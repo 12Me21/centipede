@@ -87,25 +87,127 @@ class Component {
 			pname += suffix
 			if (!def.no_names) {
 				s += `<text `
-				switch (p.side) { default:
-				                  break; case 0: s += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
-				                  break; case 1: s += `${attrxy(px-0.2, py)} class='pname m r'`
-				                  break; case 2: s += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
-				                  break; case 3: s += `${attrxy(px+0.2, py)} class='pname m'`
+				switch (p.side) {
+				default:
+					break; case 0: s += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
+					break; case 1: s += `${attrxy(px-0.2, py)} class='pname m r'`
+					break; case 2: s += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
+					break; case 3: s += `${attrxy(px+0.2, py)} class='pname m'`
 				                }
 				s += ` >${p.name}</text>`
 			}
 			if (!def.no_numbers) {
 				s += `<text `
-				switch (p.side) { default:
-				                  break; case 0: s += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
-				                  break; case 1: s += `${attrxy(px+0.2, py-0.2)} class='num'`
-				                  break; case 2:;
-				                  break; case 3: s += `${attrxy(px-0.2, py-0.2)} class='num r'`
-				                }
+				switch (p.side) {
+				default:
+					break; case 0: s += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
+					break; case 1: s += `${attrxy(px+0.2, py-0.2)} class='num'`
+					break; case 2:;
+					break; case 3: s += `${attrxy(px-0.2, py-0.2)} class='num r'`
+				}
 				s += ` >${p.num}</text>`
 			}
 		}
 		return s + "</g>"
 	}
+}
+
+let byname = {}
+function lookup_pin(des) {
+	let [part,pin] = des.split(".")
+	if (!part || !pin)
+		return [null, null]
+	part = part.toUpperCase()
+	pin = pin.toUpperCase()
+	part = byname[part]
+	if (!part)
+		return [null, null]
+	pin = part.symbol.pins.find(x=>(x.num==pin||x.name==pin))
+	return [part, pin]
+}
+let nets = {}
+function draw_conn2(desc) {
+	desc = desc.split(" ")
+	let s = ""
+	let s2 = "", s1=""
+	let px = 0
+	let py = 0
+	let dir = 0
+	let landmarks = []
+	let lineto = (c)=>{s+=c+spacexy(px,py)}
+	let drawing = false
+	
+	let netname = "???"
+	function add_label(text) {
+		if (text=="VCC") {
+			s += `v-6 h-2 l2,-6 l2,6 h-2 v-6`
+		} else if (text=="GND") {
+			s += `v6 h-6 l6,6 l6,-6 h-6`
+		} else if (text=="NC") {
+			s += `m-4,-4 l8,8 m0-8 l-8,8`
+		} else {
+			if (dir==3)
+				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
+			else if (dir==0)
+				s2 += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
+			else 
+				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
+		}
+	}
+	if (desc[0].slice(-1) == ":") {
+		netname = desc.shift().slice(0,-1)
+		//let other = nets[netname]
+		//if (other) ;
+		//nets[netname] = true
+	}
+	for (let item of desc) {
+		if (item[0]=="+") {
+			for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
+				move = move[0]
+				let num = +move.slice(1)
+				if (move[0]=="h") {
+					px += num
+					dir = num < 0 ? 3 : 1
+					lineto('L')
+				} else if (move[0]=='v') {
+					py += num
+					dir = num < 0 ? 0 : 2
+					lineto('L')
+				} else if (move[0]=='J') {
+					landmarks.push([px,py])
+					s2 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
+				} else if (move[0]=='P') {
+					0,[px,py] = landmarks.pop()
+					lineto('M')
+				} else if (move[0]=='G') {
+					s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
+				} else {
+					throw new Error('oh no +'+move[0])
+				}
+			}
+			drawing = true
+		} else if (item=="=") {
+			//netname = item.slice(1)
+			add_label(netname)
+			drawing = false
+		} else {
+			let [part, pin] = lookup_pin(item)
+			if (!part || !pin) {
+				throw new Error("lookup pin failed: “"+item+"”")
+				add_label(item)
+				drawing = false
+			} else {
+				dir = pin.side
+				px = pin.e.x+part.pos.x
+				py = pin.e.y+part.pos.y
+				if (drawing)
+					lineto('L')
+				else {
+					lineto('M')
+				}
+			}
+			drawing = false
+		}
+	}
+	return "<g class=net>"+s1+`<path d="`+s+`"/>`+s2+"</g>"
 }
