@@ -146,185 +146,178 @@ let placed = [
 	 pos: {x:30-2, y:96+2}, },
 ]
 
-let cons = [
-	"vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1",
-	"GND: r33.2 =",
-	"GND: c48.2 =",
-	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2",
-	"JP4.1: ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =", //jp4.1
-	"+12V: ic62.3 =",
-	"JP4.2: d1.2 =",
-	//"VCC =JP4.3",
+let cons = `
+	vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1
+	GND: r33.2 =
+	GND: c48.2 =
+	vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2
+	JP4.1: ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =
+	+12V: ic62.3 =
+	JP4.2: d1.2 =
 	
-	"+12V: ic61.1 =",
-	"FIO.8: ic61.3 =",
-	"FIO.7: ic61.6 =",
-	"FIO.6: ic61.11 =",
-	"FIO.9: ic61.14 =",
-	"ic61.9 + l7.1",
-	"ic61.7 + l8.1",
-	"ic61.2 + l9.1",
-	"ic61.16 + l10.1",
-	"JAMMA.9: l7.2 +h1Jv1 c32.2 +Ph6 =",
-	"JAMMA.K: l8.2 +h1Jv1 c33.2 +Ph6 =",
-	"JAMMA.8: l9.2 +h1Jv1 c34.2 +Ph6 =",
-	"JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =",
-	"AGND: c32.1 =",
-	"AGND: c33.1 =",
-	"AGND: c34.1 =",
-	"AGND: c35.1 =",
+	+12V: ic61.1 =
+	FIO.8: ic61.3 =
+	FIO.7: ic61.6 =
+	FIO.6: ic61.11 =
+	FIO.9: ic61.14 =
+	ic61.9 + l7.1
+	ic61.7 + l8.1
+	ic61.2 + l9.1
+	ic61.16 + l10.1
+	JAMMA.9: l7.2 +h1Jv1 c32.2 +Ph6 =
+	JAMMA.K: l8.2 +h1Jv1 c33.2 +Ph6 =
+	JAMMA.8: l9.2 +h1Jv1 c34.2 +Ph6 =
+	JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =
+	AGND: c32.1 =
+	AGND: c33.1 =
+	AGND: c34.1 =
+	AGND: c35.1 =
 	
-	"NC: ic34.1 =",
-	"FIO.69: ic34.3 =",
-	"FIO.70: ic34.6 =",
-	"FIO.71: ic34.14 =",
-	"FIO.72: ic34.11 =",
-	"ic34.16 +h5Jv1 zd1.2 +P l2.1",
-	"ic34.9 +h5Jv1 zd2.2 +P l3.1",
-	"ic34.7 +h5Jv1 zd3.2 +P l4.1",
-	"ic34.2 +h5Jv1 zd4.2 +P l5.1",
-	"GND: zd1.1 =",
-	"GND: zd2.1 =",
-	"GND: zd3.1 =",
-	"GND: zd4.1 =",
-	"4P.12: l2.2 +h1Jv1 c28.2 +Ph6 =",
-	"3P.12: l3.2 +h1Jv1 c29.2 +Ph6 =",
-	"4P.13: l4.2 +h1Jv1 c30.2 +Ph6 =",
-	"3P.13: l5.2 +h1Jv1 c31.2 +Ph6 =",
-	"AGND: c28.1 =",
-	"AGND: c29.1 =",
-	"AGND: c30.1 =",
-	"AGND: c31.1 =",
+	NC: ic34.1 =
+	FIO.69: ic34.3 =
+	FIO.70: ic34.6 =
+	FIO.71: ic34.14 =
+	FIO.72: ic34.11 =
+	ic34.16 +h5Jv1 zd1.2 +P l2.1
+	ic34.9 +h5Jv1 zd2.2 +P l3.1
+	ic34.7 +h5Jv1 zd3.2 +P l4.1
+	ic34.2 +h5Jv1 zd4.2 +P l5.1
+	GND: zd1.1 =
+	GND: zd2.1 =
+	GND: zd3.1 =
+	GND: zd4.1 =
+	4P.12: l2.2 +h1Jv1 c28.2 +Ph6 =
+	3P.12: l3.2 +h1Jv1 c29.2 +Ph6 =
+	4P.13: l4.2 +h1Jv1 c30.2 +Ph6 =
+	3P.13: l5.2 +h1Jv1 c31.2 +Ph6 =
+	AGND: c28.1 =
+	AGND: c29.1 =
+	AGND: c30.1 =
+	AGND: c31.1 =
 	
-	"GND: IC22.D0 + IC22.D1 + IC22.D2 + IC22.D3 =",
+	GND: IC22.D0 + IC22.D1 + IC22.D2 + IC22.D3 =
 	
-	"VCC: IC22.~LOAD =",
-	"NC: IC22.RCO =",
+	VCC: IC22.~LOAD =
+	NC: IC22.RCO =
 	
-	"IC21A.D +v-3h5 IC21A.~Q",
-	"IC21B.D +v-3h5 IC21B.~Q",
+	IC21A.D +v-3h5 IC21A.~Q
+	IC21B.D +v-3h5 IC21B.~Q
 	
-	"ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk",
+	ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk
 	
-	"IC22.Q0 + IC30L.A1",
-	"IC22.Q1 + IC30L.A2",
-	"IC22.Q2 + IC30L.A3",
-	"IC22.Q3 + IC30L.A4",
-	"OTIS.E: IC21A.CLK = IC30L.1 =",
+	IC22.Q0 + IC30L.A1
+	IC22.Q1 + IC30L.A2
+	IC22.Q2 + IC30L.A3
+	IC22.Q3 + IC30L.A4
+	OTIS.E: IC21A.CLK = IC30L.1 =
 	
-	"GND: IC21A.~PRE =",
-	"GND: IC21B.~PRE =",
-	//"<circle cx=240 cy=340 r=3 class=crossing />",
-	//"<circle cx=380 cy=340 r=3 class=crossing />",
+	GND: IC21A.~PRE =
+	GND: IC21B.~PRE =
 	
-	"OTIS.BS: ic21a.~clr = +v2Jh7J ic21b.~clr +P ic22.~mr +Pv2h1 r3.2",
-	"GND: r3.1 =",
+	OTIS.BS: ic21a.~clr = +v2Jh7J ic21b.~clr +P ic22.~mr +Pv2h1 r3.2
+	GND: r3.1 =
 	
-	"ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0",
+	ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0
 	
-	"GND: ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + =",
+	GND: ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + =
 	
-	"NC: IC30L.IO4 =",
-	"NC: IC30L.IO5 =",
-	"NC: IC30L.IO6 =",
-	"NC: IC30L.IO7 =",
+	NC: IC30L.IO4 =
+	NC: IC30L.IO5 =
+	NC: IC30L.IO6 =
+	NC: IC30L.IO7 =
 	
-	"cartB.89: IC30L.IO0 =",
-	"cartB.90: IC30L.IO1 =",
-	"cartB.91: IC30L.IO2 =",
-	"cartB.92: IC30L.IO3 =",
+	cartB.89: IC30L.IO0 =
+	cartB.90: IC30L.IO1 =
+	cartB.91: IC30L.IO2 =
+	cartB.92: IC30L.IO3 =
 	
-	"GND: IC30L.~OE =",
+	GND: IC30L.~OE =
 	
-	"(pulldown?): IC30L.~BUSY =", // unsure
-	"GND: IC30L.~WE =",
-	"NC: IC30L.4 =",
+	(pulldown?): IC30L.~BUSY =
+	GND: IC30L.~WE =
+	NC: IC30L.4 =
 	
-	"FDP.205: IC65.13 =",
-	"IC65.12 + IC64A.3",
-	"CPU.AS: IC65.11 =",
-	"IC65.10 +h1J IC64A.4 +Pv3h6v-2 IC64B.10",
-	"IC64A.5 + IC64B.12",
-	"FCM.109: IC64B.9 =",
-	"~VRAM-CE: IC64B.11 =", //], /*"h-10 v60 h-100"*/""],
+	FDP.205: IC65.13 =
+	IC65.12 + IC64A.3
+	CPU.AS: IC65.11 =
+	IC65.10 +h1J IC64A.4 +Pv3h6v-2 IC64B.10
+	IC64A.5 + IC64B.12
+	FCM.109: IC64B.9 =
+	~VRAM-CE: IC64B.11 =
 	
-	"VCC: IC64A.1 =",
-	"GND: IC64A.2 =",
-	"VCC: IC64B.13 =",
-	"NC: IC64A.~Q =",
-	"NC: IC64B.~Q =",
+	VCC: IC64A.1 =
+	GND: IC64A.2 =
+	VCC: IC64B.13 =
+	NC: IC64A.~Q =
+	NC: IC64B.~Q =
 	
-	"IC19:B.D +v-3h5 IC19:B.~Q",
-	"IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2",
-	"FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =",
-	"~VCLK_7: IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh10 =",
-	"GND: IC19:B.~PRE IC19:B.~CLR =",
-	"GND: IC19:A.~PRE IC19:A.~CLR =",
-	"IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3",
-	"X1.CLK + IC19:B.CLK",
+	IC19:B.D +v-3h5 IC19:B.~Q
+	IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2
+	FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
+	~VCLK_7: IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh10 =
+	GND: IC19:B.~PRE IC19:B.~CLR =
+	GND: IC19:A.~PRE IC19:A.~CLR =
+	IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3
+	X1.CLK + IC19:B.CLK
 	
-	"GND: IC20:A.~OE =",
-	"GND: IC20:B.~OE =",
-	"GND: IC20:B.I1 =",
+	GND: IC20:A.~OE =
+	GND: IC20:B.~OE =
+	GND: IC20:B.I1 =
 	
-	"X3.CLK + IC20:A.I0",
-	"X2.CLK +h5v-1 IC20:A.I1",
+	X3.CLK + IC20:A.I0
+	X2.CLK +h5v-1 IC20:A.I1
 	
-	/*"IC20:A.18 5701.10",
-	  "IC20:A.16 +h1J 5701.19 +Pv-1Gv-3h8 =CLK_30",
-	  "IC20:B.5 NC",
-	  "IC20:B.3 =VSYNC",*/
-	"ic20:A.14 + r52.2",
-	"VCLK_13: r52.1 =",
-	"ic20:A.12 + r53.1",
-	"VCLK_7: r53.2 =",
+	ic20:A.14 + r52.2
+	VCLK_13: r52.1 =
+	ic20:A.12 + r53.1
+	VCLK_7: r53.2 =
 	
-	"ic20:B.7 + r54.2",
-	"cartC.1: r54.1 =",
-	"ic20:B.9 + r55.1",
-	"cartC.2: r55.2 =",
+	ic20:B.7 + r54.2
+	cartC.1: r54.1 =
+	ic20:B.9 + r55.1
+	cartC.2: r55.2 =
 	
-	"V_SYNC: ic20:B.3 = r24.1 =",
-	"r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1",
-	"GND: zd5.1 =",
-	"M2.4: l11.2 +h1Jv1 c36.2 +Ph6 =",
-	"JAMMA.P: l12.2 +h1Jv1 c37.2 +Ph6 =",
-	"AGND: c36.1 =",
-	"AGND: c37.1 =",
+	V_SYNC: ic20:B.3 = r24.1 =
+	r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1
+	GND: zd5.1 =
+	M2.4: l11.2 +h1Jv1 c36.2 +Ph6 =
+	JAMMA.P: l12.2 +h1Jv1 c37.2 +Ph6 =
+	AGND: c36.1 =
+	AGND: c37.1 =
 	
-	"VCC: tr1.2 =",
-	"FDA.VIDEO_BLUE: tr1.3 =",
-	"tr1.1 +h1J tr4.3 +Pv1h-1 r26.1",
-	"tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1",
-	"AGND: r25.2 =",
-	"AGND: r26.2 =",
-	"+12V: tr4.2 =",
-	"r18.2 + l13.1",
-	"r19.2 + l14.1",
-	"M2.3: l13.2 +h1Jv1 c38.2 +Ph6 =",
-	"JAMMA.13: l14.2 +h1Jv1 c39.2 +Ph6 =",
-	"AGND: c38.1 =",
-	"AGND: c39.1 =",
+	VCC: tr1.2 =
+	FDA.VIDEO_BLUE: tr1.3 =
+	tr1.1 +h1J tr4.3 +Pv1h-1 r26.1
+	tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1
+	AGND: r25.2 =
+	AGND: r26.2 =
+	+12V: tr4.2 =
+	r18.2 + l13.1
+	r19.2 + l14.1
+	M2.3: l13.2 +h1Jv1 c38.2 +Ph6 =
+	JAMMA.13: l14.2 +h1Jv1 c39.2 +Ph6 =
+	AGND: c38.1 =
+	AGND: c39.1 =
 	
-	"GND: c37.2 =",
+	GND: c37.2 =
 	
-	"CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =",
-	"ic20:A.18 +h2G 5701.10",
+	CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
+	ic20:A.18 +h2G 5701.10
 	
-	"NC: ic20:B.5 =",
-	"CLK_15: 5701.21 +h2Jv3 ic1.10 +Pv-2h1 =",
-	"CPU.CLK: ic1.8 =",
+	NC: ic20:B.5 =
+	CLK_15: 5701.21 +h2Jv3 ic1.10 +Pv-2h1 =
+	CPU.CLK: ic1.8 =
 	
-	"GND: ic18.3 + ic18.4 + ic18.5 + ic18.6 =",
-	"VCC: ic18.1 =",
-	"VCC: ic18.10 + ic18.7 + ic18.9 =",
-	"NC: ic18.15 =",
-	"CLK_8: 5701.8 +h1v4Jv11 ic18.2 +Ph7 =",
-	"CLK_4: ic18.14 =",
-	"CLK_1: ic18.12 =",
-	"CLK_05: ic18.11 =",
-	"VCC: ic1.9 =",
-]
+	GND: ic18.3 + ic18.4 + ic18.5 + ic18.6 =
+	VCC: ic18.1 =
+	VCC: ic18.10 + ic18.7 + ic18.9 =
+	NC: ic18.15 =
+	CLK_8: 5701.8 +h1v4Jv11 ic18.2 +Ph7 =
+	CLK_4: ic18.14 =
+	CLK_1: ic18.12 =
+	CLK_05: ic18.11 =
+	VCC: ic1.9 =
+`
 
 /* hmm what if
 instead of the + designators being 'between' two pin designators,

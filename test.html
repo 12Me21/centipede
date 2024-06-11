@@ -55,6 +55,11 @@
 			fill: blue;
 			font-size: 16px;
 		}
+		.netlabelsymbol {
+			stroke: blue;
+			fill: none;
+			stroke-width: 2px;
+		}
 		.overline {
 			text-decoration: underline;
 			text-underline-offset: -12px;
@@ -99,7 +104,8 @@
 	for (let p of placed) {
 		s += p.symbol.render(p)
 	}
-	for (let conn of cons) {
+	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
+	for (let conn of cons2) {
 		s += draw_conn2(conn)
 	}
 	$dest.innerHTML = s

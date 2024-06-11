@@ -127,7 +127,15 @@ function lookup_pin(des) {
 }
 let nets = {}
 function draw_conn2(desc) {
-	desc = desc.split(" ")
+	let netname = "???"
+	{
+		let colon = desc.indexOf(": ")
+		if (colon>=0) {
+			netname = desc.slice(0, colon)
+			desc = desc.slice(colon+2)
+		}
+		desc = desc.split(" ")
+	}
 	let s = ""
 	let s2 = "", s1=""
 	let px = 0
@@ -137,14 +145,13 @@ function draw_conn2(desc) {
 	let lineto = (c)=>{s+=c+spacexy(px,py)}
 	let drawing = false
 	
-	let netname = "???"
 	function add_label(text) {
 		if (text=="VCC") {
-			s += `v-6 h-2 l2,-6 l2,6 h-2 v-6`
+			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {
-			s += `v6 h-6 l6,6 l6,-6 h-6`
+			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
 		} else if (text=="NC") {
-			s += `m-4,-4 l8,8 m0-8 l-8,8`
+			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
 		} else {
 			if (dir==3)
 				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
@@ -153,12 +160,6 @@ function draw_conn2(desc) {
 			else 
 				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
 		}
-	}
-	if (desc[0].slice(-1) == ":") {
-		netname = desc.shift().slice(0,-1)
-		//let other = nets[netname]
-		//if (other) ;
-		//nets[netname] = true
 	}
 	for (let item of desc) {
 		if (item[0]=="+") {
@@ -193,7 +194,7 @@ function draw_conn2(desc) {
 		} else {
 			let [part, pin] = lookup_pin(item)
 			if (!part || !pin) {
-				throw new Error("lookup pin failed: “"+item+"”")
+				throw new Error("lookup pin failed: “"+item+"” in “"+desc+"”")
 				add_label(item)
 				drawing = false
 			} else {
