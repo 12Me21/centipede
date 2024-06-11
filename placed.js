@@ -151,9 +151,10 @@ let cons = [
 	"r33.2 GND",
 	"c48.2 GND",
 	"vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2",
-	"ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h2 =JP4.1", //jp4.1
+	"ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =JP4.1", //jp4.1
 	"ic62.3 =+12V",
-	"d1.2 =ESP.VDD",
+	"d1.2 =JP4.2",
+	//"VCC =JP4.3",
 	
 	"ic61.1 =+12V",
 	"ic61.3 =FIO.8",
