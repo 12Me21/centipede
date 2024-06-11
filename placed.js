@@ -332,4 +332,15 @@ they are metadata on each pin des, meaning  "here is how to connect
 this pin back to the rest of the net"
 and then, a junction is like,  here is a point where those back-connections meet up. (if there are more than 2)
 
+so like, e.g.
+ic1.1(h1v-2) ic1.2(h-1v-2)
+
+@         @ 
+|   IC1   |
+|  -----  |
++-=1   2=-+
+   -----
+ie they are instructions to guide wires from the pin towards a location where they can more easily connect.
+we then take these exposed endpoints and either autoconnect them together, or add net name labels
+
 */
