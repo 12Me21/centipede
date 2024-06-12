@@ -126,6 +126,7 @@ function lookup_pin(des) {
 	return [part, pin]
 }
 let nets = {}
+let hitmap = new Int16Array(200*200)
 function draw_conn2(desc) {
 	let netname = "???"
 	{
@@ -140,11 +141,24 @@ function draw_conn2(desc) {
 	let s2 = "", s1=""
 	let px = 0
 	let py = 0
+	let lx=0,ly=0
 	let dir = 0
 	let landmarks = []
-	let lineto = (c)=>{s+=c+spacexy(px,py)}
+	function new_line(x, y) {
+		px = x
+		py = y
+		s += "M"+spacexy(px, py)
+	}
+	function move_x(n) {
+		px += n
+		s += "h"+n*20
+	}
+	function move_y(n) {
+		py += n
+		s += "v"+n*20
+	}
 	let drawing = false
-	
+	let z = 0
 	function add_label(text) {
 		if (text=="VCC") {
 			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
@@ -167,19 +181,17 @@ function draw_conn2(desc) {
 				move = move[0]
 				let num = +move.slice(1)
 				if (move[0]=="h") {
-					px += num
 					dir = num < 0 ? 3 : 1
-					lineto('L')
+					move_x(num)
 				} else if (move[0]=='v') {
-					py += num
 					dir = num < 0 ? 0 : 2
-					lineto('L')
+					move_y(num)
 				} else if (move[0]=='J') {
 					landmarks.push([px,py])
 					s2 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
 				} else if (move[0]=='P') {
-					0,[px,py] = landmarks.pop()
-					lineto('M')
+					let [x,y] = landmarks.pop()
+					new_line(x, y)
 				} else if (move[0]=='G') {
 					s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
 				} else {
@@ -199,12 +211,17 @@ function draw_conn2(desc) {
 				drawing = false
 			} else {
 				dir = pin.side
-				px = pin.e.x+part.pos.x
-				py = pin.e.y+part.pos.y
-				if (drawing)
-					lineto('L')
-				else {
-					lineto('M')
+				let x = pin.e.x+part.pos.x
+				let y = pin.e.y+part.pos.y
+				if (drawing) {
+					let dx = x - px
+					let dy = y - py
+					if (dx)
+						move_x(dx)
+					if (dy)
+						move_y(dy)
+				} else {
+					new_line(x, y)
 				}
 			}
 			drawing = false
