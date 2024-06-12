@@ -66,6 +66,8 @@ let placed = [
 	 pos: {x:29, y:51}, },
 	{name: 'R55', symbol: comps.r, override_name: '82Ω',
 	 pos: {x:29, y:52}, },
+	{name: 'R5', symbol: comps.r, override_name: '1000Ω',
+	 pos: {x:35+2, y:10+7}, },
 	
 	{name: 'TR1', symbol: comps.npn, override_name: '',
 	 pos: {x:21-13, y:65-1}, },
@@ -147,176 +149,146 @@ let placed = [
 ]
 
 let cons = `
-	vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1
-	GND: r33.2 =
-	GND: c48.2 =
-	vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2
-	JP4.1: ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =
-	+12V: ic62.3 =
-	JP4.2: d1.2 =
+16mhz osc output: x3.8 + ic20:A.2
+16mhz buffered: ic20:A.18 +h2G 5701.10
+
+26mhz osc output: x1.8 + ic19:B.11
+vclkdiv feedback 1: IC19:B.8 +v-3h-5 IC19:B.12
+~VCLK_7: IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph3Gh10 =
+
+IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2
+ic20:A.14 + r52.2
+VCLK_13: r52.1 =
+ic20:B.7 + r54.2
+cartC.1: r54.1 =
+
+IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3
+ic20:A.12 + r53.1
+VCLK_7: r53.2 =
+ic20:B.9 + r55.1
+cartC.2: r55.2 =
 	
-	+12V: ic61.1 =
-	FIO.8: ic61.3 =
-	FIO.7: ic61.6 =
-	FIO.6: ic61.11 =
-	FIO.9: ic61.14 =
-	ic61.9 + l7.1
-	ic61.7 + l8.1
-	ic61.2 + l9.1
-	ic61.16 + l10.1
-	JAMMA.9: l7.2 +h1Jv1 c32.2 +Ph6 =
-	JAMMA.K: l8.2 +h1Jv1 c33.2 +Ph6 =
-	JAMMA.8: l9.2 +h1Jv1 c34.2 +Ph6 =
-	JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =
-	AGND: c32.1 =
-	AGND: c33.1 =
-	AGND: c34.1 =
-	AGND: c35.1 =
+GND: ic19:B.~PRE + ic19:B.~CLR = ic19:A.~PRE + ic19:A.~CLR =
+
+GND: IC20:A.~OE = IC20:B.~OE = IC20:B.I1 =
+
+NC: ic20:B.5 =
+
+30mhz osc output: x2.8 +h5v-1 ic20:A.4
+CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
+
+FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
+V_SYNC: ic20:B.3 = r24.1 =
+r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
+
+VCC: ic1.9 =
+
+CLK_15: 5701.21 +h2Jv3 ic1.10 +Pv-2h1 =
+CPU.CLK: ic1.8 = #oh this goes through a resistor too
+
+GND: IC64A.2 =
+VCC: IC64A.1 = IC64B.13 =
+NC: IC64A.6 = IC64B.8 =
+
+FDP.205: ic65.13 =
+inverted fdp 205: IC64A.3 + IC65.12
+CPU.AS: ic65.11 =
+cpu as inverted preset 1+2: ic65.10 +h1J ic64A.4 +Pv3h6v-2 ic64B.10
+output 1 to input 2: ic64A.5 + ic64B.12
+FCM.109: ic64B.9 =
+~VRAM-CE: ic64B.11 =
+
+GND: ic18.3 + ic18.4 + ic18.5 + ic18.6 =
+VCC: ic18.1 = ic18.10 + ic18.7 + ic18.9 =
+NC: ic18.15 =
+
+CLK_8: 5701.8 +h1v4Jv11 ic18.2 +Ph7 =
+CLK_4: ic18.14 =
+CLK_1: ic18.12 =
+CLK_05: ic18.11 =
+
+VCC: ic21A.4 = ic21B.10 = ic22.9 =
+GND: ic22.3 + ic22.4 + ic22.5 + ic22.6 = ic30L.2 = r5.2 =
+NC: ic22.15 =
+pulldown r5: ic30L.3 + r5.1
+NC: IC30L.4 = #?? not in notes?
 	
-	NC: ic34.1 =
-	FIO.69: ic34.3 =
-	FIO.70: ic34.6 =
-	FIO.71: ic34.14 =
-	FIO.72: ic34.11 =
-	ic34.16 +h5Jv1 zd1.2 +P l2.1
-	ic34.9 +h5Jv1 zd2.2 +P l3.1
-	ic34.7 +h5Jv1 zd3.2 +P l4.1
-	ic34.2 +h5Jv1 zd4.2 +P l5.1
-	GND: zd1.1 =
-	GND: zd2.1 =
-	GND: zd3.1 =
-	GND: zd4.1 =
-	4P.12: l2.2 +h1Jv1 c28.2 +Ph6 =
-	3P.12: l3.2 +h1Jv1 c29.2 +Ph6 =
-	4P.13: l4.2 +h1Jv1 c30.2 +Ph6 =
-	3P.13: l5.2 +h1Jv1 c31.2 +Ph6 =
-	AGND: c28.1 =
-	AGND: c29.1 =
-	AGND: c30.1 =
-	AGND: c31.1 =
+OTIS.E: IC21A.CLK = IC30L.1 =
+OTIS.BS: ic21a.1 = +v2Jh7J ic21b.13 +P ic22.1 +Pv2h1 r3.2 #r3.2 not in notes?
+GND: r3.1 = #not in notes?
+feedback1: ic21A.D +v-3h5 ic21A.~Q
+feedback2: ic21B.D +v-3h5 ic21B.~Q
+div1: ic21A.q +h1J ic21B.clk +Pv5h7v-3 ic22.clk
+div2: ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0
+div3: ic22.Q0 + ic30L.A1
+div4: ic22.Q1 + ic30L.A2
+div5: ic22.Q2 + ic30L.A3
+div6: ic22.Q3 + ic30L.A4
+
+NC: IC30L.IO4 = IC30L.IO5 = IC30L.IO6 = IC30L.IO7 = #not in notes
+GND: ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + = #not in notes
+cartB.89: IC30L.IO0 =
+cartB.90: IC30L.IO1 =
+cartB.91: IC30L.IO2 =
+cartB.92: IC30L.IO3 =
+
+tr1.1 +h1J tr4.3 +Pv1h-1 r26.1	
+tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1
+AGND: r25.2 = r26.2 =
+VCC: tr1.2 =
++12V: tr4.2 =
+r18.2 + l13.1
+r19.2 + l14.1
+M2.3: l13.2 +h1Jv1 c38.2 +Ph6 =
+JAMMA.13: l14.2 +h1Jv1 c39.2 +Ph6 =
+AGND: c38.1 = c39.1 =
+FDA.VIDEO_BLUE: tr1.3 = #not in notes
+GND: c37.2 = #not in notes
+
+NC: ic34.1 =
+FIO.69: ic34.3 =
+FIO.70: ic34.6 =
+FIO.72: ic34.11 =
+FIO.71: ic34.14 =
+ic34.16 +h5Jv1 zd1.2 +P l2.1
+ic34.9 +h5Jv1 zd2.2 +P l3.1
+ic34.7 +h5Jv1 zd3.2 +P l4.1
+ic34.2 +h5Jv1 zd4.2 +P l5.1
+GND: zd1.1 = zd2.1 = zd3.1 = zd4.1 =
+4P.12: l2.2 +h1Jv1 c28.2 +Ph6 =
+3P.12: l3.2 +h1Jv1 c29.2 +Ph6 =
+4P.13: l4.2 +h1Jv1 c30.2 +Ph6 =
+3P.13: l5.2 +h1Jv1 c31.2 +Ph6 =
+AGND: c28.1 = c29.1 = c30.1 = c31.1 =
+
++12V: ic61.1 =
+AGND: c32.1 = c33.1 = c34.1 = c35.1 =
+FIO.8: ic61.3 =
+FIO.7: ic61.6 =
+FIO.6: ic61.11 =
+FIO.9: ic61.14 =
+ic61.9 + l7.1
+ic61.7 + l8.1
+ic61.2 + l9.1
+ic61.16 + l10.1
+JAMMA.9: l7.2 +h1Jv1 c32.2 +Ph6 =
+JAMMA.K: l8.2 +h1Jv1 c33.2 +Ph6 =
+JAMMA.8: l9.2 +h1Jv1 c34.2 +Ph6 =
+JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =
+
++12V: ic62.3 =
+
+GND: r33.2 = c48.2 =
+vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1
+vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2
+JP4.1: ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =
+JP4.2: d1.2 =
 	
-	GND: IC22.D0 + IC22.D1 + IC22.D2 + IC22.D3 =
+GND: zd5.1 = #not in notes
+M2.4: l11.2 +h1Jv1 c36.2 +Ph6 = #not in notes
+JAMMA.P: l12.2 +h1Jv1 c37.2 +Ph6 = #not in notes
+AGND: c36.1 = c37.1 = #not in notes
 	
-	VCC: IC22.~LOAD =
-	NC: IC22.RCO =
-	
-	IC21A.D +v-3h5 IC21A.~Q
-	IC21B.D +v-3h5 IC21B.~Q
-	
-	ic21a.q +h1J ic21b.clk +Pv5h7v-3 ic22.clk
-	
-	IC22.Q0 + IC30L.A1
-	IC22.Q1 + IC30L.A2
-	IC22.Q2 + IC30L.A3
-	IC22.Q3 + IC30L.A4
-	OTIS.E: IC21A.CLK = IC30L.1 =
-	
-	GND: IC21A.~PRE =
-	GND: IC21B.~PRE =
-	
-	OTIS.BS: ic21a.~clr = +v2Jh7J ic21b.~clr +P ic22.~mr +Pv2h1 r3.2
-	GND: r3.1 =
-	
-	ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0
-	
-	GND: ic30l.a5 + ic30l.a6 + ic30l.a7 + ic30l.a8 + ic30l.a9 + ic30l.a10 + =
-	
-	NC: IC30L.IO4 =
-	NC: IC30L.IO5 =
-	NC: IC30L.IO6 =
-	NC: IC30L.IO7 =
-	
-	cartB.89: IC30L.IO0 =
-	cartB.90: IC30L.IO1 =
-	cartB.91: IC30L.IO2 =
-	cartB.92: IC30L.IO3 =
-	
-	GND: IC30L.~OE =
-	
-	(pulldown?): IC30L.~BUSY =
-	GND: IC30L.~WE =
-	NC: IC30L.4 =
-	
-	FDP.205: IC65.13 =
-	IC65.12 + IC64A.3
-	CPU.AS: IC65.11 =
-	IC65.10 +h1J IC64A.4 +Pv3h6v-2 IC64B.10
-	IC64A.5 + IC64B.12
-	FCM.109: IC64B.9 =
-	~VRAM-CE: IC64B.11 =
-	
-	VCC: IC64A.1 =
-	GND: IC64A.2 =
-	VCC: IC64B.13 =
-	NC: IC64A.~Q =
-	NC: IC64B.~Q =
-	
-	IC19:B.D +v-3h5 IC19:B.~Q
-	IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2
-	FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
-	~VCLK_7: IC19:A.~Q +Jv-3h-5 IC19:A.D +Ph3Gh10 =
-	GND: IC19:B.~PRE IC19:B.~CLR =
-	GND: IC19:A.~PRE IC19:A.~CLR =
-	IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3
-	X1.CLK + IC19:B.CLK
-	
-	GND: IC20:A.~OE =
-	GND: IC20:B.~OE =
-	GND: IC20:B.I1 =
-	
-	X3.CLK + IC20:A.I0
-	X2.CLK +h5v-1 IC20:A.I1
-	
-	ic20:A.14 + r52.2
-	VCLK_13: r52.1 =
-	ic20:A.12 + r53.1
-	VCLK_7: r53.2 =
-	
-	ic20:B.7 + r54.2
-	cartC.1: r54.1 =
-	ic20:B.9 + r55.1
-	cartC.2: r55.2 =
-	
-	V_SYNC: ic20:B.3 = r24.1 =
-	r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1
-	GND: zd5.1 =
-	M2.4: l11.2 +h1Jv1 c36.2 +Ph6 =
-	JAMMA.P: l12.2 +h1Jv1 c37.2 +Ph6 =
-	AGND: c36.1 =
-	AGND: c37.1 =
-	
-	VCC: tr1.2 =
-	FDA.VIDEO_BLUE: tr1.3 =
-	tr1.1 +h1J tr4.3 +Pv1h-1 r26.1
-	tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1
-	AGND: r25.2 =
-	AGND: r26.2 =
-	+12V: tr4.2 =
-	r18.2 + l13.1
-	r19.2 + l14.1
-	M2.3: l13.2 +h1Jv1 c38.2 +Ph6 =
-	JAMMA.13: l14.2 +h1Jv1 c39.2 +Ph6 =
-	AGND: c38.1 =
-	AGND: c39.1 =
-	
-	GND: c37.2 =
-	
-	CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
-	ic20:A.18 +h2G 5701.10
-	
-	NC: ic20:B.5 =
-	CLK_15: 5701.21 +h2Jv3 ic1.10 +Pv-2h1 =
-	CPU.CLK: ic1.8 =
-	
-	GND: ic18.3 + ic18.4 + ic18.5 + ic18.6 =
-	VCC: ic18.1 =
-	VCC: ic18.10 + ic18.7 + ic18.9 =
-	NC: ic18.15 =
-	CLK_8: 5701.8 +h1v4Jv11 ic18.2 +Ph7 =
-	CLK_4: ic18.14 =
-	CLK_1: ic18.12 =
-	CLK_05: ic18.11 =
-	VCC: ic1.9 =
 `
 
 /* hmm what if
