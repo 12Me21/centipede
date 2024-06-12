@@ -127,6 +127,7 @@ function lookup_pin(des) {
 }
 let nets = {}
 let hitmap = new Int16Array(200*200)
+let z = 10000
 function draw_conn2(desc) {
 	let netname = "???"
 	{
@@ -141,24 +142,46 @@ function draw_conn2(desc) {
 	let s2 = "", s1=""
 	let px = 0
 	let py = 0
-	let lx=0,ly=0
 	let dir = 0
 	let landmarks = []
+	function hmi() {
+		return px+py*200
+	}
+	z--
 	function new_line(x, y) {
 		px = x
 		py = y
 		s += "M"+spacexy(px, py)
 	}
 	function move_x(n) {
-		px += n
 		s += "h"+n*20
+		let p = hmi()
+		let step = Math.sign(n)
+		for (let i=0; ; i+=step) {
+			if (hitmap[p]>z)
+				s1 += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=crossing />`
+			hitmap[p] = z
+			p += step
+			if (i==n)
+				break
+		}
+		px += n
 	}
 	function move_y(n) {
-		py += n
 		s += "v"+n*20
+		let p = hmi()
+		let step = Math.sign(n)
+		for (let i=0; ; i+=step) {
+			if (hitmap[p]>z)
+				s1 += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=crossing />`
+			hitmap[p] = z
+			p += 200*step
+			if (i==n)
+				break
+		}
+		py += n
 	}
 	let drawing = false
-	let z = 0
 	function add_label(text) {
 		if (text=="VCC") {
 			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
@@ -193,7 +216,7 @@ function draw_conn2(desc) {
 					let [x,y] = landmarks.pop()
 					new_line(x, y)
 				} else if (move[0]=='G') {
-					s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
+					//s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
 				} else {
 					throw new Error('oh no +'+move[0])
 				}

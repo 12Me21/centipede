@@ -110,3 +110,14 @@
 	}
 	$dest.innerHTML = s
 </script>
+<canvas id=$c width=200 height=200></canvas>
+<script>
+	let c = $c.getContext('2d')
+	let id = c.getImageData(0,0,200,200)
+	let dd = new Int32Array(id.data.buffer)
+	for (let k=0;k<hitmap.length;k++) {
+		if (hitmap[k])
+			dd[k] = 0xFF0000FF
+	}
+	c.putImageData(id,0,0)
+</script>

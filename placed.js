@@ -150,13 +150,17 @@ let placed = [
 
 let cons = `
 16mhz osc output: x3.8 + ic20:A.2
+CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
 16mhz buffered: ic20:A.18 +h2G 5701.10
 
 26mhz osc output: x1.8 + ic19:B.11
 vclkdiv feedback 1: IC19:B.8 +v-3h-5 IC19:B.12
-~VCLK_7: IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph3Gh10 =
 
 IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2
+
+~VCLK_7: IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph3Gh10 =
+FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
+
 ic20:A.14 + r52.2
 VCLK_13: r52.1 =
 ic20:B.7 + r54.2
@@ -175,9 +179,8 @@ GND: IC20:A.~OE = IC20:B.~OE = IC20:B.I1 =
 NC: ic20:B.5 =
 
 30mhz osc output: x2.8 +h5v-1 ic20:A.4
-CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
+#clk_30
 
-FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
 V_SYNC: ic20:B.3 = r24.1 =
 r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
 
@@ -214,11 +217,11 @@ pulldown r5: ic30L.3 + r5.1
 NC: IC30L.4 = #?? not in notes?
 	
 OTIS.E: IC21A.CLK = IC30L.1 =
+div1: ic21A.q +h1J ic21B.clk +Pv5h7v-3 ic22.clk
 OTIS.BS: ic21a.1 = +v2Jh7J ic21b.13 +P ic22.1 +Pv2h1 r3.2 #r3.2 not in notes?
 GND: r3.1 = #not in notes?
 feedback1: ic21A.D +v-3h5 ic21A.~Q
 feedback2: ic21B.D +v-3h5 ic21B.~Q
-div1: ic21A.q +h1J ic21B.clk +Pv5h7v-3 ic22.clk
 div2: ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0
 div3: ic22.Q0 + ic30L.A1
 div4: ic22.Q1 + ic30L.A2
