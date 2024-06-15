@@ -103,13 +103,13 @@ let placed = [
 	{name: 'L5', symbol: comps.fb, override_name: '',
 	 pos: {x:18, y:73}, },
 	
-	{name: 'C28', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C28', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:79+1}, },
-	{name: 'C29', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C29', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:77+1}, },
-	{name: 'C30', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C30', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:75+1}, },
-	{name: 'C31', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C31', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:73+1}, },
 	
 	{name: 'IC61', symbol: comps.td62064a,
@@ -123,13 +123,13 @@ let placed = [
 	{name: 'L10', symbol: comps.fb, override_name: '',
 	 pos: {x:18, y:12+79}, },
 	
-	{name: 'C32', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C32', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:12+77+1}, },
-	{name: 'C33', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C33', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:12+75+1}, },
-	{name: 'C34', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C34', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:12+73+1}, },
-	{name: 'C35', symbol: comps.cc2, override_name: '10000pF',
+	{name: 'C35', symbol: comps.cc2, override_name: '10nF',
 	 pos: {x:24, y:12+79+1}, },
 	
 	{name: 'VR1', symbol: comps.vr,
@@ -283,7 +283,7 @@ JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =
 
 GND: r33.2 = c48.2 =
 vr1.1 +h-1v-1J vr1.3 +Pv-1Jv-2 r32.2 +P r33.1
-vr1.2 +h1Jv-3 r32.1 +Ph1Jv1 c48.1 +Ph2J ic62.1 +Pv3 r31.2
+vr1.2 +h1Jv-3 r32.1 +Ph1Jv3 c48.1 +Ph2J ic62.1 +Pv3 r31.2
 JP4.1: ic62.2 +h1Jv3 r31.1 +PJ d1.1 +Pv-2h5 =
 JP4.2: d1.2 =
 	
