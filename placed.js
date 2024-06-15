@@ -146,9 +146,47 @@ let placed = [
 	 pos: {x:20, y:96}, },
 	{name: 'D1', symbol: comps.d, override_name: '',
 	 pos: {x:30-2, y:96+2}, },
+	
+	{name: 'L1', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:110}, },
+	{name: 'L6', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:111}, },
+	{name: 'L19', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:112}, },
+	
+	{name: 'L21', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:114}, },
+	{name: 'L22', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:115}, },
+	{name: 'L23', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:116}, },
+	
+	{name: 'L20', symbol: comps.fb, override_name: '',
+	 pos: {x:10, y:118}, },
+	
+	{name: 'C46', symbol: comps.cc2, override_name: '',
+	 pos: {x:10, y:119}, },
+	{name: 'C47', symbol: comps.cc2, override_name: '',
+	 pos: {x:10, y:120}, },
+	{name: 'C49', symbol: comps.cc, override_name: '',
+	 pos: {x:10, y:122}, },
+	{name: 'C51', symbol: comps.cc, override_name: '',
+	 pos: {x:10, y:122}, },
+	{name: 'C52', symbol: comps.cc, override_name: '',
+	 pos: {x:10, y:122}, },
 ]
 
 let cons = `
+AGND: l1.2 + l6.2 + l19.2 =
+GND: l1.1 + l6.1 + l19.1 =
+
+A5V: l21.2 + l22.2 + l23.2 =
+VCC: l21.1 + l22.1 + l23.1 =
+
+A12V: l20.1 +h-1Jh-1 = +Pv1J c46.2 +Pv1 c47.2
+AGND: c46.1 + c47.1 =
+D12V: l20.2 =
+
 16mhz osc output: x3.8 + ic20:A.2
 CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
 16mhz buffered: ic20:A.18 +h2G 5701.10
