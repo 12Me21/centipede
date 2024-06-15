@@ -1,63 +1,75 @@
+let sheets = {
+	'0': {title: "OTIS Bank Expander", pos: {x:0,y:0},},
+	'1': {title: "? FDP Memory Control", pos: {x:0,y:0},},
+	'2': {title: "Clocks", pos: {x:0,y:0},},
+	'3': {title: "Video Sync Output", pos:{x:0,y:0},},
+	'4': {title: "Video Blue Output", pos:{x:0,y:0},},
+	'5': {title: "3P/4P Coin Output", pos:{x:0,y:0},},
+	'6': {title: "1P/2P Coin Output", pos:{x:0,y:0},},
+	'7': {title: "? ESP VDD", pos:{x:-1,y:3},},
+	'8': {title: "Power Planes", pos:{x:0,y:0},},
+}
+
 let placed = [
 	{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
-	 pos: {x:31, y:37}, },
+	 pos: {x:31, y:37}, sheet:2},
 	{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c,
-	 pos: {x:40, y:39}, },
+	 pos: {x:40, y:39}, sheet:2},
 	{name: 'IC18', symbol: comps.f163,
-	 pos: {x:39, y:45}, },
+	 pos: {x:39, y:45}, sheet:2},
 	{name: 'IC19:A', symbol: comps.f74a,
-	 pos: {x:29-10-5, y:10+25+10}, },
+	 pos: {x:29-10-5, y:10+25+10}, sheet:2},
 	{name: 'IC19:B', symbol: comps.f74b,
-	 pos: {x:22-10-5, y:10+25+10}, },
+	 pos: {x:22-10-5, y:10+25+10}, sheet:2},
 	{name: 'IC20:A', symbol: comps.f244a,
-	 pos: {x:40-2-10-5, y:11+16+2+10-1}, },
+	 pos: {x:40-2-10-5, y:11+16+2+10-1}, sheet:2},
 	{name: 'IC20:B', symbol: comps.f244b,
-	 pos: {x:40-2-10-5, y:11+25+2+10}, },
+	 pos: {x:40-2-10-5, y:11+25+2+10}, sheet:2},
 	{name: 'IC21A', displayname: 'IC21:1', symbol: comps.f74a,
-	 pos: {x:12-5, y:11}, },
+	 pos: {x:12-5, y:11}, sheet:0},
 	{name: 'IC21B', displayname: 'IC21:2', symbol: comps.f74b,
-	 pos: {x:19-5, y:11}, },
+	 pos: {x:19-5, y:11}, sheet:0},
 	{name: 'IC22', symbol: comps.f161,
-	 pos: {x:30-3-5, y:11-5}, },
+	 pos: {x:30-3-5, y:11-5}, sheet:0},
 	{name: 'IC30L', displayname: 'IC30:L', symbol: comps.dpraml,
-	 pos: {x:35-5, y:10-5}, },
+	 pos: {x:35-5, y:10-5}, sheet:0},
 	{name: 'IC64A', symbol: comps.f74a,
-	 pos: {x:12, y:11+4+10}, },
+	 pos: {x:12, y:11+4+10}, sheet:1},
 	{name: 'IC64B', symbol: comps.f74b,
-	 pos: {x:19+2, y:11+5+10}, },
+	 pos: {x:19+2, y:11+5+10}, sheet:1},
 	{name: 'IC65', symbol: comps.f04,
-	 pos: {x:5, y:11+5+10}, }, 
+	 pos: {x:5, y:11+5+10}, sheet:1}, 
 	
 	{name: 'C36', symbol: comps.cc2, override_name: '220pF',
-	 pos: {x:21, y:60-2}, },
+	 pos: {x:21, y:60-2}, sheet:3},
 	{name: 'C37', symbol: comps.cc2, override_name: '220pF',
-	 pos: {x:21, y:62-2}, },
+	 pos: {x:21, y:62-2}, sheet:3},
 	{name: 'C38', symbol: comps.cc2, override_name: '220pF',
-	 pos: {x:33+5+5+1-13, y:70-5}, },
+	 pos: {x:33+5+5+1-13, y:70-5}, sheet:4},
 	{name: 'C39', symbol: comps.cc2, override_name: '220pF',
-	 pos: {x:33+5+5+1-13, y:71-5+1}, },
+	 pos: {x:33+5+5+1-13, y:71-5+1}, sheet:4},
 	
 	{name: 'L11', symbol: comps.fb, override_name: '',
-	 pos: {x:15, y:60-1-2}, },
+	 pos: {x:15, y:60-1-2}, sheet:3},
 	{name: 'L12', symbol: comps.fb, override_name: '',
-	 pos: {x:15, y:61-2}, },
+	 pos: {x:15, y:61-2}, sheet:3},
 	{name: 'L13', symbol: comps.fb, override_name: '',
-	 pos: {x:33+5-13, y:70-5-1}, },
+	 pos: {x:33+5-13, y:70-5-1}, sheet:4},
 	{name: 'L14', symbol: comps.fb, override_name: '',
-	 pos: {x:33+5-13, y:71-5}, },
+	 pos: {x:33+5-13, y:71-5}, sheet:4},
 	
 	{name: 'R3', symbol: comps.r2, override_name: '2400Ω',
 	 pos: {x:12-4, y:19}, },
 	{name: 'R18', symbol: comps.r, override_name: '75&ohm;',
-	 pos: {x:33-13, y:70-5-1}, },
+	 pos: {x:33-13, y:70-5-1}, sheet:4},
 	{name: 'R19', symbol: comps.r, override_name: '75&ohm;',
-	 pos: {x:33-13, y:71-5}, },
+	 pos: {x:33-13, y:71-5}, sheet:4},
 	{name: 'R24', symbol: comps.r, override_name: '75Ω',
-	 pos: {x:12-4, y:60-2}, },
+	 pos: {x:12-4, y:60-2}, sheet:3},
 	{name: 'R25', symbol: comps.r2, override_name: '100Ω',
-	 pos: {x:33-5-1-13, y:72-5+1}, },
+	 pos: {x:33-5-1-13, y:72-5+1}, sheet:4},
 	{name: 'R26', symbol: comps.r2, override_name: '1000Ω',
-	 pos: {x:21-13, y:67}, },
+	 pos: {x:21-13, y:67}, sheet:4},
 	{name: 'R52', symbol: comps.r2, override_name: '82Ω',
 	 pos: {x:29, y:41}, },
 	{name: 'R53', symbol: comps.r, override_name: '82Ω',
@@ -70,110 +82,110 @@ let placed = [
 	 pos: {x:35+2, y:10+7}, },
 	
 	{name: 'TR1', symbol: comps.npn, override_name: '',
-	 pos: {x:21-13, y:65-1}, },
+	 pos: {x:21-13, y:65-1}, sheet:4},
 	{name: 'TR4', symbol: comps.npn, override_name: '',
-	 pos: {x:27-13, y:65}, },
+	 pos: {x:27-13, y:65}, sheet:4},
 	
 	{name: 'X1', symbol: comps.osc, override_name: '26.686MHz',
-	 pos: {x:16-10-5, y:11+25+10}, },
+	 pos: {x:16-10-5, y:11+25+10}, sheet:2},
 	{name: 'X2', symbol: comps.osc, override_name: '30.47618MHz',
-	 pos: {x:16+10-10-5, y:11+20+10-1}, },
+	 pos: {x:16+10-10-5, y:11+20+10-1}, sheet:2},
 	{name: 'X3', symbol: comps.osc, override_name: '16MHz',
-	 pos: {x:16+5+10-10-5, y:11+15+3+10-1}, },
+	 pos: {x:16+5+10-10-5, y:11+15+3+10-1}, sheet:2},
 	
 	{name: 'ZD5', symbol: comps.zd, override_name: '',
-	 pos: {x:12-4, y:62-2}, },
+	 pos: {x:12-4, y:62-2}, sheet:3},
 	
 	{name: 'IC34', symbol: comps.td62064a,
-	 pos: {x:5, y:72}},
+	 pos: {x:5, y:72}, sheet:5},
 	{name: 'ZD1', symbol: comps.zd, override_name: '',
-	 pos: {x:13, y:79+1}, },
+	 pos: {x:14, y:79+1}, sheet:5},
 	{name: 'ZD2', symbol: comps.zd, override_name: '',
-	 pos: {x:13, y:77+1}, },
+	 pos: {x:14, y:77+1}, sheet:5},
 	{name: 'ZD3', symbol: comps.zd, override_name: '',
-	 pos: {x:13, y:75+1}, },
+	 pos: {x:14, y:75+1}, sheet:5},
 	{name: 'ZD4', symbol: comps.zd, override_name: '',
-	 pos: {x:13, y:73+1}, },
+	 pos: {x:14, y:73+1}, sheet:5},
 	{name: 'L2', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:79}, },
+	 pos: {x:19, y:79}, sheet:5},
 	{name: 'L3', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:77}, },
+	 pos: {x:19, y:77}, sheet:5},
 	{name: 'L4', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:75}, },
+	 pos: {x:19, y:75}, sheet:5},
 	{name: 'L5', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:73}, },
+	 pos: {x:19, y:73}, sheet:5},
 	
-	{name: 'C28', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:79+1}, },
-	{name: 'C29', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:77+1}, },
-	{name: 'C30', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:75+1}, },
-	{name: 'C31', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:73+1}, },
+	{name: 'C28', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:79+1}, sheet:5},
+	{name: 'C29', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:77+1}, sheet:5},
+	{name: 'C30', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:75+1}, sheet:5},
+	{name: 'C31', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:73+1}, sheet:5},
 	
 	{name: 'IC61', symbol: comps.td62064a,
-	 pos: {x:5, y:12+72}},
+	 pos: {x:5, y:12+72}, sheet:6},
 	{name: 'L7', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:12+77}, },
+	 pos: {x:19, y:12+77}, sheet:6},
 	{name: 'L8', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:12+75}, },
+	 pos: {x:19, y:12+75}, sheet:6},
 	{name: 'L9', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:12+73}, },
+	 pos: {x:19, y:12+73}, sheet:6},
 	{name: 'L10', symbol: comps.fb, override_name: '',
-	 pos: {x:18, y:12+79}, },
+	 pos: {x:19, y:12+79}, sheet:6},
 	
-	{name: 'C32', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:12+77+1}, },
-	{name: 'C33', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:12+75+1}, },
-	{name: 'C34', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:12+73+1}, },
-	{name: 'C35', symbol: comps.cc2, override_name: '10nF',
-	 pos: {x:24, y:12+79+1}, },
+	{name: 'C32', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:12+77+1}, sheet:6},
+	{name: 'C33', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:12+75+1}, sheet:6},
+	{name: 'C34', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:12+73+1}, sheet:6},
+	{name: 'C35', symbol: comps.cc, override_name: '10nF',
+	 pos: {x:25, y:12+79+1}, sheet:6},
 	
 	{name: 'VR1', symbol: comps.vr,
-	 pos: {x:10, y:97}, },
+	 pos: {x:10, y:97}, sheet:7},
 	{name: 'R32', symbol: comps.r2, override_name: '510Ω',
-	 pos: {x:10, y:95}, },
+	 pos: {x:10, y:95}, sheet:7},
 	{name: 'R33', symbol: comps.r2, override_name: '510Ω',
-	 pos: {x:4, y:97}, },
+	 pos: {x:4, y:97}, sheet:7},
 	{name: 'R31', symbol: comps.r2, override_name: '220Ω',
-	 pos: {x:20, y:101}, },
+	 pos: {x:20, y:101}, sheet:7},
 	{name: 'C48', symbol: comps.cc2, override_name: '?',
-	 pos: {x:10, y:101}, },
+	 pos: {x:10, y:101}, sheet:7},
 	{name: 'IC62', symbol: comps.lm317l,
-	 pos: {x:20, y:96}, },
+	 pos: {x:20, y:96}, sheet:7},
 	{name: 'D1', symbol: comps.d, override_name: '',
-	 pos: {x:30-2, y:96+2}, },
+	 pos: {x:30-2, y:96+2}, sheet:7},
 	
 	{name: 'L1', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:110}, },
+	 pos: {x:10, y:110}, sheet:8},
 	{name: 'L6', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:111}, },
+	 pos: {x:10, y:111}, sheet:8},
 	{name: 'L19', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:112}, },
+	 pos: {x:10, y:112}, sheet:8},
 	
 	{name: 'L21', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:114}, },
+	 pos: {x:10, y:114}, sheet:8},
 	{name: 'L22', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:115}, },
+	 pos: {x:10, y:115}, sheet:8},
 	{name: 'L23', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:116}, },
+	 pos: {x:10, y:116}, sheet:8},
 	
 	{name: 'L20', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:118}, },
+	 pos: {x:10, y:118}, sheet:8},
 	
 	{name: 'C46', symbol: comps.cc, override_name: '',
-	 pos: {x:4, y:118}, },
+	 pos: {x:4, y:118}, sheet:8},
 	{name: 'C47', symbol: comps.cc, override_name: '',
-	 pos: {x:4, y:119}, },
+	 pos: {x:4, y:119}, sheet:8},
 	{name: 'C49', symbol: comps.cc, override_name: '',
-	 pos: {x:10, y:122}, },
+	 pos: {x:10, y:122}, sheet:8},
 	{name: 'C51', symbol: comps.cc, override_name: '',
-	 pos: {x:10, y:122}, },
+	 pos: {x:10, y:122}, sheet:8},
 	{name: 'C52', symbol: comps.cc, override_name: '',
-	 pos: {x:10, y:122}, },
+	 pos: {x:10, y:122}, sheet:8},
 ]
 
 let cons = `
@@ -184,7 +196,7 @@ A5V: l21.2 + l22.2 + l23.2 =
 VCC: l21.1 + l22.1 + l23.1 =
 
 A12V: l20.1 +h-1J c46.2 +PJv1 c47.2 +Pv-1 =
-AGND: c46.1 +h-1vJ c47.1 +Pv1 =
+AGND: c46.1 +h-1v1J c47.1 +Pv1 =
 D12V: l20.2 +h1v-1 =
 
 16mhz osc output: x3.8 + ic20:A.2
@@ -284,26 +296,26 @@ M2.3: l13.2 +h1Jv1 c38.2 +Ph6 =
 JAMMA.13: l14.2 +h1Jv1 c39.2 +Ph6 =
 AGND: c38.1 = c39.1 =
 FDA.VIDEO_BLUE: tr1.3 = #not in notes
-GND: c37.2 = #not in notes
+#GND: c37.2 = #not in notes
 
 NC: ic34.1 =
 FIO.69: ic34.3 =
 FIO.70: ic34.6 =
 FIO.72: ic34.11 =
 FIO.71: ic34.14 =
-ic34.16 +h5Jv1 zd1.2 +P l2.1
-ic34.9 +h5Jv1 zd2.2 +P l3.1
-ic34.7 +h5Jv1 zd3.2 +P l4.1
-ic34.2 +h5Jv1 zd4.2 +P l5.1
-GND: zd1.1 = zd2.1 = zd3.1 = zd4.1 =
-4P.12: l2.2 +h1Jv1 c28.2 +Ph6 =
-3P.12: l3.2 +h1Jv1 c29.2 +Ph6 =
-4P.13: l4.2 +h1Jv1 c30.2 +Ph6 =
-3P.13: l5.2 +h1Jv1 c31.2 +Ph6 =
-AGND: c28.1 = c29.1 = c30.1 = c31.1 =
+GND: zd4.1 +h-1v2J zd3.1 +Pv2J zd2.1 +Pv2J zd1.1 +Pv1 =
+ic34.16 +h6Jv1 zd1.2 +P l2.1
+ic34.9 +h6Jv1 zd2.2 +P l3.1
+ic34.7 +h6Jv1 zd3.2 +P l4.1
+ic34.2 +h6Jv1 zd4.2 +P l5.1
+AGND: c31.1 +h-1v2J c30.1 +Pv2J c29.1 +Pv2J c28.1 +Pv1 =
+4P.12: l2.2 +h7Jv1 c28.2 +Ph1 =
+3P.12: l3.2 +h7Jv1 c29.2 +Ph1 =
+4P.13: l4.2 +h7Jv1 c30.2 +Ph1 =
+3P.13: l5.2 +h7Jv1 c31.2 +Ph1 =
 
 +12V: ic61.1 =
-AGND: c32.1 = c33.1 = c34.1 = c35.1 =
+AGND: c34.1 +h-1v2J c33.1 +Pv2J c32.1 +Pv2J c35.1 +Pv1 =
 FIO.8: ic61.3 =
 FIO.7: ic61.6 =
 FIO.6: ic61.11 =
@@ -312,10 +324,10 @@ ic61.9 + l7.1
 ic61.7 + l8.1
 ic61.2 + l9.1
 ic61.16 + l10.1
-JAMMA.9: l7.2 +h1Jv1 c32.2 +Ph6 =
-JAMMA.K: l8.2 +h1Jv1 c33.2 +Ph6 =
-JAMMA.8: l9.2 +h1Jv1 c34.2 +Ph6 =
-JAMMA.J: l10.2 +h1Jv1 c35.2 +Ph6 =
+JAMMA.9: l7.2 +h7Jv1 c32.2 +Ph1 =
+JAMMA.K: l8.2 +h7Jv1 c33.2 +Ph1 =
+JAMMA.8: l9.2 +h7Jv1 c34.2 +Ph1 =
+JAMMA.J: l10.2 +h7Jv1 c35.2 +Ph1 =
 
 +12V: ic62.3 =
 

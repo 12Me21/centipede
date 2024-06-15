@@ -102,6 +102,11 @@
 	
 	let s = ''
 	for (let p of placed) {
+		let sheet = sheets[p.sheet]
+		if (sheet) {
+			p.pos.x += sheet.pos.x
+			p.pos.y += sheet.pos.y
+		}
 		s += p.symbol.render(p)
 	}
 	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
