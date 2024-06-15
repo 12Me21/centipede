@@ -248,6 +248,20 @@ let comps = {
 			"2 &Tab; @1,0",
 		],
 	}),
+	fb2: new Component({
+		width: 2,
+		height: 0,
+		name: "",
+		desc: "",
+		body: 'ferrite',
+		bodypath: 'h13l8,-12l10,6l-4,6l-8,12l-10,-6 l4,-6 m14,0 h13',
+		no_names: true,
+		no_numbers: true,
+		pins: [
+			"1 &Tab; @1,0",
+			"2 &Tab; @3,0",
+		],
+	}),
 	cc: new Component({
 		width: 2,
 		height: 0,

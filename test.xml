@@ -1,0 +1,10 @@
+<schematic>
+	<comp id="escd" name="ES5701" desc="Super-GLU" size="4,3">
+		<pin d="10 16MI" pos="3,1"/>
+		<pin d="19 20MI" pos="3,2"/>
+		<pin d="8 8M" pos="1,2"/>
+		<pin d="21 10M" pos="1,1"/>
+	</comp>
+	<part id="5701" label="5701:clkdiv" symbol="#escd" pos="31,37"/>
+	<net id="CLK_30" d="ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 ="/>
+</schematic>

@@ -159,19 +159,19 @@ let placed = [
 	{name: 'D1', symbol: comps.d, override_name: '',
 	 pos: {x:30-2, y:96+2}, sheet:7},
 	
-	{name: 'L1', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:110}, sheet:8},
-	{name: 'L6', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:111}, sheet:8},
-	{name: 'L19', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:112}, sheet:8},
+	{name: 'L1', symbol: comps.fb2, override_name: '',
+	 pos: {x:5, y:108}, sheet:8},
+	{name: 'L6', symbol: comps.fb2, override_name: '',
+	 pos: {x:5, y:109}, sheet:8},
+	{name: 'L19', symbol: comps.fb2, override_name: '',
+	 pos: {x:5, y:110}, sheet:8},
 	
-	{name: 'L21', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:114}, sheet:8},
-	{name: 'L22', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:115}, sheet:8},
-	{name: 'L23', symbol: comps.fb, override_name: '',
-	 pos: {x:10, y:116}, sheet:8},
+	{name: 'L21', symbol: comps.fb2, override_name: '',
+	 pos: {x:13, y:108}, sheet:8},
+	{name: 'L22', symbol: comps.fb2, override_name: '',
+	 pos: {x:13, y:109}, sheet:8},
+	{name: 'L23', symbol: comps.fb2, override_name: '',
+	 pos: {x:13, y:110}, sheet:8},
 	
 	{name: 'L20', symbol: comps.fb, override_name: '',
 	 pos: {x:10, y:118}, sheet:8},
@@ -180,8 +180,8 @@ let placed = [
 	 pos: {x:4, y:118}, sheet:8},
 	{name: 'C47', symbol: comps.cc, override_name: '',
 	 pos: {x:4, y:119}, sheet:8},
-	{name: 'C49', symbol: comps.cc, override_name: '',
-	 pos: {x:10, y:122}, sheet:8},
+	{name: 'C49', symbol: comps.cc2, override_name: '',
+	 pos: {x:10, y:120}, sheet:8},
 	{name: 'C51', symbol: comps.cc, override_name: '',
 	 pos: {x:10, y:122}, sheet:8},
 	{name: 'C52', symbol: comps.cc, override_name: '',
@@ -189,15 +189,17 @@ let placed = [
 ]
 
 let cons = `
-AGND: l1.2 + l6.2 + l19.2 =
-GND: l1.1 + l6.1 + l19.1 =
+AGND: l1.2 +h-1v1J l6.2 +Pv1J l19.2 +Pv1 =
+GND: l1.1 +h1v1J l6.1 +Pv1J l19.1 +Pv1 =
 
-A5V: l21.2 + l22.2 + l23.2 =
-VCC: l21.1 + l22.1 + l23.1 =
+A5V: l23.2 +h-1v-1J l22.2 +Pv-1J l21.2 +Pv-1 =
+VCC: l23.1 +h1v-1J l22.1 +Pv-1J l21.1 +Pv-1 =
 
 A12V: l20.1 +h-1J c46.2 +PJv1 c47.2 +Pv-1 =
 AGND: c46.1 +h-1v1J c47.1 +Pv1 =
-D12V: l20.2 +h1v-1 =
+D12V: l20.2 +h1Jv-1 = +Pv2 c49.1
+
+
 
 16mhz osc output: x3.8 + ic20:A.2
 CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
