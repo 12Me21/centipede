@@ -194,6 +194,8 @@ function draw_conn2(desc) {
 				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
 			else if (dir==0)
 				s2 += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
+			else if (dir==2)
+				s2 += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='netlabel m r'>${text}</text>`
 			else 
 				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
 		}

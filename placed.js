@@ -164,10 +164,10 @@ let placed = [
 	{name: 'L20', symbol: comps.fb, override_name: '',
 	 pos: {x:10, y:118}, },
 	
-	{name: 'C46', symbol: comps.cc2, override_name: '',
-	 pos: {x:10, y:119}, },
-	{name: 'C47', symbol: comps.cc2, override_name: '',
-	 pos: {x:10, y:120}, },
+	{name: 'C46', symbol: comps.cc, override_name: '',
+	 pos: {x:4, y:118}, },
+	{name: 'C47', symbol: comps.cc, override_name: '',
+	 pos: {x:4, y:119}, },
 	{name: 'C49', symbol: comps.cc, override_name: '',
 	 pos: {x:10, y:122}, },
 	{name: 'C51', symbol: comps.cc, override_name: '',
@@ -183,9 +183,9 @@ GND: l1.1 + l6.1 + l19.1 =
 A5V: l21.2 + l22.2 + l23.2 =
 VCC: l21.1 + l22.1 + l23.1 =
 
-A12V: l20.1 +h-1Jh-1 = +Pv1J c46.2 +Pv1 c47.2
-AGND: c46.1 + c47.1 =
-D12V: l20.2 =
+A12V: l20.1 +h-1J c46.2 +PJv1 c47.2 +Pv-1 =
+AGND: c46.1 +h-1vJ c47.1 +Pv1 =
+D12V: l20.2 +h1v-1 =
 
 16mhz osc output: x3.8 + ic20:A.2
 CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
