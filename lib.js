@@ -183,6 +183,7 @@ function draw_conn2(desc) {
 	}
 	let drawing = false
 	function add_label(text) {
+		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
 		if (text=="VCC") {
 			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {

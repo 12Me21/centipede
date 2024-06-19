@@ -5,6 +5,86 @@
 		<pin d="8 8M" pos="1,2"/>
 		<pin d="21 10M" pos="1,1"/>
 	</comp>
+	<comp id="f74a">
+		<name>74F74</name>
+		<desc>D flip-flop</desc>
+		<shape width="3" height="5"/>
+		<pin n="1" pos="3,1">~CLR</pin>
+		<pin n="2" pos="3,4">D</pin>
+		<pin n="3" pos="3,3">CLK</pin>
+		<pin n="4" pos="3,2">~PRE</pin>
+		<pin n="5" pos="1,2">Q</pin>
+		<pin n="6" pos="1,1">~Q</pin>
+	</comp>
 	<part id="5701" label="5701:clkdiv" symbol="#escd" pos="31,37"/>
+	<part name="5701" displayname="5701:clkdiv" symbol="#escd" pos="31,37" sheet="2"/>
+	<part name="IC1" displayname="IC1:3" symbol="#hc08c" pos="40,39" sheet="2"/>
+	<part name="IC18" symbol="#f163" pos="39,45" sheet="2"/>
+	<part name="IC19:A" symbol="#f74a" pos="14,45" sheet="2"/>
+	<part name="IC19:B" symbol="#f74b" pos="7,45" sheet="2"/>
+	<part name="IC20:A" symbol="#f244a" pos="23,38" sheet="2"/>
+	<part name="IC20:B" symbol="#f244b" pos="23,48" sheet="2"/>
+	<part name="IC21A" displayname="IC21:1" symbol="#f74a" pos="7,11" sheet="0"/>
+	<part name="IC21B" displayname="IC21:2" symbol="#f74b" pos="14,11" sheet="0"/>
+	<part name="IC22" symbol="#f161" pos="22,6" sheet="0"/>
+	<part name="IC30L" displayname="IC30:L" symbol="#dpraml" pos="30,5" sheet="0"/>
+	<part name="IC64A" symbol="#f74a" pos="12,25" sheet="1"/>
+	<part name="IC64B" symbol="#f74b" pos="21,26" sheet="1"/>
+	<part name="IC65" symbol="#f04" pos="5,26" sheet="1"/>
+	<part name="C36" symbol="#cc" override_name="220pF" pos="21,58" sheet="3"/>
+	<part name="C37" symbol="#cc" override_name="220pF" pos="21,60" sheet="3"/>
+	<part name="C38" symbol="#cc" override_name="220pF" pos="31,65" sheet="4"/>
+	<part name="C39" symbol="#cc" override_name="220pF" pos="31,67" sheet="4"/>
+	<part name="L11" symbol="#fb" override_name="" pos="15,57" sheet="3"/>
+	<part name="L12" symbol="#fb" override_name="" pos="15,59" sheet="3"/>
+	<part name="L13" symbol="#fb" override_name="" pos="25,64" sheet="4"/>
+	<part name="L14" symbol="#fb" override_name="" pos="25,66" sheet="4"/>
+	<part name="R3" symbol="#r2" override_name="2400Ω" pos="8,19"/>
+	<part name="R18" symbol="#r" override_name="75Ω" pos="20,64" sheet="4"/>
+	<part name="R19" symbol="#r" override_name="75Ω" pos="20,66" sheet="4"/>
+	<part name="R24" symbol="#r" override_name="75Ω" pos="8,58" sheet="3"/>
+	<part name="R25" symbol="#r2" override_name="100Ω" pos="14,68" sheet="4"/>
+	<part name="R26" symbol="#r2" override_name="1000Ω" pos="8,67" sheet="4"/>
+	<part name="R52" symbol="#r2" override_name="82Ω" pos="29,41"/>
+	<part name="R53" symbol="#r" override_name="82Ω" pos="29,42"/>
+	<part name="R54" symbol="#r2" override_name="82Ω" pos="29,51"/>
+	<part name="R55" symbol="#r" override_name="82Ω" pos="29,52"/>
+	<part name="R5" symbol="#r" override_name="1000Ω" pos="37,17"/>
+	<part name="TR1" symbol="#npn" override_name="" pos="8,64" sheet="4"/>
+	<part name="TR4" symbol="#npn" override_name="" pos="14,65" sheet="4"/>
+	<part name="X1" symbol="#osc" override_name="26.686MHz" pos="1,46" sheet="2"/>
+	<part name="X2" symbol="#osc" override_name="30.47618MHz" pos="11,40" sheet="2"/>
+	<part name="X3" symbol="#osc" override_name="16MHz" pos="16,38" sheet="2"/>
+	<part name="ZD5" symbol="#zd" override_name="" pos="8,60" sheet="3"/>
+	<part name="IC34" symbol="#td62064a" pos="4,72" sheet="5"/>
+	<part name="ZD1" symbol="#zd" override_name="" pos="13,80" sheet="5"/>
+	<part name="ZD2" symbol="#zd" override_name="" pos="13,78" sheet="5"/>
+	<part name="ZD3" symbol="#zd" override_name="" pos="13,76" sheet="5"/>
+	<part name="ZD4" symbol="#zd" override_name="" pos="13,74" sheet="5"/>
+	<part name="L2" symbol="#fb" override_name="" pos="19,79" sheet="5"/>
+	<part name="L3" symbol="#fb" override_name="" pos="19,77" sheet="5"/>
+	<part name="L4" symbol="#fb" override_name="" pos="19,75" sheet="5"/>
+	<part name="L5" symbol="#fb" override_name="" pos="19,73" sheet="5"/>
+	<part name="C28" symbol="#cc" override_name="10nF" pos="25,80" sheet="5"/>
+	<part name="C29" symbol="#cc" override_name="10nF" pos="25,78" sheet="5"/>
+	<part name="C30" symbol="#cc" override_name="10nF" pos="25,76" sheet="5"/>
+	<part name="C31" symbol="#cc" override_name="10nF" pos="25,74" sheet="5"/>
+	<part name="IC61" symbol="#td62064a" pos="4,84" sheet="6"/>
+	<part name="L7" symbol="#fb" override_name="" pos="19,89" sheet="6"/>
+	<part name="L8" symbol="#fb" override_name="" pos="19,87" sheet="6"/>
+	<part name="L9" symbol="#fb" override_name="" pos="19,85" sheet="6"/>
+	<part name="L10" symbol="#fb" override_name="" pos="19,91" sheet="6"/>
+	<part name="C32" symbol="#cc" override_name="10nF" pos="25,90" sheet="6"/>
+	<part name="C33" symbol="#cc" override_name="10nF" pos="25,88" sheet="6"/>
+	<part name="C34" symbol="#cc" override_name="10nF" pos="25,86" sheet="6"/>
+	<part name="C35" symbol="#cc" override_name="10nF" pos="25,92" sheet="6"/>
+	<part name="VR1" symbol="#vr" pos="10,97" sheet="7"/>
+	<part name="R32" symbol="#r2" override_name="510Ω" pos="10,95" sheet="7"/>
+	<part name="R33" symbol="#r2" override_name="510Ω" pos="4,97" sheet="7"/>
+	<part name="R31" symbol="#r2" override_name="220Ω" pos="20,101" sheet="7"/>
+	<part name="C48" symbol="#cc2" override_name="?" pos="10,101" sheet="7"/>
+	<part name="IC62" symbol="#lm317l" pos="20,96" sheet="7"/>
+	<part name="D1" symbol="#d" override_name="" pos="28,98" sheet="7"/>
+	
 	<net id="CLK_30" d="ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 ="/>
 </schematic>
