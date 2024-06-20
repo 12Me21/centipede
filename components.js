@@ -290,6 +290,20 @@ let comps = {
 			"2 &Tab; @3,0",
 		],
 	}),
+	tc: new Component({
+		width: 2,
+		height: 0,
+		name: "",
+		desc: "",
+		body: 'tc',
+		bodypath: 'h18m0,-12v24m12,0v-24m0,12h10 m-10,0m-12,11 l12,-6m-12,-2l12,-6m-12,-2l12,-6 m-12,0 m-12,4 h8m-4,-4v8',
+		no_names: true,
+		no_numbers: true,
+		pins: [
+			"1 &Tab; @3,0",
+			"2 &Tab; @1,0",
+		],
+	}),
 	npn: new Component({
 		width: 2,
 		height: 2,

@@ -158,6 +158,9 @@ let placed = [
 	 pos: {x:20, y:96}, sheet:7},
 	{name: 'D1', symbol: comps.d, override_name: '',
 	 pos: {x:30-2, y:96+2}, sheet:7},
+	
+	{name: 'TA', symbol: comps.tc, override_name: '',
+	 pos: {x:40, y:96+2}, sheet:7},
 ]
 
 let cons = `
@@ -231,7 +234,7 @@ NC: IC30L.4 = #?? not in notes?
 OTIS.E: IC21A.CLK = IC30L.1 =
 div1: ic21A.q +h1J ic21B.clk +Pv5h7v-3 ic22.clk
 OTIS.BS: ic21a.1 = +v2Jh7J ic21b.13 +P ic22.1 +Pv2h1 r3.2 #r3.2 not in notes?
-GND: r3.1 = #not in notes?
+VCC: r3.1 =
 feedback1: ic21A.D +v-3h5 ic21A.~Q
 feedback2: ic21B.D +v-3h5 ic21B.~Q
 div2: ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0

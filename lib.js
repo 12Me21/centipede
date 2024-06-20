@@ -58,22 +58,26 @@ class Component {
 		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = placed
 		let s = ''
 		let {width, height} = def
+		let text1 = (displayname || name) + suffix
+		let text2 = def.name||override_name
+		
 		if (def.body) {
 			s += `<g class='chip discrete'>`
-			s += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${displayname || name}${suffix}</text>`
-			s += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${def.name||override_name} ${def.desc}</text>`
+			s += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${text1}</text>`
+			s += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${text2} ${def.desc}</text>`
 			s += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
 		} else {
 			s += `<g class=chip>`
 			if (def.bottomdesc) {
-				s += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${def.name||override_name} ${def.desc}</text>`
-				s += `<text ${attrxy(x, y-0.2)} class='name l'>${displayname || name}${suffix}</text>`					
+				s += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${text2} ${def.desc}</text>`
+				s += `<text ${attrxy(x, y-0.2)} class='name l'>${text1}</text>`
 			} else {
-				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${def.name||override_name} ${def.desc}</text>`
-				s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${displayname || name}${suffix}</text>`
+				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${text2} ${def.desc}</text>`
+				s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${text1}</text>`
 			}
 			s += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
 		}
+		
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y

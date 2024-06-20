@@ -97,28 +97,9 @@
 <script src=components.js></script>
 <script src=placed.js></script>
 <script>
-	{
-	let s = ""
 	for (let p of placed) {
 		byname[p.name] = p
-		s += "<part"
-		for (let n in p) {
-			let v = p[n]
-			if (n=="pos")
-				v = v.x+","+v.y
-			if (n=="symbol")
-				for (let n2 in comps)
-					if (comps[n2]===v) {
-						v = "#"+n2
-						break;
-					}
-			s += ` ${n}="${v}"`
-		}
-		s += "/>\n"
-	}
-	console.log(s)
-	}
-	
+	}	
 	let s = ''
 	for (let p of placed) {
 		let sheet = sheets[p.sheet]
