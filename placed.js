@@ -12,13 +12,15 @@ let sheets = {
 
 let placed = [
 	{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
-	 pos: {x:31, y:37}, sheet:2},
+	 pos: {x:31-1, y:37}, sheet:2},
 	{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c,
-	 pos: {x:40, y:38}, sheet:2},
+	 pos: {x:40-1, y:38-2}, sheet:2},
 	{name: 'R1', symbol: comps.r, override_name: '1600Ω',
-	 pos: {x:40, y:42}, sheet:2},
+	 pos: {x:40-1, y:40}, sheet:2},
+	{name: 'R2', symbol: comps.r, override_name: '56Ω',
+	 pos: {x:40+3+2, y:40-3}, sheet:2},
 	{name: 'IC18', symbol: comps.f163,
-	 pos: {x:39, y:45}, sheet:2},
+	 pos: {x:39-1, y:45}, sheet:2},
 	{name: 'IC19:A', symbol: comps.f74a,
 	 pos: {x:29-10-5, y:10+25+10}, sheet:2},
 	{name: 'IC19:B', symbol: comps.f74b,
@@ -167,7 +169,7 @@ let placed = [
 
 let cons = `
 16mhz osc output: x3.8 + ic20:A.2
-CLK_30: ic20:A.16 +h2v-2J 5701.19 +Pv-3h6 =
+CLK_30: ic20:A.16 +h1v-2J 5701.19 +Pv-1 =
 16mhz buffered: ic20:A.18 +h2G 5701.10
 
 26mhz osc output: x1.8 + ic19:B.11
@@ -203,7 +205,7 @@ r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
 
 VCC: ic1.9 =
 
-CLK_15: 5701.21 +h2Jv2J ic1.10 +Pv2 r1.1 +Pv-2h1 =
+CLK_15: 5701.21 +h1Jh1J ic1.10 +Pv2 r1.1 +Pv-1 =
 CPU.CLK: ic1.8 = #oh this goes through a resistor too
 VCC: r1.2 +h1 =
 
