@@ -18,7 +18,7 @@ let placed = [
 	{name: 'R1', symbol: comps.r, override_name: '1600Ω',
 	 pos: {x:40-1, y:40}, sheet:2},
 	{name: 'R2', symbol: comps.r, override_name: '56Ω',
-	 pos: {x:40+3+2, y:40-3}, sheet:2},
+	 pos: {x:40+3+1, y:40-3}, sheet:2},
 	{name: 'IC18', symbol: comps.f163,
 	 pos: {x:39-1, y:45}, sheet:2},
 	{name: 'IC19:A', symbol: comps.f74a,
@@ -206,7 +206,8 @@ r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
 VCC: ic1.9 =
 
 CLK_15: 5701.21 +h1Jh1J ic1.10 +Pv2 r1.1 +Pv-1 =
-CPU.CLK: ic1.8 = #oh this goes through a resistor too
+ic1.8 + r2.1
+CPU.CLK: r2.2 =
 VCC: r1.2 +h1 =
 
 GND: IC64A.2 =

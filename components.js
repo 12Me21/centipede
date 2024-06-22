@@ -128,7 +128,7 @@ let comps = {
 		],
 	}),
 	hc08c: new Component({
-		width: 3,
+		width: 2,
 		height: 3,
 		name: "74HC08",
 		desc: "AND gate",
