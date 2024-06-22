@@ -14,7 +14,9 @@ let placed = [
 	{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
 	 pos: {x:31, y:37}, sheet:2},
 	{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c,
-	 pos: {x:40, y:39}, sheet:2},
+	 pos: {x:40, y:38}, sheet:2},
+	{name: 'R1', symbol: comps.r, override_name: '1600Ω',
+	 pos: {x:40, y:42}, sheet:2},
 	{name: 'IC18', symbol: comps.f163,
 	 pos: {x:39, y:45}, sheet:2},
 	{name: 'IC19:A', symbol: comps.f74a,
@@ -59,24 +61,24 @@ let placed = [
 	 pos: {x:33+5-13, y:71-5}, sheet:4},
 	
 	{name: 'R3', symbol: comps.r2, override_name: '2400Ω',
-	 pos: {x:12-4, y:19}, },
+	 pos: {x:12-4, y:19+1}, },
 	{name: 'R18', symbol: comps.r, override_name: '75&ohm;',
 	 pos: {x:33-13, y:70-5-1}, sheet:4},
 	{name: 'R19', symbol: comps.r, override_name: '75&ohm;',
 	 pos: {x:33-13, y:71-5}, sheet:4},
 	{name: 'R24', symbol: comps.r, override_name: '75Ω',
 	 pos: {x:12-4, y:60-2}, sheet:3},
-	{name: 'R25', symbol: comps.r2, override_name: '100Ω',
-	 pos: {x:33-5-1-13, y:72-5+1}, sheet:4},
-	{name: 'R26', symbol: comps.r2, override_name: '1000Ω',
-	 pos: {x:21-13, y:67}, sheet:4},
-	{name: 'R52', symbol: comps.r2, override_name: '82Ω',
+	{name: 'R25', symbol: comps.r, override_name: '100Ω',
+	 pos: {x:33-5-1-13+6, y:72-5+1}, sheet:4},
+	{name: 'R26', symbol: comps.r, override_name: '2000Ω',
+	 pos: {x:21-13+12, y:67+2}, sheet:4},
+	{name: 'R52', symbol: comps.r2, override_name: '62Ω',
 	 pos: {x:29, y:41}, },
-	{name: 'R53', symbol: comps.r, override_name: '82Ω',
+	{name: 'R53', symbol: comps.r, override_name: '62Ω',
 	 pos: {x:29, y:42}, },
-	{name: 'R54', symbol: comps.r2, override_name: '82Ω',
+	{name: 'R54', symbol: comps.r2, override_name: '62Ω',
 	 pos: {x:29, y:51}, },
-	{name: 'R55', symbol: comps.r, override_name: '82Ω',
+	{name: 'R55', symbol: comps.r, override_name: '62Ω',
 	 pos: {x:29, y:52}, },
 	{name: 'R5', symbol: comps.r, override_name: '1000Ω',
 	 pos: {x:35+2, y:10+7}, },
@@ -140,7 +142,7 @@ let placed = [
 	{name: 'C33', symbol: comps.cc, override_name: '10nF',
 	 pos: {x:25, y:12+75+1}, sheet:6},
 	{name: 'C34', symbol: comps.cc, override_name: '10nF',
-	 pos: {x:25+1, y:12+73+1}, sheet:6},
+	 pos: {x:25, y:12+73+1}, sheet:6},
 	{name: 'C35', symbol: comps.cc, override_name: '10nF',
 	 pos: {x:25, y:12+79+1}, sheet:6},
 	
@@ -201,8 +203,9 @@ r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
 
 VCC: ic1.9 =
 
-CLK_15: 5701.21 +h2Jv3 ic1.10 +Pv-2h1 =
+CLK_15: 5701.21 +h2Jv2J ic1.10 +Pv2 r1.1 +Pv-2h1 =
 CPU.CLK: ic1.8 = #oh this goes through a resistor too
+VCC: r1.2 +h1 =
 
 GND: IC64A.2 =
 VCC: IC64A.1 = IC64B.13 =
@@ -226,15 +229,15 @@ CLK_1: ic18.12 =
 CLK_05: ic18.11 =
 
 VCC: ic21A.4 = ic21B.10 = ic22.9 =
-GND: ic22.3 + ic22.4 + ic22.5 + ic22.6 = ic30L.2 = r5.2 =
+GND: ic22.3 + ic22.4 + ic22.5 + ic22.6 = ic30L.2 = r5.2 +h1 =
 NC: ic22.15 =
 pulldown r5: ic30L.3 + r5.1
 NC: IC30L.4 = #?? not in notes?
 	
 OTIS.E: IC21A.CLK = IC30L.1 =
 div1: ic21A.q +h1J ic21B.clk +Pv5h7v-3 ic22.clk
-OTIS.BS: ic21a.1 = +v2Jh7J ic21b.13 +P ic22.1 +Pv2h1 r3.2 #r3.2 not in notes?
-VCC: r3.1 =
+OTIS.BS: ic21a.1 = +v2Jh7J ic21b.13 +P ic22.1 +Pv3 r3.2 #r3.2 not in notes?
+VCC: r3.1 +h1 =
 feedback1: ic21A.D +v-3h5 ic21A.~Q
 feedback2: ic21B.D +v-3h5 ic21B.~Q
 div2: ic21b.q +h2J ic22.enp +PJv1h1 ic22.ent +Pv-9h8v2 ic30l.a0
@@ -250,10 +253,10 @@ cartB.90: IC30L.IO1 =
 cartB.91: IC30L.IO2 =
 cartB.92: IC30L.IO3 =
 
-AGND: c36.1 +h-1v2J c37.1 +Pv5J c38.1 +Pv2J c39.1 +Pv1 = #not in notes
-tr1.1 +h1J tr4.3 +Pv1h-1 r26.1	
-tr4.1 +h1Jv1h-1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1
-AGND: r25.2 = r26.2 =
+AGND: c36.1 +h-1v2J c37.1 +Pv5J c38.1 +Pv2J c39.1 +Pv1J r25.2 +Pv1J r26.2 +Pv1 =
+#not in notes? ^
+tr1.1 +h1J tr4.3 +Pv3 r26.1	
+tr4.1 +h1Jv1 r25.1 +Pv-1J r19.1 +Pv-2 r18.1
 VCC: tr1.2 =
 +12V: tr4.2 =
 r18.2 + l13.1

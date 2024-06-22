@@ -63,11 +63,8 @@ class Component {
 		
 		if (def.body) {
 			s += `<g class='chip discrete'>`
-			if (def.body=='npn')
-				s += `<text ${attrxy(x+1, y-0.2)} class='name r'>${text1}</text>`
-			else
-				s += `<text ${attrxy(x-1+0.2, y-0.2)} class='name l'>${text1}</text>`
-			s += `<text ${attrxy(x+width+1-0.2, y-0.2)} class='desc r'>${text2} ${def.desc}</text>`
+			s += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${text1}</text>`
+			s += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${text2} ${def.desc}</text>`
 			s += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
 		} else {
 			s += `<g class=chip>`
