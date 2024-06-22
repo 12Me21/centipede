@@ -140,7 +140,7 @@ let placed = [
 	{name: 'C33', symbol: comps.cc, override_name: '10nF',
 	 pos: {x:25, y:12+75+1}, sheet:6},
 	{name: 'C34', symbol: comps.cc, override_name: '10nF',
-	 pos: {x:25, y:12+73+1}, sheet:6},
+	 pos: {x:25+1, y:12+73+1}, sheet:6},
 	{name: 'C35', symbol: comps.cc, override_name: '10nF',
 	 pos: {x:25, y:12+79+1}, sheet:6},
 	

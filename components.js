@@ -226,7 +226,7 @@ let comps = {
 		name: "",
 		desc: "",
 		body: 'zener',
-		bodypath: 'l5,0v12l24,-12l-24,-12v12m24,0h1v-10l4,-4m-4,14v10l-4,4m4,-14l10,0',
+		bodypath: 'l8,0v12l24,-12l-24,-12v12m24,0h1v-10l4,-4m-4,14v10l-4,4m4,-14l7,0',
 		no_names: true,
 		no_numbers: true,
 		pins: [
