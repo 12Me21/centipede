@@ -99,19 +99,22 @@
 <script>
 	for (let p of placed) {
 		byname[p.name] = p
-	}	
-	let s = ''
-	for (let p of placed) {
+		// hack:
 		let sheet = sheets[p.sheet]
 		if (sheet) {
 			p.pos.x += sheet.pos.x
 			p.pos.y += sheet.pos.y
 		}
-		s += p.symbol.render(p)
 	}
 	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
+	
+	let s = ''
+	// todo: maybe we want to render to more distinct "layers" (e.g. pins, chip bodys, pinlabels, wires, etc.) to give more control over z sorting
 	for (let conn of cons2) {
 		s += draw_conn2(conn)
+	}
+	for (let p of placed) {
+		s += p.symbol.render(p)
 	}
 	$dest.innerHTML = s
 </script>
