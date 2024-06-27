@@ -1,0 +1,33 @@
+db - discrete component body
+cn - component name
+cd - component desc
+cb - chip body
+dn - discrete name
+
+pl - pin label (name)
+pn - pin number
+pp - pin
+
+wg - wire gap (crossing)
+wj - wire junction
+ww - wire
+
+nl - net label
+ns - net label symbol
+
+
+types of things:
+
+- component body (background, thick lines)
+- component detail (no bg, thin lines)
+- component name (bold text)
+- component description (small text)
+
+- component pin
+- pin number
+- pin label
+
+- wire (how do we handle gaps? perhaps instead of the little white circles, we can just put a break in the line)
+- wire junction (this could just go with wires but doesn't need to)
+- net label
+- net label symbol (for GND, NC, etc.)

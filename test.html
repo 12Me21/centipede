@@ -15,47 +15,46 @@
 		.t { dominant-baseline: hanging; }
 		.m { dominant-baseline: central; }
 		.b { dominant-baseline: auto; }
-		.body {
+		.cb {
 			fill: beige;
 			stroke: maroon;
 			stroke-width: 4px;
 		}
-		.discretebody {
+		.db {
 			fill: none;
 			stroke-width: 2px;
 			stroke: maroon;
 		}
-		.pin {
+		.pp {
 			stroke: maroon;
 			stroke-width: 4px;
 			stroke-linecap: round;
 		}
-		.name {
+		.cn {
 			font-size: 16px;
 			font-weight: bold;
 		}
-		.desc {
+		.dn {
+			font-size: 14px;
+			font-weight: bold;
+		}
+		.cd {
 			font-size: 12px;
 		}
-		.discrete .name {
-			font-size: 14px;
-		}
-		.discrete .desc {
-		}
-		.pname {
+		.pl {
 			font-size: 14px;
 			fill: black;
 		}
-		.num {
+		.pn {
 			font-size: 12px;
 			fill: #008;
 		}
-		.netlabel {
+		.nl {
 			stroke: none;
 			fill: blue;
 			font-size: 16px;
 		}
-		.netlabelsymbol {
+		.ns {
 			stroke: blue;
 			fill: none;
 			stroke-width: 2px;
@@ -66,11 +65,11 @@
 			text-decoration-skip-ink: none;
 			text-underline-position: from-font;
 		}
-		.crossing {
+		.wg {
 			fill: white;
 			stroke: none;
 		}
-		.junction {
+		.wj {
 			fill: green;
 			stroke: none;
 		}
@@ -83,7 +82,7 @@
 		.net:hover .junction {
 			fill: red;
 		}*/
-		.netwire {
+		.ww {
 			fill: none;
 			stroke-width: 2px;
 			stroke-linecap: round;
@@ -128,7 +127,7 @@
 
 <g id=wires>${groups.wires}</g>
 
-<path id=pin class=pin d="${groups.pin}"/>
+<path id=pin class=pp d="${groups.pin}"/>
 
 <g id=chiplabel>${groups.chiplabel}</g>
 

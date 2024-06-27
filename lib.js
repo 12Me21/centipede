@@ -68,24 +68,19 @@ class Component {
 		let s_labels = ""
 		
 		if (def.body) {
-			s_body += `<g class='chip discrete'>`
-			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${text1}</text>`
-			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${text2} ${def.desc}</text>`
-			s_body += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
-			s_body += "</g>"
+			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='dn r'>${text1}</text>`
+			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='cd'>${text2} ${def.desc}</text>`
+			s_body += `<path d="M${spacexy(x,y)}${def.bodypath}" class='db'/>`
 		} else {
-			s_body += `<g class=chip>`
 			if (def.bottomdesc) {
-				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${text2} ${def.desc}</text>`
-				s_labels += `<text ${attrxy(x, y-0.2)} class='name l'>${text1}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='cd c t'>${text2} ${def.desc}</text>`
+				s_labels += `<text ${attrxy(x, y-0.2)} class='cn l'>${text1}</text>`
 			} else {
-				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${text2} ${def.desc}</text>`
-				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${text1}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='cd c'>${text2} ${def.desc}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='cn c'>${text1}</text>`
 			}
-			s_body += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
-			s_body += "</g>"
+			s_body += `<rect class='cb' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
 		}
-		
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
@@ -101,10 +96,10 @@ class Component {
 				s_labels += `<text `
 				switch (p.side) {
 				default:
-					break; case 0: s_labels += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
-					break; case 1: s_labels += `${attrxy(px-0.2, py)} class='pname m r'`
-					break; case 2: s_labels += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
-					break; case 3: s_labels += `${attrxy(px+0.2, py)} class='pname m'`
+					break; case 0: s_labels += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pl m r'`
+					break; case 1: s_labels += `${attrxy(px-0.2, py)} class='pl m r'`
+					break; case 2: s_labels += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pl m'`
+					break; case 3: s_labels += `${attrxy(px+0.2, py)} class='pl m'`
 				                }
 				s_labels += ` >${p.name}</text>`
 			}
@@ -112,10 +107,10 @@ class Component {
 				s_labels += `<text `
 				switch (p.side) {
 				default:
-					break; case 0: s_labels += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
-					break; case 1: s_labels += `${attrxy(px+0.2, py-0.2)} class='num'`
+					break; case 0: s_labels += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='pn l'`
+					break; case 1: s_labels += `${attrxy(px+0.2, py-0.2)} class='pn'`
 					break; case 2:;
-					break; case 3: s_labels += `${attrxy(px-0.2, py-0.2)} class='num r'`
+					break; case 3: s_labels += `${attrxy(px-0.2, py-0.2)} class='pn r'`
 				}
 				s_labels += ` >${p.num}</text>`
 			}
@@ -180,7 +175,7 @@ function draw_conn2(str) {
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=crossing />`
+				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=wg />`
 			hitmap[p] = z
 			p += step
 			if (i==n)
@@ -194,7 +189,7 @@ function draw_conn2(str) {
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=crossing />`
+				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=wg />`
 			hitmap[p] = z
 			p += 200*step
 			if (i==n)
@@ -206,20 +201,20 @@ function draw_conn2(str) {
 	function add_label(text) {
 		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
 		if (text=="VCC") {
-			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {
-			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
 		} else if (text=="NC") {
-			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
 		} else {
 			if (dir==3)
-				s_label += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
+				s_label += `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
 			else if (dir==0)
-				s_label += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='nl m'>${text}</text>`
 			else if (dir==2)
-				s_label += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='netlabel m r'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='nl m r'>${text}</text>`
 			else 
-				s_label += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
+				s_label += `<text ${attrxy(px+0.2, py)} class='nl m l'>${text}</text>`
 		}
 	}
 	for (let item of desc) {
@@ -235,7 +230,7 @@ function draw_conn2(str) {
 					move_y(num)
 				} else if (move[0]=='J') {
 					landmarks.push([px,py])
-					s_junction += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
+					s_junction += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=wj />`
 				} else if (move[0]=='P') {
 					let [x,y] = landmarks.pop()
 					new_line(x, y)
@@ -274,6 +269,6 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output("wires", `${s_gap}<path class=netwire d="${s_path}"/>${s_junction}`)
+	output("wires", `${s_gap}<path class=ww d="${s_path}"/>${s_junction}`)
 	output("netlabels", s_label)
 }
