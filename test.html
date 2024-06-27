@@ -84,9 +84,12 @@
 			fill: red;
 		}
 		.net {
-			stroke: green;
 			stroke-width: 2px;
 			fill: none;
+		}
+		.netwire {
+			stroke-linecap: round;
+			stroke: green;
 		}
 	</style>
 	<g id=$dest>
@@ -108,14 +111,23 @@
 	}
 	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
 	
-	let s = ''
+	let s_wires = ''
+	let s_chips = ''
+	let s_netlabels = ''
 	// todo: maybe we want to render to more distinct "layers" (e.g. pins, chip bodys, pinlabels, wires, etc.) to give more control over z sorting
 	for (let conn of cons2) {
-		s += draw_conn2(conn)
+		let x = draw_conn2(conn)
+		s_wires += x.wires
+		s_netlabels += x.labels
 	}
 	for (let p of placed) {
-		s += p.symbol.render(p)
+		s_chips += p.symbol.render(p)
 	}
+	let s = `
+<g id=wires>${s_wires}</g>
+<g id=chips>${s_chips}</g>
+<g id=netlabels>${s_netlabels}</g>
+`
 	$dest.innerHTML = s
 </script>
 <canvas id=$c width=200 height=200></canvas>

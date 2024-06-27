@@ -170,22 +170,22 @@ let placed = [
 let cons = `
 16mhz osc output: x3.8 + ic20:A.2
 CLK_30: ic20:A.16 +h1v-2J 5701.19 +Pv-1 =
-16mhz buffered: ic20:A.18 +h2G 5701.10
+16mhz buffered: ic20:A.18 +h2 5701.10
 
 26mhz osc output: x1.8 + ic19:B.11
 vclkdiv feedback 1: IC19:B.8 +v-3h-5 IC19:B.12
 
 IC19:B.Q +h1J IC19:A.CLK +Pv4h9J IC20:B.I2 +Pv-10 IC20:A.I2
 
-~VCLK_7: IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph3Gh10 =
-FDP.120: IC20:B.I0 +h-1Gh-3v2Gv2h-1 =
+~VCLK_7: IC19:A.6 +Jv-3h-5 IC19:A.2 +Ph13 =
+FDP.120: IC20:B.I0 +h-4v4h-1 =
 
 ic20:A.14 + r52.2
 VCLK_13: r52.1 =
 ic20:B.7 + r54.2
 cartC.1: r54.1 =
 
-IC19:A.Q +h2Jv-1Gv-4h1G IC20:A.I3 +Pv2Gv2Gv1 IC20:B.I3
+IC19:A.Q +h2Jv-5h1 IC20:A.I3 +Pv5 IC20:B.I3
 ic20:A.12 + r53.1
 VCLK_7: r53.2 =
 ic20:B.9 + r55.1

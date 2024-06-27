@@ -132,18 +132,24 @@ function lookup_pin(des) {
 let nets = {}
 let hitmap = new Int16Array(200*200)
 let z = 10000
-function draw_conn2(desc) {
+function parse_connection_desc(str) {
 	let netname = "???"
 	{
-		let colon = desc.indexOf(": ")
+		let colon = str.indexOf(": ")
 		if (colon>=0) {
-			netname = desc.slice(0, colon)
-			desc = desc.slice(colon+2)
+			netname = str.slice(0, colon)
+			str = str.slice(colon+2)
 		}
-		desc = desc.split(" ")
+		var desc = str.split(" ")
 	}
-	let s = ""
-	let s2 = "", s1=""
+	return [netname, desc]
+}
+function draw_conn2(str) {
+	let [netname, desc] = parse_connection_desc(str)
+	let s_path = "" // kind: svg path d
+	let s_label = "" // kind: xml
+	let s_junction = "" // kind: xml
+	let s_gap = "" // kind: xml
 	let px = 0
 	let py = 0
 	let dir = 0
@@ -152,18 +158,19 @@ function draw_conn2(desc) {
 		return px+py*200
 	}
 	z--
+	let net_id = "net"+z
 	function new_line(x, y) {
 		px = x
 		py = y
-		s += "M"+spacexy(px, py)
+		s_path += "M"+spacexy(px, py)
 	}
 	function move_x(n) {
-		s += "h"+n*20
+		s_path += "h"+n*20
 		let p = hmi()
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s1 += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=crossing />`
+				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=crossing />`
 			hitmap[p] = z
 			p += step
 			if (i==n)
@@ -172,12 +179,12 @@ function draw_conn2(desc) {
 		px += n
 	}
 	function move_y(n) {
-		s += "v"+n*20
+		s_path += "v"+n*20
 		let p = hmi()
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s1 += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=crossing />`
+				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=crossing />`
 			hitmap[p] = z
 			p += 200*step
 			if (i==n)
@@ -189,20 +196,20 @@ function draw_conn2(desc) {
 	function add_label(text) {
 		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
 		if (text=="VCC") {
-			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
+			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {
-			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
+			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
 		} else if (text=="NC") {
-			s2 += `<path class='netlabelsymbol' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
+			s_label += `<path class='netlabelsymbol' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
 		} else {
 			if (dir==3)
-				s2 += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
+				s_label += `<text ${attrxy(px-0.2, py)} class='netlabel m r'>${text}</text>`
 			else if (dir==0)
-				s2 += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='netlabel m'>${text}</text>`
 			else if (dir==2)
-				s2 += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='netlabel m r'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='netlabel m r'>${text}</text>`
 			else 
-				s2 += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
+				s_label += `<text ${attrxy(px+0.2, py)} class='netlabel m l'>${text}</text>`
 		}
 	}
 	for (let item of desc) {
@@ -218,12 +225,12 @@ function draw_conn2(desc) {
 					move_y(num)
 				} else if (move[0]=='J') {
 					landmarks.push([px,py])
-					s2 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
+					s_junction += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=junction />`
 				} else if (move[0]=='P') {
 					let [x,y] = landmarks.pop()
 					new_line(x, y)
-				} else if (move[0]=='G') {
-					//s1 += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
+				//} else if (move[0]=='G') {
+					//s_gap += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=crossing />`
 				} else {
 					throw new Error('oh no +'+move[0])
 				}
@@ -257,5 +264,8 @@ function draw_conn2(desc) {
 			drawing = false
 		}
 	}
-	return "<g class=net>"+s1+`<path d="`+s+`"/>`+s2+"</g>"
+	return {
+		wires: `<g class=net data-net="${net_id}">${s_gap}<path class=netwire d="${s_path}"/>${s_junction}</g>`,
+		labels: s_label,
+	}
 }
