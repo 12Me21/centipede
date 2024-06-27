@@ -100,6 +100,12 @@
 <script src=components.js></script>
 <script src=placed.js></script>
 <script>
+	let groups = {}
+	function output(g, str) {
+		if (!groups[g])
+			groups[g] = ''
+		groups[g] += str
+	}
 	for (let p of placed) {
 		byname[p.name] = p
 		// hack:
@@ -111,22 +117,24 @@
 	}
 	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
 	
-	let s_wires = ''
-	let s_chips = ''
-	let s_netlabels = ''
-	// todo: maybe we want to render to more distinct "layers" (e.g. pins, chip bodys, pinlabels, wires, etc.) to give more control over z sorting
 	for (let conn of cons2) {
-		let x = draw_conn2(conn)
-		s_wires += x.wires
-		s_netlabels += x.labels
+		draw_conn2(conn)
 	}
 	for (let p of placed) {
-		s_chips += p.symbol.render(p)
+		p.symbol.render(p)
 	}
+	// todo: ok we can simplify our css now, right?
+	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
 	let s = `
-<g id=wires>${s_wires}</g>
-<g id=chips>${s_chips}</g>
-<g id=netlabels>${s_netlabels}</g>
+<g id=chipbody>${groups.chipbody}</g>
+
+<g id=wires>${groups.wires}</g>
+
+<g id=pin>${groups.pin}</g>
+
+<g id=chiplabel>${groups.chiplabel}</g>
+
+<g id=netlabels>${groups.netlabels}</g>
 `
 	$dest.innerHTML = s
 </script>

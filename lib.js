@@ -61,27 +61,35 @@ class Component {
 		let text1 = (displayname || name) + suffix
 		let text2 = def.name||override_name
 		
+		let s_body = ""
+		let s_pins = ""
+		//let s_pinnums = ""
+		//let s_pinnames = ""
+		let s_labels = ""
+		
 		if (def.body) {
-			s += `<g class='chip discrete'>`
-			s += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${text1}</text>`
-			s += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${text2} ${def.desc}</text>`
-			s += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
+			s_body += `<g class='chip discrete'>`
+			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='name r'>${text1}</text>`
+			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='desc'>${text2} ${def.desc}</text>`
+			s_body += `<path d="M${spacexy(x,y)}${def.bodypath}" class='discretebody'/>`
+			s_body += "</g>"
 		} else {
-			s += `<g class=chip>`
+			s_body += `<g class=chip>`
 			if (def.bottomdesc) {
-				s += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${text2} ${def.desc}</text>`
-				s += `<text ${attrxy(x, y-0.2)} class='name l'>${text1}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='desc c t'>${text2} ${def.desc}</text>`
+				s_labels += `<text ${attrxy(x, y-0.2)} class='name l'>${text1}</text>`
 			} else {
-				s += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${text2} ${def.desc}</text>`
-				s += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${text1}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='desc c'>${text2} ${def.desc}</text>`
+				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='name c'>${text1}</text>`
 			}
-			s += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
+			s_body += `<rect class='body' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
+			s_body += "</g>"
 		}
 		
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
-			s += `<path class=pin d="m${spacexy(px,py)}${p.r.dir}" />`
+			s_pins += `<path class=pin d="m${spacexy(px,py)}${p.r.dir}" />`
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
@@ -90,29 +98,31 @@ class Component {
 			}
 			pname += suffix
 			if (!def.no_names) {
-				s += `<text `
+				s_labels += `<text `
 				switch (p.side) {
 				default:
-					break; case 0: s += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
-					break; case 1: s += `${attrxy(px-0.2, py)} class='pname m r'`
-					break; case 2: s += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
-					break; case 3: s += `${attrxy(px+0.2, py)} class='pname m'`
+					break; case 0: s_labels += `transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='pname m r'`
+					break; case 1: s_labels += `${attrxy(px-0.2, py)} class='pname m r'`
+					break; case 2: s_labels += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pname m'`
+					break; case 3: s_labels += `${attrxy(px+0.2, py)} class='pname m'`
 				                }
-				s += ` >${p.name}</text>`
+				s_labels += ` >${p.name}</text>`
 			}
 			if (!def.no_numbers) {
-				s += `<text `
+				s_labels += `<text `
 				switch (p.side) {
 				default:
-					break; case 0: s += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
-					break; case 1: s += `${attrxy(px+0.2, py-0.2)} class='num'`
+					break; case 0: s_labels += `transform="translate(${spacexy(px-0.2, py-0.2)}) rotate(-90)" class='num l'`
+					break; case 1: s_labels += `${attrxy(px+0.2, py-0.2)} class='num'`
 					break; case 2:;
-					break; case 3: s += `${attrxy(px-0.2, py-0.2)} class='num r'`
+					break; case 3: s_labels += `${attrxy(px-0.2, py-0.2)} class='num r'`
 				}
-				s += ` >${p.num}</text>`
+				s_labels += ` >${p.num}</text>`
 			}
 		}
-		return s + "</g>"
+		output("chipbody", s_body)
+		output("chiplabel", s_labels)
+		output("pin", s_pins)
 	}
 }
 
@@ -264,8 +274,6 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	return {
-		wires: `<g class=net data-net="${net_id}">${s_gap}<path class=netwire d="${s_path}"/>${s_junction}</g>`,
-		labels: s_label,
-	}
+	output("wires", `<g class=net data-net="${net_id}">${s_gap}<path class=netwire d="${s_path}"/>${s_junction}</g>`)
+	output("netlabels", s_label)
 }
