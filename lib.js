@@ -89,7 +89,7 @@ class Component {
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
-			s_pins += `m${spacexy(px,py)}${p.r.dir}`
+			s_pins += `M${spacexy(px,py)}${p.r.dir}`
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
@@ -274,6 +274,6 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output("wires", `<g class=net data-net="${net_id}">${s_gap}<path class=netwire d="${s_path}"/>${s_junction}</g>`)
+	output("wires", `${s_gap}<path class=netwire d="${s_path}"/>${s_junction}`)
 	output("netlabels", s_label)
 }
