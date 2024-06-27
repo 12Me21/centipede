@@ -89,7 +89,7 @@ class Component {
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
-			s_pins += `<path class=pin d="m${spacexy(px,py)}${p.r.dir}" />`
+			s_pins += `m${spacexy(px,py)}${p.r.dir}`
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
