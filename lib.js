@@ -170,16 +170,27 @@ function draw_conn2(str) {
 		s_path += "M"+spacexy(px, py)
 	}
 	function move_x(n) {
-		s_path += "h"+n*20
 		let p = hmi()
 		let step = Math.sign(n)
+		let segs = [0]
 		for (let i=0; ; i+=step) {
-			if (hitmap[p]>z)
+			if (hitmap[p]>z) {
+				segs.push(i-0.2)
+				segs.push(i+0.2)
 				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=wg />`
+			}
 			hitmap[p] = z
 			p += step
 			if (i==n)
 				break
+		}
+		segs.push(n)
+		for (let i=1; i<segs.length; i++) {
+			let d = segs[i]-segs[i-1]
+			if (i%2)
+				s_path += 'h'+d*20
+			else
+				s_path += 'm'+d*20+",0"
 		}
 		px += n
 	}
