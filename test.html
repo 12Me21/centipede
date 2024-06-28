@@ -123,15 +123,16 @@
 	// todo: ok we can simplify our css now, right?
 	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
 	let s = `
-<g id=chipbody>${groups.chipbody}</g>
+<g id='chipbody'>${groups.chipbody}</g>
 
-<g id=wires>${groups.wires}</g>
+<g id='wires'>${groups.wires}</g>
+<g id='junctions' class='wj'>${groups.junctions}</g>
 
-<path id=pin class=pp d="${groups.pin}"/>
+<path id='pin' class='pp' d="${groups.pin}"/>
 
-<g id=chiplabel>${groups.chiplabel}</g>
+<g id='chiplabel'>${groups.chiplabel}</g>
 
-<g id=netlabels>${groups.netlabels}</g>
+<g id='netlabels'>${groups.netlabels}</g>
 `
 	$dest.innerHTML = s
 </script>

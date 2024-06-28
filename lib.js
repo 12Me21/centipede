@@ -170,27 +170,16 @@ function draw_conn2(str) {
 		s_path += "M"+spacexy(px, py)
 	}
 	function move_x(n) {
+		s_path += "h"+n*20
 		let p = hmi()
 		let step = Math.sign(n)
-		let segs = [0]
 		for (let i=0; ; i+=step) {
-			if (hitmap[p]>z) {
-				segs.push(i-0.2)
-				segs.push(i+0.2)
-				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r=3 class=wg />`
-			}
+			if (hitmap[p]>z)
+				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r='3' class='wg'/>`
 			hitmap[p] = z
 			p += step
 			if (i==n)
 				break
-		}
-		segs.push(n)
-		for (let i=1; i<segs.length; i++) {
-			let d = segs[i]-segs[i-1]
-			if (i%2)
-				s_path += 'h'+d*20
-			else
-				s_path += 'm'+d*20+",0"
 		}
 		px += n
 	}
@@ -200,7 +189,7 @@ function draw_conn2(str) {
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r=3 class=wg />`
+				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r='3' class='wg'/>`
 			hitmap[p] = z
 			p += 200*step
 			if (i==n)
@@ -241,7 +230,7 @@ function draw_conn2(str) {
 					move_y(num)
 				} else if (move[0]=='J') {
 					landmarks.push([px,py])
-					s_junction += `<circle ${attrxy2('cx',px,'cy',py)} r=3 class=wj />`
+					s_junction += `<circle ${attrxy2('cx',px,'cy',py)} r='3'/>`
 				} else if (move[0]=='P') {
 					let [x,y] = landmarks.pop()
 					new_line(x, y)
@@ -280,6 +269,7 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output("wires", `${s_gap}<path class=ww d="${s_path}"/>${s_junction}`)
+	output("wires", `${s_gap}<path class='ww' d="${s_path}"/>`)
+	output("junctions", s_junction)
 	output("netlabels", s_label)
 }
