@@ -82,11 +82,15 @@
 		.net:hover .junction {
 			fill: red;
 		}*/
-		.ww {
+		.ww path {
 			fill: none;
 			stroke-width: 2px;
 			stroke-linecap: round;
 			stroke: green;
+		}
+		.ww circle {
+			fill: white;
+			stroke: none;
 		}
 	</style>
 	<g id=$dest>
@@ -125,7 +129,7 @@
 	let s = `
 <g id='chipbody'>${groups.chipbody}</g>
 
-<g id='wires'>${groups.wires}</g>
+<g id='wires' class='ww'>${groups.wires}</g>
 <g id='junctions' class='wj'>${groups.junctions}</g>
 
 <path id='pin' class='pp' d="${groups.pin}"/>
@@ -135,6 +139,7 @@
 <g id='netlabels'>${groups.netlabels}</g>
 `
 	$dest.innerHTML = s
+	console.log("size:",s.length)
 </script>
 <canvas id=$c width=200 height=200></canvas>
 <script>

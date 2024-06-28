@@ -175,7 +175,7 @@ function draw_conn2(str) {
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r='3' class='wg'/>`
+				s_gap += `<circle ${attrxy2('cx',px+i,'cy',py)} r='3'/>`
 			hitmap[p] = z
 			p += step
 			if (i==n)
@@ -189,7 +189,7 @@ function draw_conn2(str) {
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
 			if (hitmap[p]>z)
-				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r='3' class='wg'/>`
+				s_gap += `<circle ${attrxy2('cx',px,'cy',py+i)} r='3'/>`
 			hitmap[p] = z
 			p += 200*step
 			if (i==n)
@@ -269,7 +269,7 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output("wires", `${s_gap}<path class='ww' d="${s_path}"/>`)
+	output("wires", `${s_gap}<path d="${s_path}"/>`)
 	output("junctions", s_junction)
 	output("netlabels", s_label)
 }
