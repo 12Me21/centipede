@@ -11,6 +11,9 @@ let sheets = {
 }
 
 let placed = [
+	{name: 'title1', displayname: 'OTIS Voice Sample Bank Counter', symbol: null,
+	 pos: {x:5, y:3}, sheet:0},
+	
 	{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
 	 pos: {x:31-1, y:37}, sheet:2},
 	{name: 'IC1', displayname: 'IC1:3', symbol: comps.hc08c,

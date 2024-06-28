@@ -12,6 +12,9 @@ function attrxy2(a, x, b, y) {
 
 let pinpaths = ["v-","h","v","h-"]
 
+let hitmap = new Int16Array(200*200)
+let z = 10000
+
 class Pin {
 	constructor(desc, component) {
 		if ('string'==typeof desc) {
@@ -87,6 +90,7 @@ class Component {
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
+			//hitmap[(x+p.e.x)+(y+p.e.y)*200] = 20000
 			s_pins += `M${spacexy(px,py)}${p.r.dir}${S}`
 			let pname = p.name
 			let ext = ""
@@ -137,8 +141,6 @@ function lookup_pin(des) {
 	return [part, pin]
 }
 let nets = {}
-let hitmap = new Int16Array(200*200)
-let z = 10000
 function parse_connection_desc(str) {
 	let netname = "???"
 	{

@@ -9,6 +9,10 @@
 		:root {
 			font-family: mspm, serif;
 		}
+		.title {
+			font-size: 24px;
+			text-decoration: underline;
+		}
 		.l { text-anchor: start; }
 		.c { text-anchor: middle; }
 		.r { text-anchor: end; }
@@ -118,10 +122,15 @@
 		draw_conn2(conn)
 	}
 	for (let p of placed) {
-		p.symbol.render(p)
+		if (!p.symbol) {
+			output("chiplabel", `<text class="title" ${attrxy(p.pos.x, p.pos.y)}>${p.displayname}</text>`)
+		} else
+			p.symbol.render(p)
 	}
 	// todo: ok we can simplify our css now, right?
 	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
+	for (let g in groups) 
+		console.log(g, groups[g].length)
 	let s = `
 <g id='compbody' class='cb'>${groups.compbody}</g>
 <g id='compdetail' class='db'>${groups.compdetail}</g>
