@@ -1,6 +1,6 @@
 let sheets = {
 	'0': {title: "OTIS Bank Expander", pos: {x:0,y:0}, box:[{x:0,y:0},{x:10,y:10}]},
-	'1': {title: "? FDP Memory Control", pos: {x:0,y:0},},
+	'1': {},
 	'2': {title: "Clocks", pos: {x:0,y:0},},
 	'3': {title: "Video Sync Output", pos:{x:10,y:26},},
 	'4': {title: "Video Blue Output", pos:{x:0,y:26},},
@@ -11,8 +11,6 @@ let sheets = {
 }
 
 let placed = [
-	{name: 'title1', displayname: 'FDP Memory Control ?', symbol: null,
-	 pos: {x:4, y:22}, sheet:1},
 	{name: 'title2', displayname: 'Clocks', symbol: null,
 	 pos: {x:3, y:38}, sheet:2},
 	{name: 'title3', displayname: 'Video Sync Output', symbol: null,
@@ -39,13 +37,6 @@ let placed = [
 	{name: 'IC20:B', symbol: comps.f244b,
 	 pos: {x:40-2-10-5, y:11+25+2+10}, sheet:2},
 
-	{name: 'IC64A', symbol: comps.f74a,
-	 pos: {x:12, y:11+4+10}, sheet:1},
-	{name: 'IC64B', symbol: comps.f74b,
-	 pos: {x:19+2, y:11+5+10}, sheet:1},
-	{name: 'IC65', symbol: comps.f04,
-	 pos: {x:5, y:11+5+10}, sheet:1}, 
-	
 	{name: 'C36', symbol: comps.cc, override_name: '220pF',
 	 pos: {x:21, y:60-2}, sheet:3},
 	{name: 'C37', symbol: comps.cc, override_name: '220pF',
