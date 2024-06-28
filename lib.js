@@ -284,12 +284,14 @@ function draw_conn2(str) {
 	output("netlabels", s_label)
 }
 
-function render(placed, cons) {
+function render(sheet, placed, cons) {
 	groups = {}
+	z = 10000
+	hitmap.fill(0)
 	for (let p of placed) {
 		byname[p.name] = p
 		// hack:
-		let sheet = sheets[p.sheet]
+		//let sheet = sheets[p.sheet]
 		if (sheet) {
 			p.pos.x += sheet.pos.x
 			p.pos.y += sheet.pos.y
