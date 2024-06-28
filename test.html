@@ -103,49 +103,7 @@
 <script src=components.js></script>
 <script src=placed.js></script>
 <script>
-	let groups = {}
-	function output(g, str) {
-		if (!groups[g])
-			groups[g] = ''
-		groups[g] += str
-	}
-	for (let p of placed) {
-		byname[p.name] = p
-		// hack:
-		let sheet = sheets[p.sheet]
-		if (sheet) {
-			p.pos.x += sheet.pos.x
-			p.pos.y += sheet.pos.y
-		}
-	}
-	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
-	
-	for (let conn of cons2) {
-		draw_conn2(conn)
-	}
-	for (let p of placed) {
-		if (!p.symbol) {
-			output("chiplabel", `<text class="title" ${attrxy(p.pos.x, p.pos.y)}>${p.displayname}</text>`)
-		} else
-			p.symbol.render(p)
-	}
-	// todo: ok we can simplify our css now, right?
-	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
-	for (let g in groups) 
-		console.log(g, groups[g].length)
-	let s = `
-<g id='compbody' class='cb'>${groups.compbody}</g>
-<g id='compdetail' class='db'>${groups.compdetail}</g>
-
-<g id='wires' class='ww'>${groups.wires}</g>
-<g id='junctions' class='wj'>${groups.junctions}</g>
-
-<path id='pin' class='pp' d="${groups.pin}"/>
-
-<g id='chiplabel'>${groups.chiplabel}</g>
-
-<g id='netlabels'>${groups.netlabels}</g>
-`
+	let s = render(placed, cons)
 	$dest.innerHTML = s
 	console.log("size:",s.length)
 </script>

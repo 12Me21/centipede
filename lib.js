@@ -1,4 +1,10 @@
 let S = 20
+let groups = {}
+function output(sheet, g, str) {
+	if (!groups[g])
+		groups[g] = ''
+	groups[g] += str
+}
 
 function attrxy(x, y) {
 	return `x="${x*S}" y="${y*S}"`
@@ -62,7 +68,7 @@ class Component {
 		return self
 	}
 	render(placed) {
-		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = placed
+		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}, sheet} = placed
 		let s = ''
 		let {width, height} = def
 		let text1 = (displayname || name) + suffix
@@ -76,7 +82,7 @@ class Component {
 		if (def.body) {
 			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='dn r'>${text1}</text>`
 			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='cd'>${text2} ${def.desc}</text>`
-			output("compdetail", `<path d="M${spacexy(x,y)}${def.bodypath}"/>`)
+			output(sheet, "compdetail", `<path d="M${spacexy(x,y)}${def.bodypath}"/>`)
 		} else {
 			if (def.bottomdesc) {
 				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='cd c t'>${text2} ${def.desc}</text>`
@@ -85,7 +91,7 @@ class Component {
 				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='cd c'>${text2} ${def.desc}</text>`
 				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='cn c'>${text1}</text>`
 			}
-			output("compbody", `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`)
+			output(sheet, "compbody", `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`)
 		}
 		for (let p of def.pins) {
 			let px = x + p.r.x
@@ -122,8 +128,8 @@ class Component {
 				s_labels += ` >${p.num}</text>`
 			}
 		}
-		output("chiplabel", s_labels)
-		output("pin", s_pins)
+		output(sheet, "chiplabel", s_labels)
+		output(sheet, "pin", s_pins)
 	}
 }
 
@@ -156,7 +162,6 @@ function parse_connection_desc(str) {
 function draw_conn2(str) {
 	let [netname, desc] = parse_connection_desc(str)
 	let s_path = "" // kind: svg path d
-	let s_label = "" // kind: xml
 	let s_junction = "" // kind: xml
 	let s_gap = "" // kind: xml
 	let px = 0
@@ -204,23 +209,26 @@ function draw_conn2(str) {
 	let drawing = false
 	function add_label(text) {
 		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
+		let s_label = ""
 		if (text=="VCC") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
+			s_label = `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
+			s_label = `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
 		} else if (text=="NC") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
+			s_label = `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
 		} else {
 			if (dir==3)
-				s_label += `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
+				s_label = `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
 			else if (dir==0)
-				s_label += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='nl m'>${text}</text>`
+				s_label = `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='nl m'>${text}</text>`
 			else if (dir==2)
-				s_label += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='nl m r'>${text}</text>`
+				s_label = `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='nl m r'>${text}</text>`
 			else 
-				s_label += `<text ${attrxy(px+0.2, py)} class='nl m l'>${text}</text>`
+				s_label = `<text ${attrxy(px+0.2, py)} class='nl m l'>${text}</text>`
 		}
+		return s_label
 	}
+	let sheet = null
 	for (let item of desc) {
 		if (item[0]=="+") {
 			for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
@@ -247,15 +255,16 @@ function draw_conn2(str) {
 			drawing = true
 		} else if (item=="=") {
 			//netname = item.slice(1)
-			add_label(netname)
+			output(sheet, "netlabels", add_label(netname))
 			drawing = false
 		} else {
 			let [part, pin] = lookup_pin(item)
 			if (!part || !pin) {
 				throw new Error("lookup pin failed: “"+item+"” in “"+desc+"”")
-				add_label(item)
+				output(sheet, "netlabels", add_label(item))
 				drawing = false
 			} else {
+				sheet = part.sheet
 				dir = pin.side
 				let x = pin.e.x+part.pos.x
 				let y = pin.e.y+part.pos.y
@@ -273,7 +282,48 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output("wires", `${s_gap}<path d="${s_path}"/>`)
-	output("junctions", s_junction)
-	output("netlabels", s_label)
+	output(sheet, "wires", `${s_gap}<path d="${s_path}"/>`)
+	output(sheet, "junctions", s_junction)
+}
+
+function render(placed, cons) {
+	groups = {}
+	for (let p of placed) {
+		byname[p.name] = p
+		// hack:
+		let sheet = sheets[p.sheet]
+		if (sheet) {
+			p.pos.x += sheet.pos.x
+			p.pos.y += sheet.pos.y
+		}
+	}
+	let cons2 = cons.split("\n").map(x=>x.split("#",1)[0].trim()).filter(x=>x)
+	
+	for (let conn of cons2) {
+		draw_conn2(conn)
+	}
+	for (let p of placed) {
+		if (!p.symbol) {
+			output("chiplabel", `<text class="title" ${attrxy(p.pos.x, p.pos.y)}>${p.displayname}</text>`)
+		} else
+			p.symbol.render(p)
+	}
+	// todo: ok we can simplify our css now, right?
+	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
+	for (let g in groups) 
+		console.log(g, groups[g].length)
+	let s = `
+<g id='compbody' class='cb'>${groups.compbody}</g>
+<g id='compdetail' class='db'>${groups.compdetail}</g>
+
+<g id='wires' class='ww'>${groups.wires}</g>
+<g id='junctions' class='wj'>${groups.junctions}</g>
+
+<path id='pin' class='pp' d="${groups.pin}"/>
+
+<g id='chiplabel'>${groups.chiplabel}</g>
+
+<g id='netlabels'>${groups.netlabels}</g>
+`
+	return s
 }
