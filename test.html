@@ -65,14 +65,6 @@
 			text-decoration-skip-ink: none;
 			text-underline-position: from-font;
 		}
-		.wg {
-			fill: white;
-			stroke: none;
-		}
-		.wj {
-			fill: green;
-			stroke: none;
-		}
 		/*.net:hover path {
 			stroke: red;
 		}
@@ -90,6 +82,10 @@
 		}
 		.ww circle {
 			fill: white;
+			stroke: none;
+		}
+		.wj {
+			fill: green;
 			stroke: none;
 		}
 	</style>
@@ -127,7 +123,8 @@
 	// todo: ok we can simplify our css now, right?
 	// though we do need to restore some of the grouping info (e.g. which pins belong to which chip) now that we now longer store that via tree structure
 	let s = `
-<g id='chipbody'>${groups.chipbody}</g>
+<g id='compbody' class='cb'>${groups.compbody}</g>
+<g id='compdetail' class='db'>${groups.compdetail}</g>
 
 <g id='wires' class='ww'>${groups.wires}</g>
 <g id='junctions' class='wj'>${groups.junctions}</g>

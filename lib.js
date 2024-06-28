@@ -1,12 +1,16 @@
+let S = 20
+
 function attrxy(x, y) {
-	return `x="${x*20}" y="${y*20}"`
+	return `x="${x*S}" y="${y*S}"`
 }
 function spacexy(x, y) {
-	return `${x*20} ${y*20}`
+	return `${x*S} ${y*S}`
 }
 function attrxy2(a, x, b, y) {
-	return `${a}="${x*20}" ${b}="${y*20}"`
+	return `${a}="${x*S}" ${b}="${y*S}"`
 }
+
+let pinpaths = ["v-","h","v","h-"]
 
 class Pin {
 	constructor(desc, component) {
@@ -33,7 +37,7 @@ class Pin {
 		this.r = {
 			x: [this.slot,component.width,component.width-this.slot,0][this.side],
 			y: [0,this.slot,component.height,component.height-this.slot][this.side],
-			dir: ["v-20","h20","v20","h-20"][this.side],
+			dir: pinpaths[this.side],
 			//diro: ["h-1l1,-1l1,1h-1v-10","v-3l3,3l-3,3v-3 h10","v10","h-10"][this.side],
 		}
 		this.e = {
@@ -61,7 +65,6 @@ class Component {
 		let text1 = (displayname || name) + suffix
 		let text2 = def.name||override_name
 		
-		let s_body = ""
 		let s_pins = ""
 		//let s_pinnums = ""
 		//let s_pinnames = ""
@@ -70,7 +73,7 @@ class Component {
 		if (def.body) {
 			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='dn r'>${text1}</text>`
 			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='cd'>${text2} ${def.desc}</text>`
-			s_body += `<path d="M${spacexy(x,y)}${def.bodypath}" class='db'/>`
+			output("compdetail", `<path d="M${spacexy(x,y)}${def.bodypath}"/>`)
 		} else {
 			if (def.bottomdesc) {
 				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='cd c t'>${text2} ${def.desc}</text>`
@@ -79,12 +82,12 @@ class Component {
 				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='cd c'>${text2} ${def.desc}</text>`
 				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='cn c'>${text1}</text>`
 			}
-			s_body += `<rect class='cb' ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`
+			output("compbody", `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`)
 		}
 		for (let p of def.pins) {
 			let px = x + p.r.x
 			let py = y + p.r.y
-			s_pins += `M${spacexy(px,py)}${p.r.dir}`
+			s_pins += `M${spacexy(px,py)}${p.r.dir}${S}`
 			let pname = p.name
 			let ext = ""
 			if (pname[0]=="~") {
@@ -115,7 +118,6 @@ class Component {
 				s_labels += ` >${p.num}</text>`
 			}
 		}
-		output("chipbody", s_body)
 		output("chiplabel", s_labels)
 		output("pin", s_pins)
 	}
@@ -170,7 +172,7 @@ function draw_conn2(str) {
 		s_path += "M"+spacexy(px, py)
 	}
 	function move_x(n) {
-		s_path += "h"+n*20
+		s_path += "h"+n*S
 		let p = hmi()
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
@@ -184,7 +186,7 @@ function draw_conn2(str) {
 		px += n
 	}
 	function move_y(n) {
-		s_path += "v"+n*20
+		s_path += "v"+n*S
 		let p = hmi()
 		let step = Math.sign(n)
 		for (let i=0; ; i+=step) {
