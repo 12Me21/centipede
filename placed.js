@@ -1,5 +1,4 @@
 let sheets = {
-	'3': {title: "Video Sync Output", pos:{x:10,y:26},},
 	'4': {title: "Video Blue Output", pos:{x:0,y:26},},
 	'5': {title: "3P/4P Coin Output", pos:{x:6,y:-13},},
 	'6': {title: "1P/2P Coin Output", pos:{x:6,y:-13},},
@@ -8,25 +7,15 @@ let sheets = {
 }
 
 let placed = [
-	{name: 'title3', displayname: 'Video Sync Output', symbol: null,
-	 pos: {x:3, y:56}, sheet:3},
 	{name: 'title4', displayname: 'Video Blue Output', symbol: null,
 	 pos: {x:3, y:61}, sheet:4},
 	
 
-	{name: 'C36', symbol: comps.cc, override_name: '220pF',
-	 pos: {x:21, y:60-2}, sheet:3},
-	{name: 'C37', symbol: comps.cc, override_name: '220pF',
-	 pos: {x:21, y:62-2}, sheet:3},
 	{name: 'C38', symbol: comps.cc, override_name: '220pF',
 	 pos: {x:33+5+5+1-13, y:70-5}, sheet:4},
 	{name: 'C39', symbol: comps.cc, override_name: '220pF',
 	 pos: {x:33+5+5+1-13, y:71-5+1}, sheet:4},
 	
-	{name: 'L11', symbol: comps.fb, override_name: '',
-	 pos: {x:15, y:60-1-2}, sheet:3},
-	{name: 'L12', symbol: comps.fb, override_name: '',
-	 pos: {x:15, y:61-2}, sheet:3},
 	{name: 'L13', symbol: comps.fb, override_name: '',
 	 pos: {x:33+5-13, y:70-5-1}, sheet:4},
 	{name: 'L14', symbol: comps.fb, override_name: '',
@@ -36,8 +25,6 @@ let placed = [
 	 pos: {x:33-13, y:70-5-1}, sheet:4},
 	{name: 'R19', symbol: comps.r, override_name: '75&ohm;',
 	 pos: {x:33-13, y:71-5}, sheet:4},
-	{name: 'R24', symbol: comps.r, override_name: '75Ω',
-	 pos: {x:12-4, y:60-2}, sheet:3},
 	{name: 'R25', symbol: comps.r, override_name: '100Ω',
 	 pos: {x:33-5-1-13+6, y:72-5+1}, sheet:4},
 	{name: 'R26', symbol: comps.r, override_name: '2000Ω',
@@ -47,9 +34,6 @@ let placed = [
 	 pos: {x:21-13, y:65-1}, sheet:4},
 	{name: 'TR4', symbol: comps.npn, override_name: '',
 	 pos: {x:27-13, y:65}, sheet:4},
-	
-	{name: 'ZD5', symbol: comps.zd, override_name: '',
-	 pos: {x:12-4, y:62-2}, sheet:3},
 	
 	{name: 'IC34', symbol: comps.td62064a,
 	 pos: {x:4, y:72}, sheet:5},
@@ -119,9 +103,6 @@ let placed = [
 ]
 
 let cons = `
-V_SYNC: r24.1 =
-r24.2 +h1Jv1v1 zd5.2 +Ph1Jv-1 l11.1 +Pv1 l12.1 #not in notes?
-
 AGND: c36.1 +h-1v2J c37.1 +Pv5J c38.1 +Pv2J c39.1 +Pv1J r25.2 +Pv1J r26.2 +Pv1 =
 #not in notes? ^
 tr1.1 +h1J tr4.3 +Pv3 r26.1	
@@ -133,9 +114,6 @@ r19.2 + l14.1
 M2.3: l13.2 +h7Jv1 c38.2 +Ph1 =
 JAMMA.13: l14.2 +h7Jv1 c39.2 +Ph1 =
 FDA.VIDEO_BLUE: tr1.3 = #not in notes
-GND: zd5.1 = #not in notes
-M2.4: l11.2 +h7Jv1 c36.2 +Ph1 = #not in notes
-JAMMA.P: l12.2 +h7Jv1 c37.2 +Ph1 = #not in notes
 
 NC: ic34.1 =
 FIO.69: ic34.3 =
