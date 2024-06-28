@@ -1,5 +1,5 @@
 let sheets = {
-	'0': {title: "OTIS Bank Expander", pos: {x:0,y:0},},
+	'0': {title: "OTIS Bank Expander", pos: {x:0,y:0}, box:[{x:0,y:0},{x:10,y:10}]},
 	'1': {title: "? FDP Memory Control", pos: {x:0,y:0},},
 	'2': {title: "Clocks", pos: {x:0,y:0},},
 	'3': {title: "Video Sync Output", pos:{x:10,y:26},},
@@ -11,8 +11,16 @@ let sheets = {
 }
 
 let placed = [
-	{name: 'title1', displayname: 'OTIS Voice Sample Bank Counter', symbol: null,
+	{name: 'title0', displayname: 'OTIS Voice Sample Bank Counter', symbol: null,
 	 pos: {x:5, y:3}, sheet:0},
+	{name: 'title1', displayname: 'FDP Memory Control ?', symbol: null,
+	 pos: {x:4, y:22}, sheet:1},
+	{name: 'title2', displayname: 'Clocks', symbol: null,
+	 pos: {x:3, y:38}, sheet:2},
+	{name: 'title3', displayname: 'Video Sync Output', symbol: null,
+	 pos: {x:3, y:56}, sheet:3},
+	{name: 'title4', displayname: 'Video Blue Output', symbol: null,
+	 pos: {x:3, y:61}, sheet:4},
 	
 	{name: '5701', displayname: '5701:clkdiv', symbol: comps.escd,
 	 pos: {x:31-1, y:37}, sheet:2},
