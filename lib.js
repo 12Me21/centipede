@@ -1,6 +1,6 @@
 let S = 20
 let groups = {}
-function output(sheet, g, str) {
+function output(g, str) {
 	if (!groups[g])
 		groups[g] = ''
 	groups[g] += str
@@ -68,7 +68,7 @@ class Component {
 		return self
 	}
 	render(placed) {
-		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}, sheet} = placed
+		let {name, override_name, displayname, suffix="", symbol:def, pos:{x, y}} = placed
 		let s = ''
 		let {width, height} = def
 		let text1 = (displayname || name) + suffix
@@ -82,7 +82,7 @@ class Component {
 		if (def.body) {
 			s_labels += `<text ${attrxy(x+(def.body=='npn'?1:0), y-0.2)} class='dn r'>${text1}</text>`
 			s_labels += `<text ${attrxy(x+width-0.2, y-0.2)} class='cd'>${text2} ${def.desc}</text>`
-			output(sheet, "compdetail", `<path d="M${spacexy(x,y)}${def.bodypath}"/>`)
+			output("compdetail", `<path d="M${spacexy(x,y)}${def.bodypath}"/>`)
 		} else {
 			if (def.bottomdesc) {
 				s_labels += `<text ${attrxy(x+width/2, y+height+0.2)} class='cd c t'>${text2} ${def.desc}</text>`
@@ -91,7 +91,7 @@ class Component {
 				s_labels += `<text ${attrxy(x+width/2, y-0.2)} class='cd c'>${text2} ${def.desc}</text>`
 				s_labels += `<text ${attrxy(x+width/2, y-0.8)} class='cn c'>${text1}</text>`
 			}
-			output(sheet, "compbody", `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`)
+			output("compbody", `<rect ${attrxy(x, y)} ${attrxy2('width',width,'height',height)} />`)
 		}
 		for (let p of def.pins) {
 			let px = x + p.r.x
@@ -128,8 +128,8 @@ class Component {
 				s_labels += ` >${p.num}</text>`
 			}
 		}
-		output(sheet, "chiplabel", s_labels)
-		output(sheet, "pin", s_pins)
+		output("chiplabel", s_labels)
+		output("pin", s_pins)
 	}
 }
 
@@ -162,6 +162,7 @@ function parse_connection_desc(str) {
 function draw_conn2(str) {
 	let [netname, desc] = parse_connection_desc(str)
 	let s_path = "" // kind: svg path d
+	let s_label = "" // kind: xml
 	let s_junction = "" // kind: xml
 	let s_gap = "" // kind: xml
 	let px = 0
@@ -209,26 +210,23 @@ function draw_conn2(str) {
 	let drawing = false
 	function add_label(text) {
 		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
-		let s_label = ""
 		if (text=="VCC") {
-			s_label = `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
 		} else if (text=="GND") {
-			s_label = `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
 		} else if (text=="NC") {
-			s_label = `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
 		} else {
 			if (dir==3)
-				s_label = `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
+				s_label += `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
 			else if (dir==0)
-				s_label = `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='nl m'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='nl m'>${text}</text>`
 			else if (dir==2)
-				s_label = `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='nl m r'>${text}</text>`
+				s_label += `<text transform="translate(${spacexy(px, py+0.2)}) rotate(-90)" class='nl m r'>${text}</text>`
 			else 
-				s_label = `<text ${attrxy(px+0.2, py)} class='nl m l'>${text}</text>`
+				s_label += `<text ${attrxy(px+0.2, py)} class='nl m l'>${text}</text>`
 		}
-		return s_label
 	}
-	let sheet = null
 	for (let item of desc) {
 		if (item[0]=="+") {
 			for (let move of item.slice(1).matchAll(/[a-zA-Z][^a-zA-Z]*/g)) {
@@ -255,16 +253,15 @@ function draw_conn2(str) {
 			drawing = true
 		} else if (item=="=") {
 			//netname = item.slice(1)
-			output(sheet, "netlabels", add_label(netname))
+			add_label(netname)
 			drawing = false
 		} else {
 			let [part, pin] = lookup_pin(item)
 			if (!part || !pin) {
 				throw new Error("lookup pin failed: “"+item+"” in “"+desc+"”")
-				output(sheet, "netlabels", add_label(item))
+				add_label(item)
 				drawing = false
 			} else {
-				sheet = part.sheet
 				dir = pin.side
 				let x = pin.e.x+part.pos.x
 				let y = pin.e.y+part.pos.y
@@ -282,8 +279,9 @@ function draw_conn2(str) {
 			drawing = false
 		}
 	}
-	output(sheet, "wires", `${s_gap}<path d="${s_path}"/>`)
-	output(sheet, "junctions", s_junction)
+	output("wires", `${s_gap}<path d="${s_path}"/>`)
+	output("junctions", s_junction)
+	output("netlabels", s_label)
 }
 
 function render(placed, cons) {
