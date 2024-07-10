@@ -313,13 +313,14 @@ function render(sheet, placed, cons) {
 	for (let g in groups) 
 		console.log(g, groups[g].length)
 	let s = `
+<path id='pin' class='pp' d="${groups.pin}"/>
+
 <g id='compbody' class='cb'>${groups.compbody}</g>
 <g id='compdetail' class='db'>${groups.compdetail}</g>
 
 <g id='wires' class='ww'>${groups.wires}</g>
 <g id='junctions' class='wj'>${groups.junctions}</g>
 
-<path id='pin' class='pp' d="${groups.pin}"/>
 
 <g id='chiplabel'>${groups.chiplabel}</g>
 

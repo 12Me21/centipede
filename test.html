@@ -1,7 +1,10 @@
 <!doctype html><meta charset=utf-8>
 
-<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 3000" width=1000>
+<svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 3000" width=1000 id=$svg style=display:none;>
 	<style>
+		svg {
+			border: 1px solid;
+		}
 		@font-face {
 			font-family: 'mspm';
 			src: url("./short2.otf?1");
@@ -30,7 +33,7 @@
 			stroke: maroon;
 		}
 		.pp {
-			stroke: maroon;
+			stroke: olive;
 			stroke-width: 4px;
 			stroke-linecap: round;
 		}
@@ -95,23 +98,38 @@
 			stroke: none;
 		}
 	</style>
-	<g id=$dest>
-	</g>
 </svg>
 
 <script src=lib.js></script>
 <script src=components.js></script>
-<script src=placed.js></script>
 <script>
+	function new_svg() {
+		let x = $svg
+		let z = x.cloneNode(true)
+		z.id = null
+		z.setAttribute('style', '')
+		return z
+	}
+	function size_svg(e) {
+		let margin = 10
+		let rect = e.getBBox()
+		let rw = e.viewBox.baseVal;
+		rw.x = Math.round(rect.x) - margin
+		rw.y = Math.round(rect.y) - margin
+		e.width.baseVal.value = rw.width = Math.round(rect.width) + margin*2
+		rw.height = Math.round(rect.height) + margin*2
+	}
+	
 	function load(def) {
-		let dest = $dest.cloneNode()
-		$dest.after(dest)
+		let z = new_svg()
 		sheets = {
 			'null': def
 		}
 		let s = render(def, def.placed, def.cons)
-		dest.innerHTML = s
+		z.insertAdjacentHTML("beforeend", s)
+		$svg.after(z)
 		console.log("size:",s.length)
+		size_svg(z)
 	}
 </script>
 <script src=sheets/sheet0.js type=module></script>
