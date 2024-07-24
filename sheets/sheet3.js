@@ -12,7 +12,7 @@ x.placed = [
 	 pos: {x:15, y:60-1-2}, sheet:3},
 	{name: 'L12', symbol: comps.fb, override_name: '',
 	 pos: {x:15, y:61-2}, sheet:3},
-	{name: 'R24', symbol: comps.r, override_name: '75Ω',
+	{name: 'R24', symbol: comps.r, override_name: '75&ohm;',
 	 pos: {x:12-4, y:60-2}, sheet:3},
 	{name: 'ZD5', symbol: comps.zd, override_name: '',
 	 pos: {x:12-4, y:62-2}, sheet:3},

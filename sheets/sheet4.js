@@ -18,9 +18,9 @@ x.placed = [
 	 pos: {x:33-13, y:70-5-1}, sheet:4},
 	{name: 'R19', symbol: comps.r, override_name: '75&ohm;',
 	 pos: {x:33-13, y:71-5}, sheet:4},
-	{name: 'R25', symbol: comps.r, override_name: '100Ω',
+	{name: 'R25', symbol: comps.r, override_name: '100&ohm;',
 	 pos: {x:33-5-1-13+6, y:72-5+1}, sheet:4},
-	{name: 'R26', symbol: comps.r, override_name: '2000Ω',
+	{name: 'R26', symbol: comps.r, override_name: '2000&ohm;',
 	 pos: {x:21-13+12, y:67+2}, sheet:4},
 	
 	{name: 'TR1', symbol: comps.npn, override_name: '',

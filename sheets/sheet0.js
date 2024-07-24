@@ -12,9 +12,9 @@ x.placed = [
 	 pos: {x:30-3-5, y:11-5}},
 	{name: 'IC30L', displayname: 'IC30:L', symbol: comps.dpraml,
 	 pos: {x:35-5, y:10-5}},
-	{name: 'R3', symbol: comps.r2, override_name: '2400Ω',
+	{name: 'R3', symbol: comps.r2, override_name: '2400&ohm;',
 	 pos: {x:12-4, y:19+1}},
-	{name: 'R5', symbol: comps.r, override_name: '1000Ω',
+	{name: 'R5', symbol: comps.r, override_name: '1000&ohm;',
 	 pos: {x:35+2, y:10+7}},
 ]
 x.cons = `
