@@ -17,8 +17,8 @@ x.placed = [
 	{name: 'D1', symbol: comps.d, override_name: '',
 	 pos: {x:30-2, y:96+2}, sheet:7},
 	
-	{name: 'TA', symbol: comps.tc, override_name: '',
-	 pos: {x:40, y:96+2}, sheet:7},
+	/*{name: 'TA', symbol: comps.tc, override_name: '',
+	 pos: {x:40, y:96+2}, sheet:7},*/
 ]
 x.cons = `
 +12V: ic62.3 =

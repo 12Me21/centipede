@@ -115,10 +115,19 @@
 		let margin = 10
 		let rect = e.getBBox()
 		let rw = e.viewBox.baseVal;
-		rw.x = Math.round(rect.x) - margin
-		rw.y = Math.round(rect.y) - margin
-		e.width.baseVal.value = rw.width = Math.round(rect.width) + margin*2
-		rw.height = Math.round(rect.height) + margin*2
+		//rw.x = Math.round(rect.x) - margin
+		//rw.y = Math.round(rect.y) - margin
+		let x = Math.floor((rect.x - margin) / S) * S
+		let y = Math.floor((rect.y - margin) / S) * S
+		let x2 = Math.ceil((rect.x + rect.width + margin) / S) * S
+		let y2 = Math.ceil((rect.y + rect.height + margin) / S) * S
+		let width = x2 - x
+		let height = y2 - y
+		rw.x = x
+		rw.y = y
+		
+		e.width.baseVal.value = rw.width = width
+		rw.height = height
 	}
 	
 	function load(def) {

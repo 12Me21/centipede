@@ -2,6 +2,9 @@ let x = {
 	title: "3P/4P Coin Output", pos:{x:6,y:-13},
 }
 x.placed = [
+	{name: 'title5', displayname: '3P/4P Coin Output', symbol: null,
+	 pos: {x:5, y:70}},
+	
 	{name: 'IC34', symbol: comps.td62064a,
 	 pos: {x:4, y:72}, sheet:5},
 	{name: 'ZD1', symbol: comps.zd, override_name: '',

@@ -304,7 +304,7 @@ function render(sheet, placed, cons) {
 	}
 	for (let p of placed) {
 		if (!p.symbol) {
-			output("chiplabel", `<text class="title" ${attrxy(p.pos.x, p.pos.y)}>${p.displayname}</text>`)
+			//output("chiplabel", `<text class="title" ${attrxy(p.pos.x, p.pos.y)}>${p.displayname}</text>`)
 		} else
 			p.symbol.render(p)
 	}
