@@ -2,9 +2,6 @@
 
 <svg xmlns=http://www.w3.org/2000/svg viewBox="-10 0 1000 3000" width=1000 id=$svg style=display:none;>
 	<style>
-		svg {
-			border: 1px solid;
-		}
 		@font-face {
 			font-family: 'mspm';
 			src: url("./short2.otf?10");
@@ -12,6 +9,7 @@
 		:root {
 			font-family: mspm, serif;
 			font-variant-numeric: tabular-nums;
+			background: white;
 		}
 		.title {
 			font-size: 24px;
@@ -57,7 +55,7 @@
 		}
 		.pn {
 			font-size: 12px;
-			fill: #008;
+			fill: #000088;
 		}
 		.nl {
 			stroke: none;
@@ -69,21 +67,6 @@
 			fill: none;
 			stroke-width: 2px;
 		}
-		.overline {
-			text-decoration: underline;
-			text-underline-offset: -12px;
-			text-decoration-skip-ink: none;
-			text-underline-position: from-font;
-		}
-		/*.net:hover path {
-			stroke: red;
-		}
-		.net:hover text {
-			fill: red;
-		}
-		.net:hover .junction {
-			fill: red;
-		}*/
 		.ww path {
 			fill: none;
 			stroke-width: 2px;
@@ -99,6 +82,7 @@
 			stroke: none;
 		}
 	</style>
+	@@@
 </svg>
 
 <script src=lib.js></script>
@@ -140,6 +124,13 @@
 		$svg.after(z)
 		console.log("size:",s.length)
 		size_svg(z)
+		let b = z.outerHTML
+		b = b.split("@@@", 1)[0]
+		s = s.replace(/&ohm;/g, "Ω")
+		b = b + s + "</svg>"
+		let n = document.createElement('textarea')
+		n.value = b
+		document.body.append(n)
 	}
 </script>
 <script src=sheets/sheet0.js type=module></script>

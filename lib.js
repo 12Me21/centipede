@@ -114,7 +114,7 @@ class Component {
 					break; case 2: s_labels += `transform="translate(${spacexy(px, py-0.2)}) rotate(-90)" class='pl m'`
 					break; case 3: s_labels += `${attrxy(px+0.2, py)} class='pl m'`
 				                }
-				s_labels += ` >${p.name}</text>`
+				s_labels += `>${p.name}</text>`
 			}
 			if (!def.no_numbers) {
 				s_labels += `<text `
@@ -125,7 +125,7 @@ class Component {
 					break; case 2:;
 					break; case 3: s_labels += `${attrxy(px-0.2, py-0.2)} class='pn r'`
 				}
-				s_labels += ` >${p.num}</text>`
+				s_labels += `>${p.num}</text>`
 			}
 		}
 		output("chiplabel", s_labels)
@@ -211,11 +211,11 @@ function draw_conn2(str) {
 	function add_label(text) {
 		//text = text.replace(/[.](.*)/, "<tspan class=sub>$1</tspan>")
 		if (text=="VCC") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}v-6 h-2 l2,-6 l2,6 h-2 v-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v-6h-2l2-6+2+6h-2v-6"/>`
 		} else if (text=="GND") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}v6 h-6 l6,6 l6,-6 h-6"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}v6h-6l6+6+6-6h-6"/>`
 		} else if (text=="NC") {
-			s_label += `<path class='ns' d="M${spacexy(px,py)}m-4,-4 l8,8 m0-8 l-8,8"/>`
+			s_label += `<path class='ns' d="M${spacexy(px,py)}m-4-4l8+8m0-8l-8+8"/>`
 		} else {
 			if (dir==3)
 				s_label += `<text ${attrxy(px-0.2, py)} class='nl m r'>${text}</text>`
