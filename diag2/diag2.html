@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset=utf-8>
 
-<svg id=$out viewBox="0 0 100 200" width=100 height=200>
+<svg id=$out viewBox="0 0 300 200" width=300 height=200>
 	
 </svg>
 
@@ -9,31 +9,49 @@
 	let def = [
 		{
 			type: 'box',
-			pos: [4, 6],
-			size: [3, 5],
+			pos: [6, 6],
+			size: [5, 5],
 			labels: [
-				{pos:"nw", text:"test"},
-				{pos:"onw", text:"test"},
+				{pos:"c", text:"c"},
+				{pos:"n", text:"n"},
+				{pos:"ne", text:"ne"},
+				{pos:"e", text:"e"},
+				{pos:"se", text:"se"},
+				{pos:"s", text:"s"},
+				{pos:"sw", text:"sw"},
+				{pos:"w", text:"w"},
+				{pos:"nw", text:"nw"},
+				{pos:"on", text:"on"},
+				{pos:"one", text:"one"},
+				{pos:"oe", text:"oe"},
+				{pos:"ose", text:"ose"},
+				{pos:"os", text:"os"},
+				{pos:"osw", text:"osw"},
+				{pos:"ow", text:"ow"},
+				{pos:"onw", text:"onw"},
 			],
 		}
 	]
+	let margin = 2
 	function makelabel(parent, l) {
+		let pos = {px:0,py:0,ax:0,ay:0}
+		if (/n/.test(l.pos)) pos.py = -1
+		if (/s/.test(l.pos)) pos.py = 1
+		if (/w/.test(l.pos)) pos.px = -1
+		if (/e/.test(l.pos)) pos.px = 1
+		if (/o/.test(l.pos)) {
+			pos.ax = pos.px
+			pos.ay = pos.py
+		} else {
+			pos.ax = -pos.px
+			pos.ay = -pos.py
+		}
 		let attr = ""
-		if (l.pos=="c" || l.pos=="w" || l.pos=="e") {
-			attr += `y="0" dominant-baseline="central"`
-		} else if (l.pos=="n" || l.pos=="nw" || l.pos=="ne") {
-			attr += `y="${-parent.size[1]/2*g}" dominant-baseline="hanging"`
-		} else if (l.pos=="s" || l.pos=="sw" || l.pos=="se") {
-			attr += `y="${parent.size[1]/2*g}" dominant-baseline="auto"`
-		}
-		if (l.pos=="c" || l.pos=="n" || l.pos=="s") {
-			attr += ` x="0" text-anchor="middle"`
-		} else if (l.pos=="w" || l.pos=="nw" || l.pos=="sw") {
-			attr += ` x="${-parent.size[0]/2*g}" text-anchor="start"`
-		} else if (l.pos=="e" || l.pos=="ne" || l.pos=="se") {
-			attr += ` x="${parent.size[0]/2*g}" text-anchor="end"`
-		}
-		return `<text ${attr}>${l.text}</text>`		
+		attr += ` x="${(pos.px*parent.size[0]/2*g)+pos.ax*margin}"`
+		attr += ` y="${(pos.py*parent.size[1]/2*g)+pos.ay*margin}"`
+		attr += ` text-anchor="${["end","middle","start"][pos.ax+1]}"`
+		attr += ` dominant-baseline="${["auto","central","hanging"][pos.ay+1]}"`
+		return `<text ${attr}>${l.text}</text>`
 	}
 	let xml = `<style>
 .box {
