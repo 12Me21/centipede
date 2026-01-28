@@ -12,23 +12,7 @@
 			pos: [6, 6],
 			size: [5, 5],
 			labels: [
-				{pos:"c", text:"c"},
-				{pos:"n", text:"n"},
-				{pos:"ne", text:"ne"},
-				{pos:"e", text:"e"},
-				{pos:"se", text:"se"},
-				{pos:"s", text:"s"},
-				{pos:"sw", text:"sw"},
-				{pos:"w", text:"w"},
-				{pos:"nw", text:"nw"},
-				{pos:"on", text:"on"},
-				{pos:"one", text:"one"},
-				{pos:"oe", text:"oe"},
-				{pos:"ose", text:"ose"},
-				{pos:"os", text:"os"},
-				{pos:"osw", text:"osw"},
-				{pos:"ow", text:"ow"},
-				{pos:"onw", text:"onw"},
+				{pos:"c", text:"layer-specific\nrendering"},
 			],
 		}
 	]
@@ -46,12 +30,18 @@
 			pos.ax = -pos.px
 			pos.ay = -pos.py
 		}
-		let attr = ""
-		attr += ` x="${(pos.px*parent.size[0]/2*g)+pos.ax*margin}"`
-		attr += ` y="${(pos.py*parent.size[1]/2*g)+pos.ay*margin}"`
-		attr += ` text-anchor="${["end","middle","start"][pos.ax+1]}"`
-		attr += ` dominant-baseline="${["auto","central","hanging"][pos.ay+1]}"`
-		return `<text ${attr}>${l.text}</text>`
+		let xml = "<text"
+		xml += ` x="${(pos.px*parent.size[0]/2*g)+pos.ax*margin}"`
+		xml += ` y="${(pos.py*parent.size[1]/2*g)+pos.ay*margin}"`
+		xml += ` text-anchor="${["end","middle","start"][pos.ax+1]}"`
+		xml += ` dominant-baseline="${["auto","central","hanging"][pos.ay+1]}"`
+		xml += `>`
+		let lines = l.text.split("\n")
+		for (let i=0; i<lines.length; i++) {
+			xml += `<tspan x="0" y="${i - (lines.length-1)/2}em">${lines[i]}</tspan>`
+		}
+		xml += `</text>`
+		return xml
 	}
 	let xml = `<style>
 .box {
