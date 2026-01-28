@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset=utf-8>
+
+<svg id=$out viewBox="0 0 100 100" width=100 height=100>
+	
+</svg>
+
+<script>
+	let def = [
+		{
+			type: 'box',
+			pos: [4, 6],
+			size: [3, 5],
+			labels: [
+				{pos: "c", text:"test"},
+			],
+		}
+	]
+	let xml = `<style>
+.box {
+fill: white;
+stroke: black;
+stroke-width: 1;
+}
+</style>`
+	let g = 12
+	for (let x of def) {
+		xml += `<g transform="matrix(1,0,0,1,${x.pos[0]*g},${x.pos[1]*g})">`
+		xml += `<path d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z" class="box"/>`
+		for (let l of x.labels) {
+			let attr = ""
+			if (l.pos=="c")
+				attr = `x="0" y="0" text-anchor="middle" dominant-baseline="central"`
+			xml += `<text ${attr}>${l.text}</text>`
+		}
+		xml += `</g>`
+	}
+	$out.innerHTML = xml
+</script>
