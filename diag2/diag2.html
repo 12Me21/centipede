@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset=utf-8>
 
-<svg id=$out viewBox="0 0 300 200" width=300 height=200>
+<svg id=$out viewBox="0 0 300 500" width=300 height=500>
 	
 </svg>
 
@@ -32,6 +32,40 @@
 			slice: {n:8, d:1},
 		},
 		{
+			type: 'arrow1',
+			pos: [6, 15],
+			size: [1, 3],
+			labels: [],
+			slice: {n:8, d:1},
+		},
+		{
+			type: 'arrow1',
+			pos: [6, 19.5],
+			size: [1, 3],
+			labels: [],
+			slice: {n:2, d:3},
+		},
+		{
+			type: 'arrow1',
+			pos: [6, 23.5],
+			size: [1, 3],
+			labels: [],
+			slice: {n:2, d:3},
+		},
+		{
+			type: 'arrow1',
+			pos: [6, 27.5],
+			size: [1, 3],
+			labels: [],
+			slice: {n:2, d:3},
+		},
+		{
+			type: 'arrow1',
+			pos: [6, 32],
+			size: [1, 3.5],
+			labels: [],
+		},
+		{
 			type: 'box',
 			pos: [6, 11],
 			size: [6, 2],
@@ -49,6 +83,51 @@
 				{pos:"c", text:"clipping"},
 			],
 			slice: {n:8, d:1},
+		},
+		
+		{
+			type: 'merge1',
+			pos: [6, 19.5],
+			size: [6, 3],
+			labels: [
+				{pos:"c", text:"priority\ntable"},
+			],
+			slice: {n:16, d:0.5},
+		},
+		{
+			type: 'box',
+			pos: [6, 23.5],
+			size: [8, 2],
+			labels: [
+				{pos:"c", text:"alpha lookup"},
+			],
+			slice: {n:2, d:3},
+		},
+		{
+			type: 'box',
+			pos: [6, 27.5],
+			size: [8, 2],
+			labels: [
+				{pos:"c", text:"color lookup"},
+			],
+			slice: {n:2, d:3},
+		},
+		{
+			type: 'merge1',
+			pos: [6, 32],
+			size: [6, 3],
+			labels: [
+				{pos:"c", text:"blending"},
+			],
+			slice: {n:6, d:0.5},
+		},
+		{
+			type: 'oval',
+			pos: [6, 37],
+			size: [6, 3],
+			labels: [
+				{pos:"c", text:"display"},
+			],
 		},
 	]
 	let margin = 2
@@ -78,6 +157,11 @@
 			xml += `<path class="box" d="M${(-x.size[0]/2)*g},${(0)*g}`
 			xml += `h${x.size[0]*g} v${(x.size[1]-0.5)*g} l${(-x.size[0]/2)*g},${g/2} l${(-x.size[0]/2)*g},${-g/2}`
 			xml += `z"/>`
+		} else if (x.type=='merge1') {
+			// todo: allow this to be 3d with a thickness parameter  make a shared projection function to map z to x,y
+			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} z"/>`
+		} else if (x.type=='oval') {
+			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		}
 		return xml
 	}
@@ -114,7 +198,7 @@ stroke-width: 1;
 }
 </style>`
 	let g = 12
-	let depths = [] // smaller index = deeper into screen
+	let depths = {} // smaller index = deeper into screen
 	function p2depth(d, xml) {
 		depths[d] ||= []
 		depths[d].push(xml)
@@ -127,16 +211,15 @@ stroke-width: 1;
 			p2depth(10, `<g ${tt(cx,cy)}>${shape}</g>`)
 		else {
 			for (let z=x.slice.n-1; z>=0; z--) {
-				p2depth(10-z, `<g ${tt(cx+z*2,cy+z)}>${shape}</g>`)
+				p2depth(10-z, `<g ${tt(cx+(z*x.slice.d)*2,cy+z*x.slice.d)}>${shape}</g>`)
 			}
 		}
 		for (let l of x.labels) {
 			p2depth(15, `<g ${tt(cx,cy)}>${makelabel(x, l)}</g>`)
 		}
 	}
-	for (let x of depths) {
-		if (x)
-			xml += x.join("")
+	for (let x of Object.keys(depths).sort((a,b)=>a-b)) {
+		xml += depths[x].join("")
 	}
 	$out.innerHTML = xml
 </script>
