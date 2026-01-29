@@ -196,6 +196,7 @@ fill: white;
 stroke: black;
 stroke-width: 1;
 }
+tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 </style>`
 	let g = 12
 	let depths = {} // smaller index = deeper into screen
