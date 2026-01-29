@@ -212,7 +212,7 @@ tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 			p2depth(10, `<g ${tt(cx,cy)}>${shape}</g>`)
 		else {
 			for (let z=x.slice.n-1; z>=0; z--) {
-				p2depth(10-z, `<g ${tt(cx+(z*x.slice.d)*2,cy+z*x.slice.d)}>${shape}</g>`)
+				p2depth(10-z*x.slice.d, `<g ${tt(cx+(z*x.slice.d)*2,cy+z*x.slice.d)}>${shape}</g>`)
 			}
 		}
 		for (let l of x.labels) {
