@@ -88,22 +88,29 @@ stroke-width: 1;
 }
 </style>`
 	let g = 12
+	let depths = [] // smaller index = deeper into screen
+	function p2depth(d, xml) {
+		depths[d] ||= []
+		depths[d].push(xml)
+	}
 	for (let x of def) {
-		xml += `<g ${tt(x.pos[0]*g+0.5,x.pos[1]*g+0.5)}>`		// todo: do pixel alignment in the shape constructor instead of offsetting everything
+		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
+		let cy = x.pos[1]*g+0.5
 		let shape = makeshape(x)
 		if (!x.slice)
-			xml += shape
+			p2depth(10, `<g ${tt(cx,cy)}>${shape}</g>`)
 		else {
-			for (let i=x.slice.n-1; i>=0; i--) {
-				xml += `<g ${tt(i*2,i)}>`
-				xml += shape
-				xml += `</g>`
+			for (let z=x.slice.n-1; z>=0; z--) {
+				p2depth(10-z, `<g ${tt(cx+z*2,cy+z)}>${shape}</g>`)
 			}
 		}
 		for (let l of x.labels) {
-			xml += makelabel(x, l)
+			p2depth(15, `<g ${tt(cx,cy)}>${makelabel(x, l)}</g>`)
 		}
-		xml += `</g>`
+	}
+	for (let x of depths) {
+		if (x)
+			xml += x.join("")
 	}
 	$out.innerHTML = xml
 </script>
