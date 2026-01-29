@@ -6,32 +6,41 @@
 </svg>
 
 <script>
+	"use strict"
 	let def = [
 		{
 			type: 'cloud',
 			pos: [6, 6],
-			size: [9, 3],
+			size: [9, 4],
 			labels: [
 				{pos:"c", text:"layer-specific\nrendering"},
 			],
-		}
+			slice: {n:8, d:1},
+		},
 	]
 	let margin = 2
 	function tt(x,y) {
 		return ` transform="translate(${x},${y})"`
 	}
 	function makeshape(x) {
-		xml = ""
+		let xml = ""
 		if (x.type=='box') {
-			xml += `<path d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z" class="box"/>`
+			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z"/>`
 		} else if (x.type=='cloud') {
-			xml += `<path d="M${(-x.size[0]/2)*g},${(-x.size[1]/2+0.5)*g}`
-			xml += `a ${g/2},${g/2} 0 01 ${g/2},${-g/2}`
-			for (let i=0; i<x.size[0]; i++) {
-				xml += `a ${g/2},${g/2} 0 01 ${g/2},${g/2}`
-				xml += `a ${g/2},${g/2} 0 01 ${g/2},${-g/2}`
-			}
-			xml += `"/>`
+			xml += `<path class="box" d="M${(-x.size[0]/2+0.5)*g},${(-x.size[1]/2+1)*g}`
+			xml += `a ${g/2},${g/2} 0 11 ${g/2},${-g/2}`
+			for (let i=0; i<x.size[0]-2; i++)
+				xml += `a ${g/2},${g/2} 0 01 ${g},${0}`
+			xml += `a ${g/2},${g/2} 0 11 ${g/2},${g/2}`
+			for (let i=0; i<x.size[1]-2; i++)
+				xml += `a ${g/2},${g/2} 0 01 ${0},${g}`
+			xml += `a ${g/2},${g/2} 0 11 ${-g/2},${g/2}`
+			for (let i=0; i<x.size[0]-2; i++)
+				xml += `a ${g/2},${g/2} 0 01 ${-g},${0}`
+			xml += `a ${g/2},${g/2} 0 11 ${-g/2},${-g/2}`
+			for (let i=0; i<x.size[1]-2; i++)
+				xml += `a ${g/2},${g/2} 0 01 ${0},${-g}`
+			xml += `z"/>`
 		}
 		return xml
 	}
@@ -70,7 +79,16 @@ stroke-width: 1;
 	let g = 12
 	for (let x of def) {
 		xml += `<g ${tt(x.pos[0]*g+0.5,x.pos[1]*g+0.5)}>`
-		xml += makeshape(x)
+		let shape = makeshape(x)
+		if (!x.slice)
+			xml += shape
+		else {
+			for (let i=x.slice.n-1; i>=0; i--) {
+				xml += `<g ${tt(i*2,i)}>`
+				xml += shape
+				xml += `</g>`
+			}
+		}
 		for (let l of x.labels) {
 			xml += makelabel(x, l)
 		}
