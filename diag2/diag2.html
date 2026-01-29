@@ -9,6 +9,13 @@
 	"use strict"
 	let def = [
 		{
+			type: 'arrow1',
+			pos: [6, 6],
+			size: [1, 4],
+			labels: [],
+			slice: {n:8, d:1},
+		},
+		{
 			type: 'cloud',
 			pos: [6, 6],
 			size: [9, 4],
@@ -40,6 +47,10 @@
 			xml += `a ${g/2},${g/2} 0 11 ${-g/2},${-g/2}`
 			for (let i=0; i<x.size[1]-2; i++)
 				xml += `a ${g/2},${g/2} 0 01 ${0},${-g}`
+			xml += `z"/>`
+		} else if (x.type=='arrow1') {
+			xml += `<path class="box" d="M${(-x.size[0]/2)*g},${(0)*g}`
+			xml += `h${x.size[0]*g} v${(x.size[1]-0.5)*g} l${(-x.size[0]/2)*g},${g/2} l${(-x.size[0]/2)*g},${-g/2}`
 			xml += `z"/>`
 		}
 		return xml
@@ -78,7 +89,7 @@ stroke-width: 1;
 </style>`
 	let g = 12
 	for (let x of def) {
-		xml += `<g ${tt(x.pos[0]*g+0.5,x.pos[1]*g+0.5)}>`
+		xml += `<g ${tt(x.pos[0]*g+0.5,x.pos[1]*g+0.5)}>`		// todo: do pixel alignment in the shape constructor instead of offsetting everything
 		let shape = makeshape(x)
 		if (!x.slice)
 			xml += shape
