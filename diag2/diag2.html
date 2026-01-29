@@ -8,15 +8,33 @@
 <script>
 	let def = [
 		{
-			type: 'box',
+			type: 'cloud',
 			pos: [6, 6],
-			size: [5, 5],
+			size: [9, 3],
 			labels: [
 				{pos:"c", text:"layer-specific\nrendering"},
 			],
 		}
 	]
 	let margin = 2
+	function tt(x,y) {
+		return ` transform="translate(${x},${y})"`
+	}
+	function makeshape(x) {
+		xml = ""
+		if (x.type=='box') {
+			xml += `<path d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z" class="box"/>`
+		} else if (x.type=='cloud') {
+			xml += `<path d="M${(-x.size[0]/2)*g},${(-x.size[1]/2+0.5)*g}`
+			xml += `a ${g/2},${g/2} 0 01 ${g/2},${-g/2}`
+			for (let i=0; i<x.size[0]; i++) {
+				xml += `a ${g/2},${g/2} 0 01 ${g/2},${g/2}`
+				xml += `a ${g/2},${g/2} 0 01 ${g/2},${-g/2}`
+			}
+			xml += `"/>`
+		}
+		return xml
+	}
 	function makelabel(parent, l) {
 		let pos = {px:0,py:0,ax:0,ay:0}
 		if (/n/.test(l.pos)) pos.py = -1
@@ -31,8 +49,7 @@
 			pos.ay = -pos.py
 		}
 		let xml = "<text"
-		xml += ` x="${(pos.px*parent.size[0]/2*g)+pos.ax*margin}"`
-		xml += ` y="${(pos.py*parent.size[1]/2*g)+pos.ay*margin}"`
+		xml += tt((pos.px*parent.size[0]/2*g)+pos.ax*margin,(pos.py*parent.size[1]/2*g)+pos.ay*margin)
 		xml += ` text-anchor="${["end","middle","start"][pos.ax+1]}"`
 		xml += ` dominant-baseline="${["auto","central","hanging"][pos.ay+1]}"`
 		xml += `>`
@@ -52,8 +69,8 @@ stroke-width: 1;
 </style>`
 	let g = 12
 	for (let x of def) {
-		xml += `<g transform="matrix(1,0,0,1,${x.pos[0]*g+0.5},${x.pos[1]*g+0.5})">`
-		xml += `<path d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z" class="box"/>`
+		xml += `<g ${tt(x.pos[0]*g+0.5,x.pos[1]*g+0.5)}>`
+		xml += makeshape(x)
 		for (let l of x.labels) {
 			xml += makelabel(x, l)
 		}
