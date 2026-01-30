@@ -10,15 +10,15 @@
 	let def = [
 		{
 			type: 'arrow1',
-			pos: [6, 6],
-			size: [1, 4],
+			pos: [12, 12],
+			size: [2, 8],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'cloud',
-			pos: [6, 6],
-			size: [9, 4],
+			pos: [12, 12],
+			size: [18, 8],
 			labels: [
 				{pos:"c", text:"layer-specific\nrendering"},
 			],
@@ -26,49 +26,49 @@
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 11],
-			size: [1, 3],
+			pos: [12, 22],
+			size: [2, 6],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 15],
-			size: [1, 3],
+			pos: [12, 30],
+			size: [2, 6],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 19.5],
-			size: [1, 3],
+			pos: [12, 40],
+			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 23.5],
-			size: [1, 3],
+			pos: [12, 48],
+			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 27.5],
-			size: [1, 3],
+			pos: [12, 56],
+			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [6, 32],
-			size: [1, 3.5],
+			pos: [12, 65],
+			size: [2, 7.0],
 			labels: [],
 		},
 		{
 			type: 'box',
-			pos: [6, 11],
-			size: [6, 2],
+			pos: [12, 22],
+			size: [12, 4],
 			labels: [
 				{pos:"c", text:"mosaic"},
 			],
@@ -77,8 +77,8 @@
 		
 		{
 			type: 'box',
-			pos: [6, 15],
-			size: [6, 2],
+			pos: [12, 30],
+			size: [12, 4],
 			labels: [
 				{pos:"c", text:"clipping"},
 			],
@@ -87,8 +87,8 @@
 		
 		{
 			type: 'merge1',
-			pos: [6, 19.5],
-			size: [6, 3],
+			pos: [12, 39.0],
+			size: [12, 6],
 			labels: [
 				{pos:"c", text:"priority\ntable"},
 			],
@@ -97,8 +97,8 @@
 		},
 		{
 			type: 'box',
-			pos: [6, 23.5],
-			size: [8, 2],
+			pos: [12, 48],
+			size: [16, 4],
 			labels: [
 				{pos:"c", text:"alpha lookup"},
 			],
@@ -106,8 +106,8 @@
 		},
 		{
 			type: 'box',
-			pos: [6, 27.5],
-			size: [8, 2],
+			pos: [12, 56],
+			size: [16, 4],
 			labels: [
 				{pos:"c", text:"color lookup"},
 			],
@@ -115,18 +115,18 @@
 		},
 		{
 			type: 'merge1',
-			pos: [6, 32],
-			size: [6, 3],
+			pos: [12, 65],
+			size: [12, 6],
 			labels: [
-				{pos:"c", text:"blending"},
+				{pos:"c", text:"blend"},
 			],
 			thickness: 6,
 			slice: {n:6, d:1},
 		},
 		{
 			type: 'oval',
-			pos: [6, 37],
-			size: [6, 3],
+			pos: [12, 75],
+			size: [12, 6],
 			labels: [
 				{pos:"c", text:"display"},
 			],
@@ -149,27 +149,27 @@
 		if (x.type=='box') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z"/>`
 		} else if (x.type=='cloud') {
-			xml += `<path class="box" d="M${(-x.size[0]/2+0.5)*g},${(-x.size[1]/2+1)*g}`
-			xml += `a ${g/2},${g/2} 0 11 ${g/2},${-g/2}`
-			for (let i=0; i<x.size[0]-2; i++)
-				xml += `a ${g/2},${g/2} 0 01 ${g},${0}`
-			xml += `a ${g/2},${g/2} 0 11 ${g/2},${g/2}`
-			for (let i=0; i<x.size[1]-2; i++)
-				xml += `a ${g/2},${g/2} 0 01 ${0},${g}`
-			xml += `a ${g/2},${g/2} 0 11 ${-g/2},${g/2}`
-			for (let i=0; i<x.size[0]-2; i++)
-				xml += `a ${g/2},${g/2} 0 01 ${-g},${0}`
-			xml += `a ${g/2},${g/2} 0 11 ${-g/2},${-g/2}`
-			for (let i=0; i<x.size[1]-2; i++)
-				xml += `a ${g/2},${g/2} 0 01 ${0},${-g}`
+			xml += `<path class="box" d="M${(-x.size[0]/2+1)*g},${(-x.size[1]/2+2)*g}`
+			xml += `a ${g},${g} 0 11 ${g},${-g}`
+			for (let i=0; i<x.size[0]/2-2; i++)
+				xml += `a ${g},${g} 0 01 ${g*2},${0}`
+			xml += `a ${g},${g} 0 11 ${g},${g}`
+			for (let i=0; i<x.size[1]/2-2; i++)
+				xml += `a ${g},${g} 0 01 ${0},${g*2}`
+			xml += `a ${g},${g} 0 11 ${-g},${g}`
+			for (let i=0; i<x.size[0]/2-2; i++)
+				xml += `a ${g},${g} 0 01 ${-g*2},${0}`
+			xml += `a ${g},${g} 0 11 ${-g},${-g}`
+			for (let i=0; i<x.size[1]/2-2; i++)
+				xml += `a ${g},${g} 0 01 ${0},${-g*2}`
 			xml += `z"/>`
 		} else if (x.type=='arrow1') {
 			xml += `<path class="box" d="M${(-x.size[0]/2)*g},${(0)*g}`
-			xml += `h${x.size[0]*g} v${(x.size[1]-0.5)*g} l${(-x.size[0]/2)*g},${g/2} l${(-x.size[0]/2)*g},${-g/2}`
+			xml += `h${x.size[0]*g} v${(x.size[1]-1)*g} l${(-x.size[0]/2)*g},${g} l${(-x.size[0]/2)*g},${-g}`
 			xml += `z"/>`
 		} else if (x.type=='merge1') {
 			// todo: allow this to be 3d with a thickness parameter  make a shared projection function to map z to x,y
-			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} z"/>`
+			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} l${-g*2},${x.size[1]*g} h${-(x.size[0]-4)*g} z"/>`
 		} else if (x.type=='oval') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		}
@@ -179,11 +179,11 @@
 		}
 		if (x.type=='merge1' && x.thickness) {
 			// back edge
-			let xml = `<path class="backbox" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g}"/>`
+			let xml = `<path class="backbox" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${-g*2},${x.size[1]*g} h${-(x.size[0]-4)*g}"/>`
 			let z1 = z + x.thickness
 			p2depth(10 - z1, `<g ${tt(cx+px(z1),cy+py(z1))}>${xml}</g>`)
 			{
-				let xml = `<path class="wirebox" d="M${x.size[0]/2*g},${-x.size[1]/2*g}l${px(x.thickness)},${py(x.thickness)} M${(-x.size[0]/2+1)*g},${(x.size[1]/2)*g} l${px(x.thickness)},${py(x.thickness)} M${(x.size[0]/2-1)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}"/>`
+				let xml = `<path class="wirebox" d="M${x.size[0]/2*g},${-x.size[1]/2*g}l${px(x.thickness)},${py(x.thickness)} M${(-x.size[0]/2+2)*g},${(x.size[1]/2)*g} l${px(x.thickness)},${py(x.thickness)} M${(x.size[0]/2-2)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}"/>`
 				p2depth(10 - z, `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
 			}
 		}
@@ -235,7 +235,7 @@ stroke-width: 1;
 }
 tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 </style>`
-	let g = 12
+	let g = 6
 	let depths = {} // smaller index = deeper into screen
 	function p2depth(d, xml) {
 		depths[d] ||= []
