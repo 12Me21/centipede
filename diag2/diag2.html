@@ -179,7 +179,7 @@
 		}
 		if (x.type=='merge1' && x.thickness) {
 			// back edge
-			let xml = `<path class="box" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g}"/>`
+			let xml = `<path class="backbox" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g}"/>`
 			let z1 = z + x.thickness
 			p2depth(10 - z1, `<g ${tt(cx+px(z1),cy+py(z1))}>${xml}</g>`)
 			{
@@ -220,11 +220,16 @@ stroke: black;
 stroke-width: 1;
 }
 .solid .box {
- fill: white;
-stroke: white;
+ fill: gray;
+stroke: gray;
 }
 .wirebox {
 fill: none;
+stroke: black;
+stroke-width: 1;
+}
+.backbox {
+fill: gray;
 stroke: black;
 stroke-width: 1;
 }
