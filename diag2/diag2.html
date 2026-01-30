@@ -92,6 +92,7 @@
 			labels: [
 				{pos:"c", text:"priority\ntable"},
 			],
+			thickness: 10,
 			slice: {n:10, d:1, solid:true},
 		},
 		{
@@ -140,7 +141,9 @@
 	function py(z) {
 		return z
 	}
-	function makeshape(x) {
+	function makeshape(x, z) {
+		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
+		let cy = x.pos[1]*g+0.5
 		let xml = ""
 		if (x.type=='box') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z"/>`
@@ -169,13 +172,14 @@
 		} else if (x.type=='oval') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		}
-		/*if (x.thickness) {
-				xml += `M${x.size[0]/2*g},${-x.size[1]/2*g}`
-				xml += `l${px(x.thickness)},${py(x.thickness)} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} l-${px(x.thickness)},-${py(x.thickness)}`
-				xml += `M${(x.size[0]/2-1)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}`
-			}*/
-		
-		return xml
+		for (let i=x.slice ? x.slice.n-1 : 0; i>=0; i--) {
+			let z1 = z + i*(x.slice ? x.slice.d : 0)
+			p2depth(10 - z1, `<g ${tt(cx+px(z1),cy+py(z1))} ${i!=0 && x.thickness ? "class='solid'" : ""}>${xml}</g>`)
+		}
+		if (x.type=='merge1' && x.thickness) {
+			let xml = `<path class="box" d="M${x.size[0]/2*g},${-x.size[1]/2*g}l${px(x.thickness)},${py(x.thickness)} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} l-${px(x.thickness)},-${py(x.thickness)}M${(x.size[0]/2-1)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}"/>`
+			p2depth(10 - z - x.thickness, `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
+		}
 	}
 	function makelabel(parent, l) {
 		let pos = {px:0,py:0,ax:0,ay:0}
@@ -209,7 +213,8 @@ stroke: black;
 stroke-width: 1;
 }
 .solid .box {
- fill: black;
+ fill: white;
+stroke: white;
 }
 tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 </style>`
@@ -222,18 +227,9 @@ tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 	for (let x of def) {
 		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
 		let cy = x.pos[1]*g+0.5
-		let shape = makeshape(x)
 		let thickness = x.slice ? (x.slice.n-1)*(x.slice.d) : 0
 		let zz = (x.pos[2] || 0)-thickness/2
-		if (!x.slice) {
-			let z = zz
-			p2depth(10 + z, `<g ${tt(cx+px(z),cy+py(z))}>${shape}</g>`)
-		} else {
-			for (let i=x.slice.n-1; i>=0; i--) {
-				let z = zz+i*x.slice.d
-				p2depth(10-z, `<g ${tt(cx+px(z),cy+py(z))} ${i==0||!x.slice.solid ? "" : "class='solid'"}>${shape}</g>`)
-			}
-		}
+		makeshape(x, zz)
 		for (let l of x.labels) {
 			let z = zz
 			p2depth(15, `<g ${tt(cx+px(z),cy+py(z))}>${makelabel(x, l)}</g>`)
