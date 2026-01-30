@@ -87,13 +87,12 @@
 		
 		{
 			type: 'merge1',
-			pos: [6, 19.5],
+			pos: [6, 19.5, -1],
 			size: [6, 3],
 			labels: [
 				{pos:"c", text:"priority\ntable"},
 			],
-			//slice: {n:16, d:0.5},
-			thickness: 8,
+			slice: {n:16, d:0.5},
 		},
 		{
 			type: 'box',
@@ -141,7 +140,7 @@
 	function py(z) {
 		return z
 	}
-	function makeshape(x, z) {
+	function makeshape(x) {
 		let xml = ""
 		if (x.type=='box') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z"/>`
@@ -170,13 +169,7 @@
 		} else if (x.type=='oval') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		}
-		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
-		let cy = x.pos[1]*g+0.5
-		p2depth(10-z, `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
-		if (x.type=='merge1' && x.thickness) {
-			xml += `<path class="box" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} l-${px(x.thickness)},-${py(x.thickness)} M${(x.size[0]/2-1)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}"/>`
-			p2depth(10-(z+x.thickness), `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
-		}
+		return xml
 	}
 	function makelabel(parent, l) {
 		let pos = {px:0,py:0,ax:0,ay:0}
@@ -220,11 +213,14 @@ tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 	for (let x of def) {
 		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
 		let cy = x.pos[1]*g+0.5
-		if (!x.slice)
-			makeshape(x, 0)
-		else {
-			for (let z=x.slice.n-1; z>=0; z--) {
-				makeshape(x, z*x.slice.d)
+		let shape = makeshape(x)
+		if (!x.slice) {
+			let z = x.pos[2]
+			p2depth(10 + z, `<g ${tt(cx+px(z),cy+py(z))}>${shape}</g>`)
+		} else {
+			for (let i=x.slice.n-1; i>=0; i--) {
+				let z = x.pos[2]+i*x.slice.d
+				p2depth(10-z, `<g ${tt(cx+px(z),cy+py(z))}>${shape}</g>`)
 			}
 		}
 		for (let l of x.labels) {
