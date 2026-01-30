@@ -92,7 +92,8 @@
 			labels: [
 				{pos:"c", text:"priority\ntable"},
 			],
-			slice: {n:16, d:0.5},
+			//slice: {n:16, d:0.5},
+			thickness: 8,
 		},
 		{
 			type: 'box',
@@ -134,7 +135,13 @@
 	function tt(x,y) {
 		return ` transform="translate(${x},${y})"`
 	}
-	function makeshape(x) {
+	function px(z) {
+		return z*2
+	}
+	function py(z) {
+		return z
+	}
+	function makeshape(x, z) {
 		let xml = ""
 		if (x.type=='box') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} v${x.size[1]*g} h${-x.size[0]*g} z"/>`
@@ -163,7 +170,13 @@
 		} else if (x.type=='oval') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		}
-		return xml
+		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
+		let cy = x.pos[1]*g+0.5
+		p2depth(10-z, `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
+		if (x.type=='merge1' && x.thickness) {
+			xml += `<path class="box" d="M${x.size[0]/2*g},${-x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)} l${-g},${x.size[1]*g} h${-(x.size[0]-2)*g} l-${px(x.thickness)},-${py(x.thickness)} M${(x.size[0]/2-1)*g},${x.size[1]/2*g} l${px(x.thickness)},${py(x.thickness)}"/>`
+			p2depth(10-(z+x.thickness), `<g ${tt(cx+px(z),cy+py(z))}>${xml}</g>`)
+		}
 	}
 	function makelabel(parent, l) {
 		let pos = {px:0,py:0,ax:0,ay:0}
@@ -207,12 +220,11 @@ tspan:not([dominant-baseline]) { dominant-baseline: inherit; } /* safari... */
 	for (let x of def) {
 		let cx = x.pos[0]*g+0.5 // todo: do pixel alignment in the shape constructor instead of offsetting everything
 		let cy = x.pos[1]*g+0.5
-		let shape = makeshape(x)
 		if (!x.slice)
-			p2depth(10, `<g ${tt(cx,cy)}>${shape}</g>`)
+			makeshape(x, 0)
 		else {
 			for (let z=x.slice.n-1; z>=0; z--) {
-				p2depth(10-z*x.slice.d, `<g ${tt(cx+(z*x.slice.d)*2,cy+z*x.slice.d)}>${shape}</g>`)
+				makeshape(x, z*x.slice.d)
 			}
 		}
 		for (let l of x.labels) {
