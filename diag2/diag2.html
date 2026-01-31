@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset=utf-8>
 
-<svg id=$out viewBox="0 0 300 500" width=300 height=500>
+<svg id=$out viewBox="0 0 500 500" width=500 height=500>
 	
 </svg>
 
@@ -35,7 +35,7 @@
 			type: 'arrow1',
 			pos: [32, 30],
 			size: [2, 6],
-			labels: [],
+			labels: [{pos:"ose",text:"color id, alpha select, priority, blend mode"}],
 			slice: {n:8, d:1},
 		},
 		{
@@ -68,7 +68,7 @@
 		{
 			type: 'arrow2',
 			pos: [12, 22],
-			size: [10, 0],
+			size: [14, 1],
 			labels: [],
 			slice: {n:8, d:1},
 		},
@@ -79,6 +79,13 @@
 			labels: [
 				{pos:"c", text:"mosaic"},
 			],
+			slice: {n:8, d:1},
+		},
+		{
+			type: 'arrow2',
+			pos: [12, 30],
+			size: [14, 1],
+			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
@@ -199,7 +206,7 @@
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
 		} else if (x.type=='arrow2') {
 			xml += `<path class="box" d="M${(0)*g},${(-x.size[1]/2)*g}`
-			xml += `h${x.size[0]*g} v${(x.size[1]-1)*g} h${x.size[0]*g}`
+			xml += `h${x.size[0]*g} v${(x.size[1])*g} h${-x.size[0]*g}`
 			xml += `z"/>`
 		}
 		for (let i=x.slice ? x.slice.n-1 : 0; i>=0; i--) {
