@@ -10,14 +10,14 @@
 	let def = [
 		{
 			type: 'arrow1',
-			pos: [12, 12],
+			pos: [32, 12],
 			size: [2, 8],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'cloud',
-			pos: [12, 12],
+			pos: [32, 12],
 			size: [18, 8],
 			labels: [
 				{pos:"c", text:"layer-specific\nrendering"},
@@ -26,58 +26,83 @@
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 22],
+			pos: [32, 22],
 			size: [2, 6],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 30],
+			pos: [32, 30],
 			size: [2, 6],
 			labels: [],
 			slice: {n:8, d:1},
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 40],
+			pos: [32, 40],
 			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 48],
+			pos: [32, 48],
 			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 56],
+			pos: [32, 56],
 			size: [2, 6],
 			labels: [],
 			slice: {n:2, d:3},
 		},
 		{
 			type: 'arrow1',
-			pos: [12, 65],
+			pos: [32, 65],
 			size: [2, 7.0],
 			labels: [],
 		},
 		{
-			type: 'box',
+			type: 'arrow2',
 			pos: [12, 22],
+			size: [10, 0],
+			labels: [],
+			slice: {n:8, d:1},
+		},
+		{
+			type: 'box',
+			pos: [32, 22],
 			size: [12, 4],
 			labels: [
 				{pos:"c", text:"mosaic"},
 			],
 			slice: {n:8, d:1},
 		},
-		
+		{
+			type: 'box',
+			pos: [12, 22],
+			size: [10, 6],
+			labels: [
+				{pos:"c", text:"mosaic\nsettings"},
+			],
+			slice: {n:8, d:1},
+		},
 		{
 			type: 'box',
 			pos: [12, 30],
+			size: [10, 6],
+			labels: [
+				{pos:"c", text:"clip\nsettings"},
+			],
+			slice: {n:8, d:1},
+		},
+		
+		{
+			type: 'box',
+			pos: [32, 30],
 			size: [12, 4],
 			labels: [
 				{pos:"c", text:"clipping"},
@@ -87,7 +112,7 @@
 		
 		{
 			type: 'merge1',
-			pos: [12, 39.0],
+			pos: [32, 39.0],
 			size: [12, 6],
 			labels: [
 				{pos:"c", text:"priority\ntable"},
@@ -97,7 +122,7 @@
 		},
 		{
 			type: 'box',
-			pos: [12, 48],
+			pos: [32, 48],
 			size: [16, 4],
 			labels: [
 				{pos:"c", text:"alpha lookup"},
@@ -106,7 +131,7 @@
 		},
 		{
 			type: 'box',
-			pos: [12, 56],
+			pos: [32, 56],
 			size: [16, 4],
 			labels: [
 				{pos:"c", text:"color lookup"},
@@ -115,17 +140,17 @@
 		},
 		{
 			type: 'merge1',
-			pos: [12, 65],
+			pos: [32, 65],
 			size: [12, 6],
 			labels: [
-				{pos:"c", text:"blend"},
+				{pos:"c", text:"blending"},
 			],
 			thickness: 6,
 			slice: {n:6, d:1},
 		},
 		{
 			type: 'oval',
-			pos: [12, 75],
+			pos: [32, 75],
 			size: [12, 6],
 			labels: [
 				{pos:"c", text:"display"},
@@ -172,6 +197,10 @@
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${-x.size[1]/2*g} h${x.size[0]*g} l${-g*2},${x.size[1]*g} h${-(x.size[0]-4)*g} z"/>`
 		} else if (x.type=='oval') {
 			xml += `<path class="box" d="M${-x.size[0]/2*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${x.size[0]*g},${0} a ${x.size[0]/2*g},${x.size[1]/2*g} 0 01 ${-x.size[0]*g},${0} z"/>`
+		} else if (x.type=='arrow2') {
+			xml += `<path class="box" d="M${(0)*g},${(-x.size[1]/2)*g}`
+			xml += `h${x.size[0]*g} v${(x.size[1]-1)*g} h${x.size[0]*g}`
+			xml += `z"/>`
 		}
 		for (let i=x.slice ? x.slice.n-1 : 0; i>=0; i--) {
 			let z1 = z + i*(x.slice ? x.slice.d : 0)
@@ -201,8 +230,21 @@
 			pos.ax = -pos.px
 			pos.ay = -pos.py
 		}
+		let dx = 0
+		let dy = 0
+		if (parent.slice) {
+			let d = (parent.slice.n-1)*(parent.slice.d)
+			if (pos.px>0 && pos.ax>0) {
+				dx += px(d)
+			} else if (pos.py>0 && pos.ay>0) {
+				dy += py(d)
+			}
+		}
 		let xml = "<text"
-		xml += tt((pos.px*parent.size[0]/2*g)+pos.ax*margin,(pos.py*parent.size[1]/2*g)+pos.ay*margin)
+		if (parent.type=='arrow1')
+			xml += tt((pos.px*parent.size[0]/2*g)+pos.ax*margin+dx,((pos.py*parent.size[1]-3)*g)+pos.ay*margin+dy)
+		else
+			xml += tt((pos.px*parent.size[0]/2*g)+pos.ax*margin+dx,(pos.py*parent.size[1]/2*g)+pos.ay*margin+dy)
 		xml += ` text-anchor="${["end","middle","start"][pos.ax+1]}"`
 		xml += ` dominant-baseline="${["auto","central","hanging"][pos.ay+1]}"`
 		xml += `>`
